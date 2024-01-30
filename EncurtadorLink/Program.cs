@@ -34,6 +34,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//GERA O LINK PARA ENCURTAR URL
 app.MapPost("api/encurtar", async (
     UrlRequisicaoModel requisicao, 
     UrlEncurtadorService urlEncurtadorService, 
@@ -63,6 +64,7 @@ app.MapPost("api/encurtar", async (
     return Results.Ok(urlEncurtada.UrlCurta.UrlSemHttp());
 });
 
+//RECUPERA O LINK ENCURTADO DA TABELA
 app.MapGet("api/{codigo}", async (string codigo, ContextoDb contextoDb) => {
     var urlEncurtada = await contextoDb.UrlEncurtadas
     .FirstOrDefaultAsync(u => u.Codigo == codigo);
