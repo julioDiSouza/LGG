@@ -1,5 +1,4 @@
 ﻿using EncurtadorLink.Entidades;
-using EncurtadorLink.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EncurtadorLink.DataBase
@@ -17,7 +16,7 @@ namespace EncurtadorLink.DataBase
         {
             modelBuilder.Entity<UrlEncurtada>(builder =>
             {
-                builder.Property(u => u.Codigo).HasMaxLength(UrlEncurtadorService.Tamanho);
+                builder.Property(u => u.Codigo).HasMaxLength(10);
                 builder.HasIndex(u => u.Codigo).IsUnique();
             });
         }

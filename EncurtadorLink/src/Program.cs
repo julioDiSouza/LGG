@@ -6,15 +6,14 @@ using EncurtadorLink.Extensoes;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var strConn = builder.Configuration.GetConnectionString("DataBaseMysql");
-
-builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConn, ServerVersion.AutoDetect(strConn)));
+var strConexao = builder.Configuration.GetConnectionString("DataBaseMysql");
 
 // Add services to the container.
+builder.Services.AddSingleton(builder.Configuration.GetSection("ConfiguracaoCodigoUnico").Get<ConfiguracaoCodigoUnico>()!);
+builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexao, ServerVersion.AutoDetect(strConexao)));
 builder.Services.AddScoped<UrlEncurtadorService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -61,7 +60,7 @@ app.MapPost("api/encurtar", async (
     contextoDb.UrlEncurtadas.Add(urlEncurtada);
     await contextoDb.SaveChangesAsync();
 
-    return Results.Ok(urlEncurtada.UrlCurta.UrlSemHttp());
+    return Results.Ok(urlEncurtada.UrlCurta);
 });
 
 //RECUPERA O LINK ENCURTADO DA TABELA
@@ -74,6 +73,5 @@ app.MapGet("api/{codigo}", async (string codigo, ContextoDb contextoDb) => {
 
     return Results.Redirect(urlEncurtada.UrlLonga);
 });
-
 
 app.Run();
