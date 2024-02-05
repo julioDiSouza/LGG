@@ -1,0 +1,10 @@
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace EncurtadorLink.Entidades
+{
+    public class ApplicationUser : IdentityUser
+    {
+        public Guid ClienteId { get; set; }
+        public virtual Cliente Cliente { get; set; }
+    }
+}

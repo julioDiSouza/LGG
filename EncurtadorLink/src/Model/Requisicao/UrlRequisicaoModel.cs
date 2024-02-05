@@ -1,4 +1,4 @@
-﻿namespace EncurtadorLink.Model
+﻿namespace EncurtadorLink.Model.Requisicao
 {
     public class UrlRequisicaoModel
     {

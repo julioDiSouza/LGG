@@ -1,7 +1,7 @@
-﻿using EncurtadorLink.DataBase;
+﻿using EncurtadorLink.Infra.BancoDados;
 using Microsoft.EntityFrameworkCore;
 
-namespace EncurtadorLink.Extensoes
+namespace EncurtadorLink.Infra.Extensoes
 {
     public static class MigracaoExtensao
     {
