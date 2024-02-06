@@ -2,10 +2,11 @@
 using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Usuario;
 using Microsoft.AspNetCore.Identity;
+using EncurtadorLink.Services.Interface;
 
 namespace EncurtadorLink.Services
 {
-    public class UsuarioService
+    public class UsuarioService : IUsuarioService
     {
         private IMapper _mapper;
         private UserManager<ApplicationUser> _userManager;

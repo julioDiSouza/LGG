@@ -2,6 +2,7 @@ using System.Text;
 using EncurtadorLink.Rotas;
 using EncurtadorLink.Services;
 using EncurtadorLink.Endpoints;
+using EncurtadorLink.Entidades;
 using Microsoft.EntityFrameworkCore;
 using EncurtadorLink.Infra.Extensoes;
 using Microsoft.IdentityModel.Tokens;
@@ -15,11 +16,13 @@ var strConexao = builder.Configuration.GetConnectionString("DataBaseMysql");
 
 // Add services to the container.
 builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexao, ServerVersion.AutoDetect(strConexao)));
+builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<ContextoDb>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped(typeof(IUrlEncurtadorService), typeof(UrlEncurtadorService));
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
+builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -56,6 +59,7 @@ app.UseAuthorization();
 // Rotas
 app.Raiz("api");
 app.Token("api/token");
+app.Login("api/login");
 app.Teste("api/teste");
 
 app.Run();

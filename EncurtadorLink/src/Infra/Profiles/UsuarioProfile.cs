@@ -8,7 +8,9 @@ namespace EncurtadorLink.Infra.Profiles
     {
         public UsuarioProfile()
         {
-            CreateMap<UsuarioDtoCriar, ApplicationUser>().ReverseMap();
+            CreateMap<UsuarioDtoCriar, ApplicationUser>()
+                .ForMember(d => d.UserName, m => m.MapFrom(s => s.NomeUsuario))
+                .ReverseMap();
         }
     }
 }

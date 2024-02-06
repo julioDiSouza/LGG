@@ -14,7 +14,7 @@ namespace EncurtadorLink.Rotas
 
         public static void Monitoramento(this WebApplication app)
         {
-            app.MapGet(_rota + "/monitoramento", () => {
+            app.MapGet(_rota + "/monitoramento", [AllowAnonymous] () => {
                 return Results.Ok("Api no ar.");
             });
         }

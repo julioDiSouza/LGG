@@ -1,5 +1,6 @@
 ﻿using EncurtadorLink.Model.Token;
 using EncurtadorLink.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EncurtadorLink.Endpoints
 {
@@ -14,7 +15,7 @@ namespace EncurtadorLink.Endpoints
 
         public static void Obter(this WebApplication app)
         {
-            app.MapGet(_rota, (
+            app.MapGet(_rota, [AllowAnonymous] (
             ITokenService tokenService,
             HttpContext httpContext
             ) =>

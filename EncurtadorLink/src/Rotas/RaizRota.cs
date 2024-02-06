@@ -1,6 +1,7 @@
 ﻿using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EncurtadorLink.Rotas
 {
@@ -16,7 +17,7 @@ namespace EncurtadorLink.Rotas
 
         public static void EncurtarLink(this WebApplication app)
         {
-            app.MapPost(_rota + "/encurtar", async (
+            app.MapPost(_rota + "/encurtar", [Authorize] async (
                 UrlRequisicaoModel requisicao,
                 IUrlEncurtadorService urlEncurtadorService,
                 HttpContext httpContext
@@ -41,7 +42,7 @@ namespace EncurtadorLink.Rotas
 
         public static void RecuperarLink(this WebApplication app)
         {
-            app.MapGet(_rota + "/{codigo}", async (string codigo, IUrlEncurtadorService urlEncurtadorService) => {
+            app.MapGet(_rota + "/{codigo}", [AllowAnonymous] async (string codigo, IUrlEncurtadorService urlEncurtadorService) => {
                 var urlEncurtada = await urlEncurtadorService.RecuperarLinkAsync(codigo);
 
                 if (urlEncurtada is null)
