@@ -1,4 +1,5 @@
 using System.Text;
+using FluentValidation;
 using EncurtadorLink.Rotas;
 using EncurtadorLink.Services;
 using EncurtadorLink.Endpoints;
@@ -17,6 +18,7 @@ var strConexao = builder.Configuration.GetConnectionString("DataBaseMysql");
 // Add services to the container.
 builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexao, ServerVersion.AutoDetect(strConexao)));
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<ContextoDb>();
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped(typeof(IUrlEncurtadorService), typeof(UrlEncurtadorService));
@@ -59,7 +61,7 @@ app.UseAuthorization();
 // Rotas
 app.Raiz("api");
 app.Token("api/token");
-app.Login("api/login");
+app.Usuario("api/usuario");
 app.Teste("api/teste");
 
 app.Run();

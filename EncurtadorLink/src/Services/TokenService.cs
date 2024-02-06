@@ -34,6 +34,7 @@ namespace EncurtadorLink.Services
                 );
 
             if (cliente is null || 
+                cliente.Ativo is false || 
                 cliente.Aplicacoes is null || 
                 !cliente.Aplicacoes.Any(a => 
                 a.ClienteSecret.ToString() == requisicao.ClientSecret && a.Ativo is true)
