@@ -4,6 +4,6 @@ namespace EncurtadorLink.Services.Interface
 {
     public interface IUsuarioService
     {
-        Task<bool> CadastrarUsuario(UsuarioDtoCriar usuarioDto);
+        Task<bool> CadastrarAsync(UsuarioDtoCriar usuarioDto);
     }
 }

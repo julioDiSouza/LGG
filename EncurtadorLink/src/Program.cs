@@ -24,6 +24,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(IUrlEncurtadorService), typeof(UrlEncurtadorService));
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
+builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -60,9 +61,10 @@ app.UseAuthorization();
 
 // Rotas
 app.Raiz("api");
+app.Teste("api/teste");
 app.Token("api/token");
 app.Usuario("api/usuario");
-app.Teste("api/teste");
+app.Cliente("api/cliente");
 
 app.Run();
 

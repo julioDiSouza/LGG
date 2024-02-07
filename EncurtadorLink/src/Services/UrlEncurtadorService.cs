@@ -23,8 +23,7 @@ namespace EncurtadorLink.Services
             urlEncurtada.Codigo = await ObterCodigoUnicoAsync();
             urlEncurtada.UrlCurta += urlEncurtada.Codigo;
 
-            _dbContexto.UrlEncurtadas.Add(urlEncurtada);
-
+            await _dbContexto.UrlEncurtadas.AddAsync(urlEncurtada);
             await _dbContexto.SaveChangesAsync();
 
             return urlEncurtada;

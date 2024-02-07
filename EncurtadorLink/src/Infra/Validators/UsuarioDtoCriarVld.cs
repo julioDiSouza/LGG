@@ -7,23 +7,29 @@ namespace EncurtadorLink.Infra.Validators
     {
         public UsuarioDtoCriarVld()
         {
-            RuleFor(u => u.NomeUsuario)
+            RuleFor(x => x.NomeUsuario)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: NomeUsuario");
+            .WithMessage("Campo obrigatório: NomeUsuario")
+            .Must(x => x.Length <= 256)
+            .WithMessage("NomeUsuario deve conter menos que 256 caracteres");
 
-            RuleFor(u => u.NomeCompleto)
+            RuleFor(x => x.NomeCompleto)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: NomeCompleto");
+            .WithMessage("Campo obrigatório: NomeCompleto")
+            .Must(x => x.Length <= 256)
+            .WithMessage("NomeCompleto deve conter menos que 256 caracteres");
 
-            RuleFor(u => u.Email)
+            RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: Email");
+            .WithMessage("Campo obrigatório: Email")
+            .Must(x => x.Length <= 256)
+            .WithMessage("Email deve conter menos que 256 caracteres");
 
-            RuleFor(u => u.ClienteId)
+            RuleFor(x => x.ClienteId)
             .NotEmpty()
             .WithMessage("Campo obrigatório: ClienteId");
 
-            RuleFor(u => u.Senha)
+            RuleFor(x => x.Senha)
             .NotEmpty()
             .WithMessage("Campo obrigatório: Senha");
         }

@@ -17,7 +17,7 @@ namespace EncurtadorLink.Services
             _userManager = userManager;
         }
 
-        public async Task<bool> CadastrarUsuario(UsuarioDtoCriar usuarioDto)
+        public async Task<bool> CadastrarAsync(UsuarioDtoCriar usuarioDto)
         {
             var usuarioIdentity = _mapper.Map<ApplicationUser>(usuarioDto);
             var resultadoIdentity = await _userManager.CreateAsync(usuarioIdentity, usuarioDto.Senha);

@@ -27,6 +27,9 @@ namespace EncurtadorLink.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<Guid>("ClienteId")
                         .HasColumnType("char(36)");
 

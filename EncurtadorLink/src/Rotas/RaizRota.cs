@@ -1,4 +1,5 @@
-﻿using EncurtadorLink.Entidades;
+﻿using FluentValidation;
+using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +21,15 @@ namespace EncurtadorLink.Rotas
             app.MapPost(_rota + "/encurtar", [Authorize] async (
                 UrlRequisicaoModel requisicao,
                 IUrlEncurtadorService urlEncurtadorService,
-                HttpContext httpContext
+                HttpContext httpContext,
+                IValidator<UrlRequisicaoModel> validacao
                 ) =>
             {
+                var resultado = await validacao.ValidateAsync(requisicao);
+
+                if (!resultado.IsValid)
+                    return Results.ValidationProblem(resultado.ToDictionary());
+
                 if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
                     return Results.BadRequest("URL é inválida");
 

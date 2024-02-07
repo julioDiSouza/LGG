@@ -10,7 +10,7 @@ namespace EncurtadorLink.Model.Usuario
         public Guid ClienteId { get; set; }
         [DataType(DataType.Password)]
         public string Senha { get; set; }
-        [Compare("Password")]
+        [Compare(nameof(Senha), ErrorMessage = "A confirmação de senha não é válida.")]
         public string ReSenha { get; set; }
     }
 }
