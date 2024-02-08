@@ -11,12 +11,12 @@ namespace EncurtadorLink.Rotas
         public static void Cliente(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.CadastrarCliente();
+            app.CadastroCliente();
         }
 
-        public static void CadastrarCliente(this WebApplication app)
+        public static void CadastroCliente(this WebApplication app)
         {
-            app.MapPost(_rota + "/cadastrar", [AllowAnonymous] async (
+            app.MapPost(_rota + "/cadastro", [AllowAnonymous] async (
                 ClienteDtoCriar clienteDto,
                 IClienteService clienteService,
                 IValidator<ClienteDtoCriar> validacao
@@ -29,7 +29,7 @@ namespace EncurtadorLink.Rotas
 
                 await clienteService.CadastrarAsync(clienteDto);
 
-                return Results.NoContent();
+                return Results.Ok();
             });
         }
     }

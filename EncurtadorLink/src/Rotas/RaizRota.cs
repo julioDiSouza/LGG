@@ -12,13 +12,15 @@ namespace EncurtadorLink.Rotas
         public static void Raiz(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.EncurtarLink();
-            app.RecuperarLink();
+            app.CriaLink();
+            app.RecuperaLink();
+            app.Login();
+            app.Logout();
         }
 
-        public static void EncurtarLink(this WebApplication app)
+        public static void CriaLink(this WebApplication app)
         {
-            app.MapPost(_rota + "/encurtar", [Authorize] async (
+            app.MapPost(_rota + "/link", [Authorize] async (
                 UrlRequisicaoModel requisicao,
                 IUrlEncurtadorService urlEncurtadorService,
                 HttpContext httpContext,
@@ -47,7 +49,7 @@ namespace EncurtadorLink.Rotas
             });
         }
 
-        public static void RecuperarLink(this WebApplication app)
+        public static void RecuperaLink(this WebApplication app)
         {
             app.MapGet(_rota + "/{codigo}", [AllowAnonymous] async (string codigo, IUrlEncurtadorService urlEncurtadorService) => {
                 var urlEncurtada = await urlEncurtadorService.RecuperarLinkAsync(codigo);
@@ -56,6 +58,43 @@ namespace EncurtadorLink.Rotas
                     return Results.NotFound();
 
                 return Results.Redirect(urlEncurtada.UrlLonga);
+            });
+        }
+
+        public static void Login(this WebApplication app)
+        {
+            app.MapPost(_rota + "/login", [AllowAnonymous] async (
+                LoginRequisicaoModel requisicao,
+                ITokenService tokenService,
+                HttpContext httpContext,
+                IValidator<LoginRequisicaoModel> validacao
+                ) =>
+            {
+                var resultado = await validacao.ValidateAsync(requisicao);
+
+                if (!resultado.IsValid)
+                    return Results.ValidationProblem(resultado.ToDictionary());
+
+                var ip = httpContext.Connection.RemoteIpAddress?.ToString()!;
+
+                var (token, sucesso) = await tokenService.ObterTokenLoginAsync(requisicao, ip);
+
+                if (!sucesso)
+                    return Results.BadRequest(token);
+
+                return Results.Ok(token);
+            });
+        }
+
+        public static void Logout(this WebApplication app)
+        {
+            app.MapGet(_rota + "/logout", [Authorize] async (
+                ITokenService tokenService
+                ) =>
+            {
+                await tokenService.LogoutAsync();
+
+                return Results.Ok();
             });
         }
     }

@@ -11,12 +11,12 @@ namespace EncurtadorLink.Rotas
         public static void Usuario(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.CadastrarUsuario();
+            app.CadastroUsuario();
         }
 
-        public static void CadastrarUsuario(this WebApplication app)
+        public static void CadastroUsuario(this WebApplication app)
         {
-            app.MapPost(_rota + "/cadastrar", [Authorize] async ( 
+            app.MapPost(_rota + "/cadastro", [Authorize] async ( 
                 UsuarioDtoCriar usuarioDto, 
                 IUsuarioService usuarioService, 
                 IValidator<UsuarioDtoCriar> validacao 
@@ -29,7 +29,7 @@ namespace EncurtadorLink.Rotas
 
                 var sucesso = await usuarioService.CadastrarAsync(usuarioDto);
 
-                return sucesso ? Results.NoContent() : Results.Problem("Falha ao cadastrar usuário");
+                return sucesso ? Results.Ok() : Results.Problem("Falha ao cadastrar usuário");
             });
         }
     }

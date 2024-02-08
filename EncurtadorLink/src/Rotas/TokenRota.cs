@@ -10,10 +10,10 @@ namespace EncurtadorLink.Endpoints
         public static void Token(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.Obter();
+            app.Busca();
         }
 
-        public static void Obter(this WebApplication app)
+        public static void Busca(this WebApplication app)
         {
             app.MapGet(_rota, [AllowAnonymous] (
             ITokenService tokenService,
@@ -26,7 +26,7 @@ namespace EncurtadorLink.Endpoints
 
                 var ip = httpContext.Connection.RemoteIpAddress?.ToString()!;
 
-                var (token, sucesso) = tokenService.ObterTokenJWT(MontaRequisicao(httpContext), ip);
+                var (token, sucesso) = tokenService.ObterTokenAplicacao(MontaRequisicao(httpContext), ip);
 
                 if (!sucesso)
                     return Results.BadRequest(token);
@@ -37,9 +37,9 @@ namespace EncurtadorLink.Endpoints
 
         #region ..:: Privados ::..
 
-        private static TokenRequisicao MontaRequisicao(HttpContext context)
+        private static TokenRequisicaoModel MontaRequisicao(HttpContext context)
         {
-            return new TokenRequisicao
+            return new TokenRequisicaoModel
             {
                 ClientId = context.Request.Headers["client_id"]!,
                 ClientSecret = context.Request.Headers["client_secret"]!

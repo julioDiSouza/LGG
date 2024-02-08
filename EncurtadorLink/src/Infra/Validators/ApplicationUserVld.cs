@@ -10,12 +10,12 @@ namespace EncurtadorLink.Infra.Validators
         {
             RuleFor(x => x.ClienteId)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: ClienteId");
+            .WithMessage("ClienteId é obrigatório");
 
             RuleFor(x => x.NomeCompleto)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: NomeCompleto")
-            .Must(x => x.Length <= 256)
+            .WithMessage("NomeCompleto é obrigatório")
+            .Must(x => x?.Length <= 256)
             .WithMessage("NomeCompleto deve conter menos que 256 caracteres");
         }
 

@@ -37,6 +37,9 @@ namespace EncurtadorLink.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("DataInclusao")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -165,6 +168,9 @@ namespace EncurtadorLink.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Codigo")
                         .IsRequired()

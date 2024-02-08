@@ -2,7 +2,7 @@
 
 namespace EncurtadorLink.Model.Token
 {
-    public class TokenRequisicao
+    public class TokenRequisicaoModel
     {
         [JsonProperty("client_id")]
         public string ClientId { get; set; } = string.Empty;

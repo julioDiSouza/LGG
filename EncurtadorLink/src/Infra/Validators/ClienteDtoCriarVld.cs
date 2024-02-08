@@ -9,24 +9,24 @@ namespace EncurtadorLink.Infra.Validators
         {
             RuleFor(x => x.RazaoSocial)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: RazaoSocial");
+            .WithMessage("RazaoSocial é obrigatório");
 
             RuleFor(x => x.NomeCompleto)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: NomeCompleto")
-            .Must(x => x.Length <= 50)
+            .WithMessage("NomeCompleto é obrigatório")
+            .Must(x => x?.Length <= 50)
             .WithMessage("NomeCompleto deve conter menos que 50 caracteres");
 
             RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: Email")
-            .Must(x => x.Length <= 50)
+            .WithMessage("Email é obrigatório")
+            .Must(x => x?.Length <= 50)
             .WithMessage("Email deve conter menos que 50 caracteres");
 
             RuleFor(x => x.Documento)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: Documento")
-            .Must(x => x.Length >= 11 || x.Length <= 14)
+            .WithMessage("Documento é obrigatório")
+            .Must(x => x?.Length >= 11 || x?.Length <= 14)
             .WithMessage("Documento deve conter entre 11 e 14 caracteres");
         }
     }

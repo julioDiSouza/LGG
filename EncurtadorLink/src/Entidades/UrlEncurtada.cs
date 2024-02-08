@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EncurtadorLink.Entidades
+﻿namespace EncurtadorLink.Entidades
 {
     public class UrlEncurtada
     {
@@ -8,6 +6,7 @@ namespace EncurtadorLink.Entidades
         public string UrlLonga { get; set; } = string.Empty;
         public string UrlCurta { get; set; } = string.Empty;
         public string Codigo { get; set; } = string.Empty;
+        public bool Ativo { get; set; }
         public DateTime DataInclusaoUtc { get; set; }
     }
 }

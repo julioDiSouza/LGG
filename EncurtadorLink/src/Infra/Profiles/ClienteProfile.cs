@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Usuario;
+using EncurtadorLink.Infra.Extensoes;
 
 namespace EncurtadorLink.Infra.Profiles
 {
@@ -14,14 +15,8 @@ namespace EncurtadorLink.Infra.Profiles
                 .ReverseMap();
 
             CreateMap<ClienteDtoCriar, ApplicationUser>()
-                .ForMember(d => d.UserName, m => m.MapFrom(s => ObterUserName(s.Email)))
+                .ForMember(d => d.UserName, m => m.MapFrom(s => s.Email.ObterUserName()))
                 .ReverseMap();
-        }
-
-        private string ObterUserName(string email)
-        {
-            var arr = email.Split('@');
-            return arr[0];
         }
     }
 }

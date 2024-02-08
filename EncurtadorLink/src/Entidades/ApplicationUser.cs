@@ -6,7 +6,7 @@ namespace EncurtadorLink.Entidades
     {
         public Guid ClienteId { get; set; }
         public virtual Cliente Cliente { get; set; }
-        public string NomeCompleto { get; set; }
+        public string NomeCompleto { get; set; } = string.Empty;
         public bool Ativo { get; set; }
         public DateTime DataInclusao { get; set; }
     }

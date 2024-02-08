@@ -4,27 +4,32 @@ using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Token;
 using Microsoft.EntityFrameworkCore;
 using EncurtadorLink.Entidades.Enum;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using EncurtadorLink.Infra.Extensoes;
 using System.IdentityModel.Tokens.Jwt;
 using EncurtadorLink.Infra.BancoDados;
+using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
 
 namespace EncurtadorLink.Services
 {
     public class TokenService : ITokenService
     {
+        private SignInManager<ApplicationUser> _signInManager;
         private readonly ContextoDb _dbContexto;
         private readonly string _chaveInterna;
         private readonly int _segundos;
 
-        public TokenService(IConfiguration configuration, ContextoDb dbContexto)
+        public TokenService(IConfiguration configuration, SignInManager<ApplicationUser> signInManager, ContextoDb dbContexto)
         {
             _chaveInterna = configuration["TokenJWT:ChaveInterna"]!;
             _segundos = int.Parse(configuration["TokenJWT:Segundos"]!);
+            _signInManager = signInManager;
             _dbContexto = dbContexto;
         }
 
-        public (ITokenModel, bool) ObterTokenJWT(TokenRequisicao requisicao, string ip)
+        public (ITokenModel, bool) ObterTokenAplicacao(TokenRequisicaoModel requisicao, string ip)
         {
             var cliente = _dbContexto.Cliente
                 .Include(c => c.Aplicacoes)
@@ -42,9 +47,34 @@ namespace EncurtadorLink.Services
                 return (new TokenErroModel { Erro = "Cliente inválido.", Descricao = "Cliente ou credenciais inválidas." }, false);
 
             var tipo = cliente.Aplicacoes.FirstOrDefault(x => x.Ativo == true)!.Tipo;
-            var claims = MontarClaims(cliente, tipo, ip);
+            var claims = MontarClaims(cliente.Email.ObterUserName(), cliente.Id, tipo, ip);
 
             return (CriarToken(claims, issuer: tipo.ToString()), true);
+        }
+
+        public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginRequisicaoModel requisicao, string ip)
+        {
+            var resultado = await _signInManager
+                .PasswordSignInAsync(requisicao.Email.ObterUserName(), requisicao.Senha, false, false);
+
+            if (resultado.Succeeded)
+            {
+                var identityUser = _signInManager
+                    .UserManager
+                    .Users
+                    .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
+
+                var claims = MontarClaims(identityUser.UserName, identityUser.ClienteId, ClienteAplicacaoTipo.WEB, ip);
+
+                return (CriarToken(claims, issuer: ClienteAplicacaoTipo.WEB.ToString()), true);
+            }
+
+            return (new TokenErroModel { Erro = "Usuário inválido.", Descricao = "Usuário ou senha inválida." }, false);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
 
         #region ..:: Privados ::..
@@ -69,16 +99,17 @@ namespace EncurtadorLink.Services
             };
         }
 
-        private Claim[] MontarClaims(Cliente cliente, ClienteAplicacaoTipo tipo, string ip)
+        private Claim[] MontarClaims(string username, Guid clienteId, ClienteAplicacaoTipo tipo, string ip)
         {
             switch (tipo)
             {
+                case ClienteAplicacaoTipo.WEB:
                 case ClienteAplicacaoTipo.APP:
                 case ClienteAplicacaoTipo.API:
                     return new Claim[]
                     {
-                        new Claim("username", cliente.Nome),
-                        new Claim("id", cliente.Id.ToString()),
+                        new Claim("username", username),
+                        new Claim("id", clienteId.ToString()),
                         new Claim("ip", ip)
                     };
                 default:

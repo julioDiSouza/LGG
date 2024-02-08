@@ -9,8 +9,8 @@ namespace EncurtadorLink.Infra.Validators
         {
             RuleFor(x => x.Url)
             .NotEmpty()
-            .WithMessage("Campo obrigatório: Url")
-            .Must(x => x.Length <= 1000)
+            .WithMessage("Url é obrigatório")
+            .Must(x => x?.Length <= 1000)
             .WithMessage("Url deve conter menos que 1000 caracteres");
         }
     }
