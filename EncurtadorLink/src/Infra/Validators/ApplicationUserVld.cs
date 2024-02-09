@@ -9,14 +9,11 @@ namespace EncurtadorLink.Infra.Validators
         public ApplicationUserVld()
         {
             RuleFor(x => x.ClienteId)
-            .NotEmpty()
-            .WithMessage("ClienteId é obrigatório");
+            .NotEmpty().WithMessage("ClienteId é obrigatório");
 
             RuleFor(x => x.NomeCompleto)
-            .NotEmpty()
-            .WithMessage("NomeCompleto é obrigatório")
-            .Must(x => x?.Length <= 256)
-            .WithMessage("NomeCompleto deve conter menos que 256 caracteres");
+            .NotEmpty().WithMessage("NomeCompleto é obrigatório")
+            .Must(x => x?.Length <= 256).WithMessage("NomeCompleto deve conter menos que 256 caracteres");
         }
 
         public bool MaximoParaTodos(List<string> valores, int tamanho)
