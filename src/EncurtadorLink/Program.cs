@@ -8,15 +8,21 @@ using Microsoft.EntityFrameworkCore;
 using EncurtadorLink.Infra.Extensoes;
 using Microsoft.IdentityModel.Tokens;
 using EncurtadorLink.Services.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EncurtadorLink.Infra.BancoDados.SQL;
+using EncurtadorLink.Core.Library.BancoDados;
+using EncurtadorLink.Services.Library.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EncurtadorLink.Services.Library.UnidadeTrabalho;
+using EncurtadorLink.Core.Library.BancoDados.Interfaces;
+using EncurtadorLink.Services.Library.Services.Interfaces;
+using EncurtadorLink.Services.Library.UnidadeTrabalho.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-var strConexao = builder.Configuration.GetConnectionString("DataBaseMysql");
+var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql");
 
 // Add services to the container.
-builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexao, ServerVersion.AutoDetect(strConexao)));
+builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<ContextoDb>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -25,6 +31,9 @@ builder.Services.AddScoped(typeof(IUrlEncurtadorService), typeof(UrlEncurtadorSe
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
+builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
+builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
+builder.Services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

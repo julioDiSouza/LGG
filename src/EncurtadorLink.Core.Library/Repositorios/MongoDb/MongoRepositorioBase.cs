@@ -53,7 +53,7 @@ namespace EncurtadorLink.Core.Library.Repositorios.MongoDb
             await _colecao.InsertManyAsync(entidades);
         }
 
-        public async Task AtualizarAsync(FilterDefinition<T> filtro, UpdateDefinition<T> atualizador, UpdateOptions updateOptions = null)
+        public async Task AtualizarAsync(FilterDefinition<T> filtro, UpdateDefinition<T> atualizador, UpdateOptions updateOptions)
         {
             if (_contexto.IsProcessInTransaction())
             {
@@ -65,7 +65,7 @@ namespace EncurtadorLink.Core.Library.Repositorios.MongoDb
             await _colecao.UpdateOneAsync(filtro, atualizador, options: updateOptions);
         }
 
-        public async Task AtualizarVariosAsync(FilterDefinition<T> filtro, UpdateDefinition<T> atualizador, UpdateOptions updateOptions = null)
+        public async Task AtualizarVariosAsync(FilterDefinition<T> filtro, UpdateDefinition<T> atualizador, UpdateOptions updateOptions)
         {
             if (_contexto.IsProcessInTransaction())
             {
@@ -77,19 +77,14 @@ namespace EncurtadorLink.Core.Library.Repositorios.MongoDb
             await _colecao.UpdateManyAsync(filtro, atualizador, options: updateOptions);
         }
 
-        public IQueryable<T> Consultar(Expression<Func<T, bool>> query = null)
+        public IQueryable<T> Consultar(Expression<Func<T, bool>> query)
         {
-            IMongoQueryable<T> consulta;
+            return _colecao.AsQueryable().Where(query);
+        }
 
-            if (_contexto.IsProcessInTransaction())
-                consulta = _colecao.AsQueryable(_contexto.Transaction);
-            else
-                consulta = _colecao.AsQueryable();
-
-            if (query is null)
-                return consulta;
-            else
-                return consulta.Where(query);
+        public async Task<T> ConsultarPrimeiroAsync(Expression<Func<T, bool>> query)
+        {
+            return await _colecao.AsQueryable().FirstOrDefaultAsync(query);
         }
 
         public async Task<T> ConsultarPorIdAsync(string id)
@@ -152,7 +147,7 @@ namespace EncurtadorLink.Core.Library.Repositorios.MongoDb
         public async Task<bool> ExisteAsync(Expression<Func<T, bool>> query)
         {
             if (_contexto.IsProcessInTransaction())
-                return await _colecao.AsQueryable(_contexto.Transaction).AnyAsync(query);
+                return await _colecao.AsQueryable().AnyAsync(query);
                 
             return await _colecao.AsQueryable().AnyAsync(query);
         }

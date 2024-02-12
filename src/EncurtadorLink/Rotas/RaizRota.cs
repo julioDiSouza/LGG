@@ -3,6 +3,8 @@ using EncurtadorLink.Entidades;
 using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Services.Library.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EncurtadorLink.Rotas
 {
@@ -51,13 +53,13 @@ namespace EncurtadorLink.Rotas
 
         public static void RecuperaLink(this WebApplication app)
         {
-            app.MapGet(_rota + "/{codigo}", [AllowAnonymous] async (string codigo, IUrlEncurtadorService urlEncurtadorService) => {
-                var urlEncurtada = await urlEncurtadorService.RecuperarLinkAsync(codigo);
+            app.MapGet(_rota + "/{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbService urlMongoService) => {
+                var urlMongo = await urlMongoService.ConsultarPorCodigoAsync(codigo);
 
-                if (urlEncurtada is null)
+                if (urlMongo is null)
                     return Results.NotFound();
 
-                return Results.Redirect(urlEncurtada.UrlLonga);
+                return Results.Redirect(urlMongo.UrlLonga);
             });
         }
 
