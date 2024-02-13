@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using EncurtadorLink.Entidades;
+using Microsoft.AspNetCore.Mvc;
 using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Services.Library.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using EncurtadorLink.Core.Library.Entidades.MongoDb;
 
 namespace EncurtadorLink.Rotas
 {
@@ -20,6 +21,7 @@ namespace EncurtadorLink.Rotas
             app.Logout();
         }
 
+        /*
         public static void CriaLink(this WebApplication app)
         {
             app.MapPost(_rota + "/link", [Authorize] async (
@@ -44,6 +46,39 @@ namespace EncurtadorLink.Rotas
                     UrlCurta = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/",
                     DataInclusaoUtc = DateTime.Now 
                 };
+
+                urlEncurtada = await urlEncurtadorService.GerarCodigoUnicoAsync(urlEncurtada);
+
+                return Results.Ok(urlEncurtada.UrlCurta);
+            });
+        }
+        */
+
+        public static void CriaLink(this WebApplication app)
+        {
+            app.MapPost(_rota + "/link", [Authorize] async (
+                UrlRequisicaoModel requisicao,
+                IUrlMongoDbService urlMongoService,
+                HttpContext httpContext,
+                IValidator<UrlRequisicaoModel> validacao
+                ) =>
+            {
+                var resultado = await validacao.ValidateAsync(requisicao);
+
+                if (!resultado.IsValid)
+                    return Results.ValidationProblem(resultado.ToDictionary());
+
+                if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
+                    return Results.BadRequest("URL é inválida");
+
+                var urlEncurtada = new UrlMongoDB
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UrlLonga = requisicao.Url,
+                    Ativo = true
+                };
+
+                //$"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/"
 
                 urlEncurtada = await urlEncurtadorService.GerarCodigoUnicoAsync(urlEncurtada);
 
