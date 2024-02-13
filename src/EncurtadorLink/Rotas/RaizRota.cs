@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
-using EncurtadorLink.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using EncurtadorLink.Model.Requisicao;
 using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
-using EncurtadorLink.Services.Library.Services.Interfaces;
-using EncurtadorLink.Core.Library.Entidades.MongoDb;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
@@ -56,6 +54,7 @@ namespace EncurtadorLink.Rotas
 
         public static void CriaLink(this WebApplication app)
         {
+            /*
             app.MapPost(_rota + "/link", [Authorize] async (
                 UrlRequisicaoModel requisicao,
                 IUrlMongoDbService urlMongoService,
@@ -71,7 +70,7 @@ namespace EncurtadorLink.Rotas
                 if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
                     return Results.BadRequest("URL é inválida");
 
-                var urlEncurtada = new UrlMongoDB
+                var urlEncurtada = new UrlMongoDbModel
                 {
                     Id = Guid.NewGuid().ToString(),
                     UrlLonga = requisicao.Url,
@@ -84,7 +83,9 @@ namespace EncurtadorLink.Rotas
 
                 return Results.Ok(urlEncurtada.UrlCurta);
             });
+            */
         }
+
 
         public static void RecuperaLink(this WebApplication app)
         {
