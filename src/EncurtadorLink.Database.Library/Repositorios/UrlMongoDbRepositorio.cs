@@ -1,20 +1,32 @@
-﻿using EncurtadorLink.Entities.Library.Mongo;
+﻿using MongoDB.Driver;
+using EncurtadorLink.Entities.Library.Mongo;
 using EncurtadorLink.Database.Library.Contextos.Interfaces;
 using EncurtadorLink.Database.Library.Repositorios.Interfaces;
 
 namespace EncurtadorLink.Database.Library.Repositorios
 {
-    public class UrlMongoDbRepositorio : MongoRepositorioBase<UrlMongoDb>, IUrlMongoDbRepositorio
+    public class UrlMongoDbRepositorio : IUrlMongoDbRepositorio
     {
-        public UrlMongoDbRepositorio(IMongoDbContext contexto) : base(contexto, "urlMongoDB")
+        private readonly IMongoCollection<UrlMongoDb> _colecao;
+
+        public UrlMongoDbRepositorio(IMongoDbContext contexto)
         {
-            AplicarProjecao(x => new UrlMongoDb
-            {
-                Id = x.Id,
-                Codigo = x.Codigo,
-                UrlLonga = x.UrlLonga,
-                Ativo = x.Ativo
-            });
+            _colecao = contexto.DataBase.GetCollection<UrlMongoDb>("urlMongoDB");
         }
+
+        public async Task<UrlMongoDb> ConsultarPorCodigoAsync(string codigo)
+        {
+            var filtro = Builders<UrlMongoDb>.Filter.Eq(x => x.Codigo, codigo) & 
+                         Builders<UrlMongoDb>.Filter.Eq(x => x.Ativo, true);
+            
+            return await _colecao.Find(filtro).Project<UrlMongoDb>(Projecao).FirstOrDefaultAsync();
+        }
+
+        private static ProjectionDefinition<UrlMongoDb> Projecao =>
+            Builders<UrlMongoDb>.Projection
+            .Include(x => x.Id)
+            .Include(x => x.Codigo)
+            .Include(x => x.UrlLonga)
+            .Include(x => x.Ativo);
     }
 }

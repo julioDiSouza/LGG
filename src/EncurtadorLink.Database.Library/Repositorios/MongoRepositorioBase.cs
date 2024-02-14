@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using EncurtadorLink.Entities.Library.Mongo;
@@ -83,7 +84,7 @@ namespace EncurtadorLink.Database.Library.Repositorios
 
         public async Task<T> ConsultarPrimeiroAsync(Expression<Func<T, bool>> query)
         {
-            return await _colecao.AsQueryable().  .FirstOrDefaultAsync(query);
+            return await _colecao.AsQueryable().FirstOrDefaultAsync(query);
         }
 
         public async Task<T> ConsultarPorIdAsync(string id)

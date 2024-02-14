@@ -7,7 +7,7 @@ namespace EncurtadorLink.Database.Library.Repositorios.Interfaces
     public interface IMongoRepositorioBase<T> where T : EntidadeId
     {
         IQueryable<T> Consultar(Expression<Func<T, bool>> query);
-        T ConsultarPrimeiro(Expression<Func<T, bool>> query);
+        Task<T> ConsultarPrimeiroAsync(Expression<Func<T, bool>> query);
         Task<T> ConsultarPorIdAsync(string id);
         Task<IEnumerable<T>> ConsultarPorIdsAsync(IEnumerable<string> ids);
         Task<bool> ExisteAsync(string id);

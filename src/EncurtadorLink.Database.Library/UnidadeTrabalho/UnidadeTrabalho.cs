@@ -9,15 +9,15 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho
     {
         private readonly IMongoDbContext _mongoContexto;
 
-        private IUrlMongoDbRepositorio _urlMongoDBRepositorio;
+        private IUrlMongoDbRepositorio _urlMongoDbRepositorio;
 
         public UnidadeTrabalho(IMongoDbContext mongoContexto)
         {
             _mongoContexto = mongoContexto;
         }
 
-        public IUrlMongoDbRepositorio UrlMongoDBRepositorio =>
-            _urlMongoDBRepositorio ?? new UrlMongoDbRepositorio(_mongoContexto);
+        public IUrlMongoDbRepositorio UrlMongoDbRepositorio =>
+            _urlMongoDbRepositorio ?? new UrlMongoDbRepositorio(_mongoContexto);
 
         public async Task AbortAsync()
         {

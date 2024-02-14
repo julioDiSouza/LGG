@@ -90,12 +90,16 @@ namespace EncurtadorLink.Rotas
         public static void RecuperaLink(this WebApplication app)
         {
             app.MapGet(_rota + "/{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbService urlMongoService) => {
-                var urlMongo = await urlMongoService.ConsultarPorCodigoAsync(codigo);
+                try
+                {
+                    var urlMongo = await urlMongoService.ConsultarPorCodigoAsync(codigo);
 
-                if (urlMongo is null)
-                    return Results.NotFound();
+                    if (urlMongo is not null)
+                        return Results.Redirect(urlMongo.UrlLonga);
+                }
+                catch (Exception) { }
 
-                return Results.Redirect(urlMongo.UrlLonga);
+                return Results.NotFound();
             });
         }
 

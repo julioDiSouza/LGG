@@ -4,6 +4,6 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
 {
     public interface IUrlMongoDbService
     {
-        Task<UrlMongoDbModel> ConsultarPorCodigoAsync(string codigo);
+        Task<UrlMongoDbModel?> ConsultarPorCodigoAsync(string codigo);
     }
 }

@@ -2,7 +2,8 @@
 
 namespace EncurtadorLink.Database.Library.Repositorios.Interfaces
 {
-    public interface IUrlMongoDbRepositorio : IMongoRepositorioBase<UrlMongoDb>
+    public interface IUrlMongoDbRepositorio
     {
+        Task<UrlMongoDb> ConsultarPorCodigoAsync(string codigo);
     }
 }

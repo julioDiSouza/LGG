@@ -5,6 +5,6 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho.Interface
 {
     public interface IUnidadeTrabalho : ITransactionalContext
     {
-        IUrlMongoDbRepositorio UrlMongoDBRepositorio { get; }
+        IUrlMongoDbRepositorio UrlMongoDbRepositorio { get; }
     }
 }

@@ -16,15 +16,11 @@ namespace EncurtadorLink.UseCases.Library.Services
             _mapper = mapper;
         }
 
-        public async Task<UrlMongoDbModel> ConsultarPorCodigoAsync(string codigo)
+        public async Task<UrlMongoDbModel?> ConsultarPorCodigoAsync(string codigo)
         {
-            var entidade = _udt.UrlMongoDBRepositorio.ConsultarPrimeiro(x =>
-            x.Codigo == codigo &&
-            x.Ativo == true);
+            var entidade = await _udt.UrlMongoDbRepositorio.ConsultarPorCodigoAsync(codigo);
 
-            await Task.Run(() => { });
-
-            return entidade is not null ? _mapper.Map<UrlMongoDbModel>(entidade) : null;
+            return _mapper.Map<UrlMongoDbModel>(entidade) ?? null;
         }
     }
 }
