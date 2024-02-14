@@ -1,9 +1,9 @@
 ﻿using MongoDB.Driver;
 using EncurtadorLink.Entities.Library.Mongo;
 using EncurtadorLink.Database.Library.Contextos.Interfaces;
-using EncurtadorLink.Database.Library.Repositorios.Interfaces;
+using EncurtadorLink.Database.Library.Repositorios.Mongo.Interfaces;
 
-namespace EncurtadorLink.Database.Library.Repositorios
+namespace EncurtadorLink.Database.Library.Repositorios.Mongo
 {
     public class UrlMongoDbRepositorio : IUrlMongoDbRepositorio
     {
@@ -16,9 +16,9 @@ namespace EncurtadorLink.Database.Library.Repositorios
 
         public async Task<UrlMongoDb> ConsultarPorCodigoAsync(string codigo)
         {
-            var filtro = Builders<UrlMongoDb>.Filter.Eq(x => x.Codigo, codigo) & 
+            var filtro = Builders<UrlMongoDb>.Filter.Eq(x => x.Codigo, codigo) &
                          Builders<UrlMongoDb>.Filter.Eq(x => x.Ativo, true);
-            
+
             return await _colecao.Find(filtro).Project<UrlMongoDb>(Projecao).FirstOrDefaultAsync();
         }
 

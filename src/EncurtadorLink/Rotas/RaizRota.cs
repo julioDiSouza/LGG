@@ -13,10 +13,10 @@ namespace EncurtadorLink.Rotas
         public static void Raiz(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.CriaLink();
+            //app.CriaLink();
             app.RecuperaLink();
-            app.Login();
-            app.Logout();
+            //app.Login();
+            //app.Logout();
         }
 
         /*

@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 using EncurtadorLink.Model.Usuario;
-using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EncurtadorLink.Rotas
 {
@@ -12,10 +13,29 @@ namespace EncurtadorLink.Rotas
         {
             _rota = rota;
             app.CadastroCliente();
+            app.ListarClientes();
+        }
+
+        public static void ListarClientes(this WebApplication app)
+        {
+            app.MapGet(_rota , [AllowAnonymous] async ([FromServices] IClienteService clienteService) => 
+            {
+                try
+                {
+                    var clientes = await clienteService.ListarClientesAsync();
+
+                    if (clientes is not null)
+                        return Results.Ok(clientes);
+                }
+                catch (Exception) { }
+
+                return Results.NotFound();
+            });
         }
 
         public static void CadastroCliente(this WebApplication app)
         {
+            /*
             app.MapPost(_rota + "/cadastro", [AllowAnonymous] async (
                 ClienteDtoCriar clienteDto,
                 IClienteService clienteService,
@@ -31,6 +51,7 @@ namespace EncurtadorLink.Rotas
 
                 return Results.Ok();
             });
+            */
         }
     }
 }

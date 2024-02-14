@@ -1,4 +1,4 @@
-﻿using EncurtadorLink.Infra.BancoDados.SQL;
+﻿using EncurtadorLink.Database.Library.Contextos;
 using Microsoft.EntityFrameworkCore;
 
 namespace EncurtadorLink.Infra.Extensoes
@@ -9,7 +9,7 @@ namespace EncurtadorLink.Infra.Extensoes
         {
             using var scope = app.Services.CreateScope();
 
-            var dbContext = scope.ServiceProvider.GetRequiredService<ContextoDb>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<MysqlContext>();
 
             dbContext.Database.Migrate();
         }

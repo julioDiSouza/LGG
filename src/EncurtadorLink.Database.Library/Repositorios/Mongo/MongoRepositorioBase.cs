@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using EncurtadorLink.Entities.Library.Mongo;
 using EncurtadorLink.Database.Library.Contextos.Interfaces;
-using EncurtadorLink.Database.Library.Repositorios.Interfaces;
+using EncurtadorLink.Database.Library.Repositorios.Mongo.Interfaces;
 
-namespace EncurtadorLink.Database.Library.Repositorios
+namespace EncurtadorLink.Database.Library.Repositorios.Mongo
 {
     public class MongoRepositorioBase<T> : IMongoRepositorioBase<T> where T : EntidadeId
     {

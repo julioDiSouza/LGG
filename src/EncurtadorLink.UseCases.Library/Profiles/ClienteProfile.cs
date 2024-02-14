@@ -16,6 +16,9 @@ namespace EncurtadorLink.UseCases.Library.Profiles
             CreateMap<ClienteModelCriar, ApplicationUser>()
                 .ForMember(d => d.UserName, m => m.MapFrom(s => s.Email.ObterUserName()))
                 .ReverseMap();
+
+            CreateMap<ClienteModel, Cliente>()
+                .ReverseMap();
         }
     }
 }
