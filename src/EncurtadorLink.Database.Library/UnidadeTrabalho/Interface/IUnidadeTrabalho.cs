@@ -9,5 +9,6 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho.Interface
         IUrlMongoDbRepositorio UrlMongoDbRepositorio { get; }
 
         IClienteRepositorio ClienteRepositorio { get; }
+        IUrlSqlRepositorio UrlSqlRepositorio { get; }
     }
 }

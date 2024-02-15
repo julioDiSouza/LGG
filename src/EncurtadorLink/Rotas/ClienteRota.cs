@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using EncurtadorLink.Model.Usuario;
-using Microsoft.AspNetCore.Authorization;
-using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
@@ -12,8 +12,8 @@ namespace EncurtadorLink.Rotas
         public static void Cliente(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.CadastroCliente();
             app.ListarClientes();
+            app.CadastroCliente();
         }
 
         public static void ListarClientes(this WebApplication app)
@@ -35,23 +35,28 @@ namespace EncurtadorLink.Rotas
 
         public static void CadastroCliente(this WebApplication app)
         {
-            /*
             app.MapPost(_rota + "/cadastro", [AllowAnonymous] async (
-                ClienteDtoCriar clienteDto,
+                ClienteModelCriar clienteModel,
                 IClienteService clienteService,
-                IValidator<ClienteDtoCriar> validacao
+                IValidator<ClienteModelCriar> validacao
                 ) =>
             {
-                var resultado = await validacao.ValidateAsync(clienteDto);
+                try
+                {
+                    var resultado = await validacao.ValidateAsync(clienteModel);
 
-                if (!resultado.IsValid)
-                    return Results.ValidationProblem(resultado.ToDictionary());
+                    if (!resultado.IsValid)
+                        return Results.ValidationProblem(resultado.ToDictionary());
 
-                await clienteService.CadastrarAsync(clienteDto);
+                    await clienteService.CadastrarAsync(clienteModel);
+                }
+                catch (Exception)
+                {
+                    return Results.Problem("Falha ao cadastrar cliente.");
+                }
 
                 return Results.Ok();
             });
-            */
         }
     }
 }

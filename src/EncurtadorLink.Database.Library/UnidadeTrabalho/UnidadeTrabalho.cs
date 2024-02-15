@@ -16,6 +16,7 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho
         private IUrlMongoDbRepositorio _urlMongoDbRepositorio;
         
         private IClienteRepositorio _clienteRepositorio;
+        private IUrlSqlRepositorio _urlSqlRepositorio;
 
         public UnidadeTrabalho(IMongoDbContext mongoContexto, MysqlContext mysqlContexto)
         {
@@ -28,6 +29,9 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho
 
         public IClienteRepositorio ClienteRepositorio =>
             _clienteRepositorio ?? new ClienteRepositorio(_mysqlContexto);
+
+        public IUrlSqlRepositorio UrlSqlRepositorio => 
+            _urlSqlRepositorio ?? new UrlSqlRepositorio(_mysqlContexto);
 
         public async Task AbortAsync()
         {

@@ -11,8 +11,4 @@
     <PackageReference Include="MongoDB.Bson" Version="2.10.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EncurtadorLink.Shared.Library\EncurtadorLink.Shared.Library.csproj" />
-  </ItemGroup>
-
 </Project>

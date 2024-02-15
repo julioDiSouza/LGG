@@ -1,35 +1,31 @@
 using System.Text;
 using FluentValidation;
 using EncurtadorLink.Rotas;
-using EncurtadorLink.Endpoints;
-using EncurtadorLink.Entidades;
+using EncurtadorLink.Extensoes;
 using Microsoft.EntityFrameworkCore;
-using EncurtadorLink.Infra.Extensoes;
 using Microsoft.IdentityModel.Tokens;
-using EncurtadorLink.Infra.BancoDados.SQL;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EncurtadorLink.Entities.Library.Sql;
+using EncurtadorLink.UseCases.Library.Services;
 using EncurtadorLink.Database.Library.Contextos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EncurtadorLink.Database.Library.UnidadeTrabalho;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.Contextos.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using EncurtadorLink.UseCases.Library.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql");
 
 // Add services to the container.
-//builder.Services.AddDbContext<ContextoDb>(options => options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
-//builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<ContextoDb>();
 builder.Services.AddDbContext<MysqlContext>(options => options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//builder.Services.AddScoped(typeof(IUrlEncurtadorService), typeof(UrlEncurtadorService));
-//builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
-//builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
+builder.Services.AddScoped(typeof(IUrlService), typeof(UrlService));
+builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
+builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
@@ -70,9 +66,9 @@ app.UseAuthorization();
 
 // Rotas
 app.Raiz("api");
-//app.Teste("api/teste");
-//app.Token("api/token");
-//app.Usuario("api/usuario");
+app.Teste("api/teste");
+app.Token("api/token");
+app.Usuario("api/usuario");
 app.Cliente("api/cliente");
 
 app.Run();

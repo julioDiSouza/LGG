@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using EncurtadorLink.Model.Requisicao;
-using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Entities.Library.Sql;
+using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
@@ -13,20 +13,19 @@ namespace EncurtadorLink.Rotas
         public static void Raiz(this WebApplication app, string rota)
         {
             _rota = rota;
-            //app.CriaLink();
+            app.CriaLink();
             app.RecuperaLink();
-            //app.Login();
-            //app.Logout();
+            app.Login();
+            app.Logout();
         }
 
-        /*
         public static void CriaLink(this WebApplication app)
         {
             app.MapPost(_rota + "/link", [Authorize] async (
-                UrlRequisicaoModel requisicao,
-                IUrlEncurtadorService urlEncurtadorService,
+                RequisicaoUrlModel requisicao,
+                IUrlService urlService,
                 HttpContext httpContext,
-                IValidator<UrlRequisicaoModel> validacao
+                IValidator<RequisicaoUrlModel> validacao
                 ) =>
             {
                 var resultado = await validacao.ValidateAsync(requisicao);
@@ -37,55 +36,19 @@ namespace EncurtadorLink.Rotas
                 if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
                     return Results.BadRequest("URL é inválida");
 
-                var urlEncurtada = new UrlEncurtada
+                var urlSql = new UrlSql
                 {
                     Id = Guid.NewGuid(),
                     UrlLonga = requisicao.Url,
                     UrlCurta = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/",
-                    DataInclusaoUtc = DateTime.Now 
+                    DataInclusao = DateTime.Now 
                 };
 
-                urlEncurtada = await urlEncurtadorService.GerarCodigoUnicoAsync(urlEncurtada);
+                urlSql = await urlService.GerarUrlCodigoUnicoAsync(urlSql);
 
-                return Results.Ok(urlEncurtada.UrlCurta);
+                return Results.Ok(urlSql.UrlCurta);
             });
         }
-        */
-
-        public static void CriaLink(this WebApplication app)
-        {
-            /*
-            app.MapPost(_rota + "/link", [Authorize] async (
-                UrlRequisicaoModel requisicao,
-                IUrlMongoDbService urlMongoService,
-                HttpContext httpContext,
-                IValidator<UrlRequisicaoModel> validacao
-                ) =>
-            {
-                var resultado = await validacao.ValidateAsync(requisicao);
-
-                if (!resultado.IsValid)
-                    return Results.ValidationProblem(resultado.ToDictionary());
-
-                if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
-                    return Results.BadRequest("URL é inválida");
-
-                var urlEncurtada = new UrlMongoDbModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UrlLonga = requisicao.Url,
-                    Ativo = true
-                };
-
-                //$"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/"
-
-                urlEncurtada = await urlEncurtadorService.GerarCodigoUnicoAsync(urlEncurtada);
-
-                return Results.Ok(urlEncurtada.UrlCurta);
-            });
-            */
-        }
-
 
         public static void RecuperaLink(this WebApplication app)
         {
@@ -106,10 +69,10 @@ namespace EncurtadorLink.Rotas
         public static void Login(this WebApplication app)
         {
             app.MapPost(_rota + "/login", [AllowAnonymous] async (
-                LoginRequisicaoModel requisicao,
+                RequisicaoLoginModel requisicao,
                 ITokenService tokenService,
                 HttpContext httpContext,
-                IValidator<LoginRequisicaoModel> validacao
+                IValidator<RequisicaoLoginModel> validacao
                 ) =>
             {
                 var resultado = await validacao.ValidateAsync(requisicao);

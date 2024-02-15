@@ -1,4 +1,4 @@
-﻿using EncurtadorLink.Shared.Library.Enumeradores;
+﻿using EncurtadorLink.Entities.Library.Enumeradores;
 using System.ComponentModel.DataAnnotations;
 
 namespace EncurtadorLink.Shared.Library.Models

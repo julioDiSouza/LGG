@@ -1,8 +1,8 @@
-﻿using EncurtadorLink.Model.Token;
-using EncurtadorLink.Services.Interface;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
-namespace EncurtadorLink.Endpoints
+namespace EncurtadorLink.Rotas
 {
     public static class TokenRota
     {
@@ -37,9 +37,9 @@ namespace EncurtadorLink.Endpoints
 
         #region ..:: Privados ::..
 
-        private static TokenRequisicaoModel MontaRequisicao(HttpContext context)
+        private static RequisicaoTokenModel MontaRequisicao(HttpContext context)
         {
-            return new TokenRequisicaoModel
+            return new RequisicaoTokenModel
             {
                 ClientId = context.Request.Headers["client_id"]!,
                 ClientSecret = context.Request.Headers["client_secret"]!

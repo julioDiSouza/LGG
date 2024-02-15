@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using EncurtadorLink.Model.Usuario;
-using EncurtadorLink.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
@@ -17,9 +17,9 @@ namespace EncurtadorLink.Rotas
         public static void CadastroUsuario(this WebApplication app)
         {
             app.MapPost(_rota + "/cadastro", [Authorize] async ( 
-                UsuarioDtoCriar usuarioDto, 
+                UsuarioModelCriar usuarioDto, 
                 IUsuarioService usuarioService, 
-                IValidator<UsuarioDtoCriar> validacao 
+                IValidator<UsuarioModelCriar> validacao 
                 ) =>
             {
                 var resultado = await validacao.ValidateAsync(usuarioDto);
