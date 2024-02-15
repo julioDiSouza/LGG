@@ -14,6 +14,11 @@ namespace EncurtadorLink.Database.Library.Repositorios.Mongo
             _colecao = contexto.DataBase.GetCollection<UrlMongoDb>("urlMongoDB");
         }
 
+        public async Task AdicionarAsync(UrlMongoDb urlMongo)
+        {
+            await _colecao.InsertOneAsync(urlMongo);
+        }
+
         public async Task<UrlMongoDb> ConsultarPorCodigoAsync(string codigo)
         {
             var filtro = Builders<UrlMongoDb>.Filter.Eq(x => x.Codigo, codigo) &

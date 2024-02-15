@@ -36,11 +36,14 @@ namespace EncurtadorLink.Rotas
                 if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
                     return Results.BadRequest("URL é inválida");
 
+                var enderecoCurto = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/";
+
                 var urlSql = new UrlSql
                 {
                     Id = Guid.NewGuid(),
                     UrlLonga = requisicao.Url,
-                    UrlCurta = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/",
+                    UrlCurta = enderecoCurto,
+                    IP = httpContext.Connection.RemoteIpAddress?.ToString()!,
                     DataInclusao = DateTime.Now 
                 };
 

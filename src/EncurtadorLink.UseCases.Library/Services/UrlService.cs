@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
+using EncurtadorLink.Entities.Library.Mongo;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
@@ -24,6 +25,15 @@ namespace EncurtadorLink.UseCases.Library.Services
             urlSql.UrlCurta += urlSql.Codigo;
 
             await _udt.UrlSqlRepositorio.AdicionarAsync(urlSql);
+
+            var urlMongoDb = new UrlMongoDb
+            {
+                Codigo = urlSql.Codigo,
+                UrlLonga = urlSql.UrlLonga,
+                Ativo = true
+            };
+
+            await _udt.UrlMongoDbRepositorio.AdicionarAsync(urlMongoDb);
 
             return urlSql;
         }
