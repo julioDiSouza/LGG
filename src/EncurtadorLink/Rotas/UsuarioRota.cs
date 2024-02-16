@@ -16,7 +16,7 @@ namespace EncurtadorLink.Rotas
 
         public static void CadastroUsuario(this WebApplication app)
         {
-            app.MapPost(_rota + "/cadastro", [Authorize] async ( 
+            app.MapPost(_rota , [Authorize] async ( 
                 UsuarioModelCriar usuarioDto, 
                 IUsuarioService usuarioService, 
                 IValidator<UsuarioModelCriar> validacao 

@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.UseCases.Lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.Entities.Library", "src\EncurtadorLink.Entities.Library\EncurtadorLink.Entities.Library.csproj", "{791B26E1-747F-454F-97A2-E404278E33DE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{CB31C5DA-FCC0-4F79-98B1-09EB14164110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncurtadorLink.Robot.Service", "src\Services\EncurtadorLink.Robot.Service\EncurtadorLink.Robot.Service.csproj", "{CBFFB926-503E-492B-9114-C095B5AE0402}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,9 +43,16 @@ Global
 		{791B26E1-747F-454F-97A2-E404278E33DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{791B26E1-747F-454F-97A2-E404278E33DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{791B26E1-747F-454F-97A2-E404278E33DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBFFB926-503E-492B-9114-C095B5AE0402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFFB926-503E-492B-9114-C095B5AE0402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFFB926-503E-492B-9114-C095B5AE0402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFFB926-503E-492B-9114-C095B5AE0402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CBFFB926-503E-492B-9114-C095B5AE0402} = {CB31C5DA-FCC0-4F79-98B1-09EB14164110}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {305FF9E0-5A16-4A62-85D9-35DA9A9538BF}

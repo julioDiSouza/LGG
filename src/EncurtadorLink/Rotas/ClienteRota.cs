@@ -35,7 +35,7 @@ namespace EncurtadorLink.Rotas
 
         public static void CadastroCliente(this WebApplication app)
         {
-            app.MapPost(_rota + "/cadastro", [AllowAnonymous] async (
+            app.MapPost(_rota , [AllowAnonymous] async (
                 ClienteModelCriar clienteModel,
                 IClienteService clienteService,
                 IValidator<ClienteModelCriar> validacao
