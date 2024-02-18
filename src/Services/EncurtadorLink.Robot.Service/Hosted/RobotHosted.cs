@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using EncurtadorLink.Robot.Service.Services.Interfaces;
 using EncurtadorLink.Shared.Library.Models.Configuracoes;
 
 namespace EncurtadorLink.Robot.Service.Hosted
@@ -7,10 +8,12 @@ namespace EncurtadorLink.Robot.Service.Hosted
     internal class RobotHosted : BackgroundService
     {
         private readonly ConfiguracaoAutenticacao _configuracaoAutenticacao;
+        private readonly IMonitoramento _monitoramento;
 
-        public RobotHosted(IConfiguration configuration)
+        public RobotHosted(IConfiguration configuration, IMonitoramento monitoramento)
         {
             _configuracaoAutenticacao = configuration.GetSection("ConfiguracaoAutenticacao").Get<ConfiguracaoAutenticacao>()!;
+            _monitoramento = monitoramento;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,6 +31,8 @@ namespace EncurtadorLink.Robot.Service.Hosted
                         Console.WriteLine("");
                     });
 
+
+                    await _monitoramento.TestarAutenticacaoAsync();
                 }
                 catch (Exception ex)
                 {
