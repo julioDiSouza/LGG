@@ -1,0 +1,6 @@
+@EncurtadorLink.RecuperaLink.WebApi_HostAddress = http://localhost:5006
+
+GET {{EncurtadorLink.RecuperaLink.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
+using Newtonsoft.Json;
+using EncurtadorLink.Entities.Library.Mongo;
+
 
 namespace EncurtadorLink.Rotas
 {
