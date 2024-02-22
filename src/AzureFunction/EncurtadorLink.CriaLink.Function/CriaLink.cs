@@ -28,20 +28,38 @@ namespace EncurtadorLink.CriaLink.Function
         [Function("CriaLink")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var model = JsonConvert.DeserializeObject<RequisicaoUrlModel>(requestBody);
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var reqModel = JsonConvert.DeserializeObject<RequisicaoUrlModel>(requestBody);
 
-            var resultado = await _validacao.ValidateAsync(model!);
+                var resultado = await _validacao.ValidateAsync(reqModel!);
 
-            if (!resultado.IsValid)
-                return new BadRequestObjectResult(resultado.ToDictionary());
+                if (!resultado.IsValid)
+                    return new BadRequestObjectResult(resultado.ToDictionary());
 
-            if (!Uri.TryCreate(model!.Url, UriKind.Absolute, out _))
-                return new BadRequestObjectResult("URL é inválida");
+                if (!Uri.TryCreate(reqModel!.Url, UriKind.Absolute, out _))
+                    return new BadRequestObjectResult("URL é inválida");
 
-            var enderecoCurto = _configuration["EnderecoCurto"]! + "/EO5si";
+                var urlSqlModel = new UrlSqlModel
+                {
+                    Id = Guid.NewGuid(),
+                    UrlLonga = reqModel.Url,
+                    UrlCurta = _configuration["EnderecoCurto"]!,
+                    IP = req.HttpContext.Connection.RemoteIpAddress?.ToString()!,
+                    DataInclusao = DateTime.Now
+                };
 
-            return new OkObjectResult(new { Url = enderecoCurto });
+                urlSqlModel = await _urlService.GerarUrlCodigoUnicoAsync(urlSqlModel);
+
+                return new OkObjectResult(new { UrlCurta = urlSqlModel.UrlCurta });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

@@ -17,17 +17,17 @@ namespace EncurtadorLink.Rotas
         public static void CadastroUsuario(this WebApplication app)
         {
             app.MapPost(_rota , [Authorize] async ( 
-                UsuarioModelCriar usuarioDto, 
+                UsuarioModelCriar usuarioModel, 
                 IUsuarioService usuarioService, 
                 IValidator<UsuarioModelCriar> validacao 
                 ) =>
             {
-                var resultado = await validacao.ValidateAsync(usuarioDto);
+                var resultado = await validacao.ValidateAsync(usuarioModel);
 
                 if (!resultado.IsValid)
                     return Results.ValidationProblem(resultado.ToDictionary());
 
-                var sucesso = await usuarioService.CadastrarAsync(usuarioDto);
+                var sucesso = await usuarioService.CadastrarAsync(usuarioModel);
 
                 return sucesso ? Results.Ok() : Results.Problem("Falha ao cadastrar usuário");
             });

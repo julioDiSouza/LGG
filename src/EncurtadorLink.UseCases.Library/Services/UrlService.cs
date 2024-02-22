@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
+using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Entities.Library.Mongo;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
@@ -11,31 +13,35 @@ namespace EncurtadorLink.UseCases.Library.Services
         private readonly int _tamanho;
         private readonly string _caracteres;
         private readonly IUnidadeTrabalho _udt;
+        private readonly IMapper _mapper;
 
-        public UrlService(IConfiguration configuration, IUnidadeTrabalho udt)
+        public UrlService(IConfiguration configuration, IUnidadeTrabalho udt, IMapper mapper)
         {
             _udt = udt;
+            _mapper = mapper;
             _tamanho = int.Parse(configuration["ConfiguracaoCodigoUnico:Tamanho"]!);
             _caracteres = configuration["ConfiguracaoCodigoUnico:Caracteres"]!;
         }
 
-        public async Task<UrlSql> GerarUrlCodigoUnicoAsync(UrlSql urlSql)
+        public async Task<UrlSqlModel> GerarUrlCodigoUnicoAsync(UrlSqlModel urlSqlModel)
         {
-            urlSql.Codigo = await ObterCodigoUnicoAsync();
-            urlSql.UrlCurta += urlSql.Codigo;
+            urlSqlModel.Codigo = await ObterCodigoUnicoAsync();
+            urlSqlModel.UrlCurta += "/" + urlSqlModel.Codigo;
 
-            await _udt.UrlSqlRepositorio.AdicionarAsync(urlSql);
+            var urlSqlEntidade = _mapper.Map<UrlSql>(urlSqlModel);
+
+            await _udt.UrlSqlRepositorio.AdicionarAsync(urlSqlEntidade);
 
             var urlMongoDb = new UrlMongoDb
             {
-                Codigo = urlSql.Codigo,
-                UrlLonga = urlSql.UrlLonga,
+                Codigo = urlSqlModel.Codigo,
+                UrlLonga = urlSqlModel.UrlLonga,
                 Ativo = true
             };
 
             await _udt.UrlMongoDbRepositorio.AdicionarAsync(urlMongoDb);
 
-            return urlSql;
+            return urlSqlModel;
         }
 
         #region ..:: Privados ::..

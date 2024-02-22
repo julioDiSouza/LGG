@@ -1,9 +1,9 @@
-﻿using EncurtadorLink.Entities.Library.Sql;
+﻿using EncurtadorLink.Shared.Library.Models;
 
 namespace EncurtadorLink.UseCases.Library.Services.Interfaces
 {
     public interface IUrlService
     {
-        Task<UrlSql> GerarUrlCodigoUnicoAsync(UrlSql urlSql);
+        Task<UrlSqlModel> GerarUrlCodigoUnicoAsync(UrlSqlModel urlSql);
     }
 }
