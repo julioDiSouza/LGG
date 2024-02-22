@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.Robot.Servic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunctions", "AzureFunctions", "{9F5D5AA2-6BA8-4509-930D-2319B4D656AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.RecuperaLink.Function", "src\AzureFunctions\EncurtadorLink.RecuperaLink.Function\EncurtadorLink.RecuperaLink.Function.csproj", "{7B346358-B856-445E-956B-4EB40A4C2C6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.RecuperaLink.WebApi", "src\EncurtadorLink.RecuperaLink.WebApi\EncurtadorLink.RecuperaLink.WebApi.csproj", "{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncurtadorLink.RecuperaLink.WebApi", "src\EncurtadorLink.RecuperaLink.WebApi\EncurtadorLink.RecuperaLink.WebApi.csproj", "{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.CriaLink.Function", "src\AzureFunction\EncurtadorLink.CriaLink.Function\EncurtadorLink.CriaLink.Function.csproj", "{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,21 +53,21 @@ Global
 		{CBFFB926-503E-492B-9114-C095B5AE0402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBFFB926-503E-492B-9114-C095B5AE0402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBFFB926-503E-492B-9114-C095B5AE0402}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B346358-B856-445E-956B-4EB40A4C2C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B346358-B856-445E-956B-4EB40A4C2C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B346358-B856-445E-956B-4EB40A4C2C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B346358-B856-445E-956B-4EB40A4C2C6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ED0DC77-B2FE-4EF0-B030-B33E17F77634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBFFB926-503E-492B-9114-C095B5AE0402} = {CB31C5DA-FCC0-4F79-98B1-09EB14164110}
-		{7B346358-B856-445E-956B-4EB40A4C2C6B} = {9F5D5AA2-6BA8-4509-930D-2319B4D656AA}
+		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76} = {9F5D5AA2-6BA8-4509-930D-2319B4D656AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {305FF9E0-5A16-4A62-85D9-35DA9A9538BF}
