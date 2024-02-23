@@ -1,0 +1,20 @@
+﻿{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7246"
+  },
+  "Routes": [
+    {
+      //RecuperaLink
+      "UpstreamPathTemplate": "/gateway/recupera-link/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7285
+        }
+      ]
+    }
+  ]
+}

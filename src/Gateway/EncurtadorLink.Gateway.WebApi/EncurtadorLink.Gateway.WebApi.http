@@ -1,0 +1,6 @@
+@EncurtadorLink.Gateway.WebApi_HostAddress = http://localhost:5025
+
+GET {{EncurtadorLink.Gateway.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.RecuperaLink
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncurtadorLink.CriaLink.Function", "src\AzureFunction\EncurtadorLink.CriaLink.Function\EncurtadorLink.CriaLink.Function.csproj", "{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{C71B7ACF-677A-4859-84A6-616A2B64667E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncurtadorLink.Gateway.WebApi", "src\Gateway\EncurtadorLink.Gateway.WebApi\EncurtadorLink.Gateway.WebApi.csproj", "{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +76,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CBFFB926-503E-492B-9114-C095B5AE0402} = {CB31C5DA-FCC0-4F79-98B1-09EB14164110}
 		{ABE30D5F-D6C4-407F-A1B8-5C48A2D82B76} = {9F5D5AA2-6BA8-4509-930D-2319B4D656AA}
+		{DEE0EC33-8DB7-4D03-9A04-9431046FD3DC} = {C71B7ACF-677A-4859-84A6-616A2B64667E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {305FF9E0-5A16-4A62-85D9-35DA9A9538BF}
