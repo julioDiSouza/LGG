@@ -41,7 +41,7 @@ namespace EncurtadorLink.Rotas
 
                 var enderecoCurto = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/";
 
-                var urlSql = new UrlSql
+                var urlSql = new UrlSqlModel
                 {
                     Id = Guid.NewGuid(),
                     UrlLonga = requisicao.Url,

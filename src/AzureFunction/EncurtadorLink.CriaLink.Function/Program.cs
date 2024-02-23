@@ -1,16 +1,16 @@
-using EncurtadorLink.Database.Library.Contextos;
-using EncurtadorLink.Database.Library.Contextos.Interfaces;
-using EncurtadorLink.Database.Library.UnidadeTrabalho;
-using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
+using FluentValidation;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.UseCases.Library.Services;
-using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using FluentValidation;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using EncurtadorLink.Database.Library.Contextos;
+using EncurtadorLink.Database.Library.UnidadeTrabalho;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
+using EncurtadorLink.Database.Library.Contextos.Interfaces;
+using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -31,9 +31,9 @@ var host = new HostBuilder()
         services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
-        services.AddScoped(typeof(IUrlService), typeof(UrlService));
         services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
         services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
+        services.AddScoped(typeof(IUrlService), typeof(UrlService));
 
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
