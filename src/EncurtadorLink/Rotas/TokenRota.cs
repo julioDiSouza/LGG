@@ -10,10 +10,10 @@ namespace EncurtadorLink.Rotas
         public static void Token(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.Busca();
+            app.ObterTokenAsync();
         }
 
-        public static void Busca(this WebApplication app)
+        public static void ObterTokenAsync(this WebApplication app)
         {
             app.MapGet(_rota, [AllowAnonymous] (
             ITokenService tokenService,
@@ -47,6 +47,5 @@ namespace EncurtadorLink.Rotas
         }
 
         #endregion ..:: Fim - Privados ::..
-
     }
 }

@@ -12,11 +12,11 @@ namespace EncurtadorLink.Rotas
         public static void Cliente(this WebApplication app, string rota)
         {
             _rota = rota;
-            app.ListarClientes();
-            app.CadastroCliente();
+            app.ListarClientesAsync();
+            app.CadastrarClienteAsync();
         }
 
-        public static void ListarClientes(this WebApplication app)
+        public static void ListarClientesAsync(this WebApplication app)
         {
             app.MapGet(_rota , [AllowAnonymous] async ([FromServices] IClienteService clienteService) => 
             {
@@ -33,7 +33,7 @@ namespace EncurtadorLink.Rotas
             });
         }
 
-        public static void CadastroCliente(this WebApplication app)
+        public static void CadastrarClienteAsync(this WebApplication app)
         {
             app.MapPost(_rota , [AllowAnonymous] async (
                 ClienteModelCriar clienteModel,
