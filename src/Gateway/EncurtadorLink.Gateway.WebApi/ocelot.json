@@ -1,4 +1,36 @@
 ﻿{
-  "Routes": [],
-  "GlobalConfiguration": {}
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:4710"
+  },
+  "Routes": [
+    {
+      //Serviço RecuperaLink
+      //Entrada
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      //Saída
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "172.18.0.3",
+          "Port": 8080
+        }
+      ],
+      //Limite de requisições
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 2
+      }
+    }
+  ],
+  "Logging": {
+    "LogLevel": {
+      "Default": "Error",
+      "Microsoft.AspNetCore": "Error"
+    }
+  }
 }

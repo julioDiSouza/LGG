@@ -8,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+#if DEBUG
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+#else
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+#endif
+
 builder.Services.AddScoped(typeof(IUrlMongoDbLazyService), typeof(UrlMongoDbLazyService));
 
 var app = builder.Build();

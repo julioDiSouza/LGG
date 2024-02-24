@@ -6,7 +6,7 @@
     {
       //Serviço RecuperaLink
       //Entrada
-      "UpstreamPathTemplate": "/gateway/recupera-link/{everything}",
+      "UpstreamPathTemplate": "/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       //Saída
       "DownstreamPathTemplate": "/{everything}",
@@ -26,5 +26,11 @@
         "Limit": 50
       }
     }
-  ]
+  ],
+  "Logging": {
+    "LogLevel": {
+      "Default": "Error",
+      "Microsoft.AspNetCore": "Error"
+    }
+  }
 }
