@@ -1,0 +1,36 @@
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
+
+namespace EncurtadorLink.Rotas
+{
+    public static class UsuarioRota
+    {
+        private static string _rota = string.Empty;
+        public static void Usuario(this WebApplication app, string rota)
+        {
+            _rota = rota;
+            app.CadastrarUsuarioAsync();
+        }
+
+        public static void CadastrarUsuarioAsync(this WebApplication app)
+        {
+            app.MapPost(_rota , [Authorize] async ( 
+                UsuarioModelCriar usuarioModel, 
+                IUsuarioService usuarioService, 
+                IValidator<UsuarioModelCriar> validacao 
+                ) =>
+            {
+                var resultado = await validacao.ValidateAsync(usuarioModel);
+
+                if (!resultado.IsValid)
+                    return Results.ValidationProblem(resultado.ToDictionary());
+
+                var sucesso = await usuarioService.CadastrarAsync(usuarioModel);
+
+                return sucesso ? Results.Ok() : Results.Problem("Falha ao cadastrar usuário.");
+            });
+        }
+    }
+}
