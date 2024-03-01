@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using EncurtadorLink.Shared.Library;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,10 @@ using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API - RecuperaLink", Version = "v1" });
+});
 
 #if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
@@ -19,10 +23,13 @@ builder.Services.AddScoped(typeof(IUrlMongoDbLazyService), typeof(UrlMongoDbLazy
 var app = builder.Build();
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI(c => 
+  {
+      c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - RecuperaLink v1");
+  });
 }
 
 app.MapGet("{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbLazyService urlMongoLazyService) =>
@@ -42,9 +49,8 @@ app.MapGet("{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUr
     return Results.NotFound();
 });
 
-app.MapGet("teste/monitoramento", [AllowAnonymous] () => {
-    return Results.Ok("Api no ar.");
+app.MapGet("teste/ping", [AllowAnonymous] () => {
+    return Results.Ok("Api - RecuperaLink esta online.");
 });
 
 app.Run();
-

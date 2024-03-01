@@ -1,36 +1,52 @@
 ﻿{
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7246"
-  },
-  "Routes": [
-    {
-      //Serviço RecuperaLink
-      //Entrada
-      "UpstreamPathTemplate": "/{everything}",
-      "UpstreamHttpMethod": [ "Get" ],
-      //Saída
-      "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7285
-        }
-      ],
-      //Limite de requisições
+      "BaseUrl": "https://localhost:7246",
       "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 10,
-        "Limit": 50
+        "QuotaExceededMessage": "Limite de solicitacoes excedido, tente novamente mais tarde."
+      }
+    },
+    "Routes": [
+      {
+        //Serviço RecuperaLink
+        //Entrada
+        "UpstreamPathTemplate": "/{everything}",
+        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+        "SwaggerKey": "recuperaLinkApi",
+        //Saída
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 7285
+          }
+        ],
+        //Limite de requisições
+        "RateLimitOptions": {
+          "ClientWhitelist": [],
+          "EnableRateLimiting": true,
+          "Period": "10s",
+          "PeriodTimespan": 10,
+          "Limit": 2
+        }
+      }
+    ],
+    "SwaggerEndPoints": [
+      {
+        "Key": "recuperaLinkApi",
+        "Config": [
+          {
+            "Name": "Gateway: API - RecuperaLink",
+            "Version": "v1",
+            "Url": "https://localhost:7285/swagger/v1/swagger.json"
+          }
+        ]
+      }
+    ],
+    "Logging": {
+      "LogLevel": {
+        "Default": "Information",
+        "Microsoft.AspNetCore": "Information"
       }
     }
-  ],
-  "Logging": {
-    "LogLevel": {
-      "Default": "Error",
-      "Microsoft.AspNetCore": "Error"
-    }
   }
-}

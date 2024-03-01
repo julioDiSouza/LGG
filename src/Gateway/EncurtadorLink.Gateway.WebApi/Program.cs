@@ -1,5 +1,6 @@
 using Ocelot.Middleware;
 using Ocelot.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,20 +12,17 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddOcelot(builder.Configuration);
+builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseHttpsRedirection();
+app.UseSwaggerForOcelotUI();
+app.UseOcelot().Wait();
 
-await app.UseOcelot();
+app.MapGet("/", [AllowAnonymous] () => {
+    return Results.Ok("Gateway esta online.");
+});
 
 app.Run();
