@@ -1,0 +1,52 @@
+﻿{
+  "GlobalConfiguration": {
+    "BaseUrl": "172.18.0.3",
+    "RateLimitOptions": {
+      "QuotaExceededMessage": "Limite de solicitacoes excedido, tente novamente mais tarde."
+    }
+  },
+  "Routes": [
+    {
+      //Serviço RecuperaLink
+      //Entrada
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "SwaggerKey": "recuperaLinkApi",
+      //Saída
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "172.18.0.2",
+          "Port": 8080
+        }
+      ],
+      //Limite de requisições
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 2
+      }
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "recuperaLinkApi",
+      "Config": [
+        {
+          "Name": "Gateway: API - RecuperaLink",
+          "Version": "v1",
+          "Url": "http://172.18.0.2:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Information"
+    }
+  }
+}

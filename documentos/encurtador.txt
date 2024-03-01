@@ -1,0 +1,49 @@
+*** Servidor *** 
+site: 000webhost
+senha: encurtadorlink@Apex1
+banco de dados:
+nome: db_encurtador
+usuário: root
+pass: root@Apex1
+
+*** Servidor ***
+site: uolhost
+instancia: MySql
+banco: db_encurtador
+user: jwsn
+pass: db@Apex1
+
+instancia: MongoDB
+banco: db_encurtador
+user: jwsn_mongo
+pass: db-Apex1
+
+*** Docker ***
+Docker--
+STATUS
+docker ps
+
+INSPECIONAR
+docker inspect <id>
+
+NETWORK
+docker network create my-network
+docker run -d --name container1 --network my-network your-image1
+docker run -d -p 4710:8080 --name gatewaynet --network my-network encurtadorlinkgatewaywebapi 
+docker run -d -p 4700:8080 --name recuperanet --network my-network encurtadorlinkrecuperalinkwebapi 
+
+PORTA
+docker run -d -p 4600:4600 encurtador
+
+BUILD
+docker build -t encurtador .
+docker build -t encurtadorlinkgatewaywebapi.azurecr.io/gateway . 
+docker build -t encurtadorlinkacr.azurecr.io/<repositorio> . 
+
+LOGIN
+docker login encurtadorlinkacr.azurecr.io --username encurtadorlinkacr --password 8XL/49RLSCu5UkB4XCfxxrvKL4lAjGp4gG6Tq4cSnK+ACRDdbZdY
+
+PUSH
+docker push encurtadorlinkacr.azurecr.io/recuperalink:latest
+
+
