@@ -1,6 +1,6 @@
 ﻿{
   "GlobalConfiguration": {
-    "BaseUrl": "172.18.0.3",
+    "BaseUrl": "https://gateway-encurtadorlink.azurewebsites.net",
     "RateLimitOptions": {
       "QuotaExceededMessage": "Limite de solicitacoes excedido, tente novamente mais tarde."
     }
@@ -11,16 +11,16 @@
       //Entrada
       "UpstreamPathTemplate": "/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-      "SwaggerKey": "recuperaLinkApi",
       //Saída
       "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "172.18.0.2",
-          "Port": 8080
+          "Host": "recuperalink.azurewebsites.net",
+          "Port": 80
         }
       ],
+      "SwaggerKey": "recuperaLinkApi",
       //Limite de requisições
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -38,7 +38,7 @@
         {
           "Name": "Gateway: API - RecuperaLink",
           "Version": "v1",
-          "Url": "http://172.18.0.2:8080/swagger/v1/swagger.json"
+          "Url": "https://recuperalink.azurewebsites.net/swagger/v1/swagger.json"
         }
       ]
     }

@@ -29,8 +29,8 @@ docker inspect <id>
 NETWORK
 docker network create my-network
 docker run -d --name container1 --network my-network your-image1
-docker run -d -p 4710:8080 --name gatewaynet --network my-network encurtadorlinkgatewaywebapi 
-docker run -d -p 4700:8080 --name recuperanet --network my-network encurtadorlinkrecuperalinkwebapi 
+docker run -d -p 4710:8080 --name gateway --network my-network encurtadorlinkacr.azurecr.io/gateway
+docker run -d -p 4700:8080 --name recuperalink --network my-network encurtadorlinkacr.azurecr.io/recuperalink
 
 PORTA
 docker run -d -p 4600:4600 encurtador
@@ -45,5 +45,6 @@ docker login encurtadorlinkacr.azurecr.io --username encurtadorlinkacr --passwor
 
 PUSH
 docker push encurtadorlinkacr.azurecr.io/recuperalink:latest
+docker push encurtadorlinkacr.azurecr.io/gateway:latest
 
 
