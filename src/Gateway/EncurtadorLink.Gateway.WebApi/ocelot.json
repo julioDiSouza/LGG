@@ -7,20 +7,19 @@
   },
   "Routes": [
     {
-      //Serviço RecuperaLink
+      //Api - RecuperaLink
       //Entrada
       "UpstreamPathTemplate": "/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       //Saída
       "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "recuperalink.azurewebsites.net",
-          "Port": 80
+          "Port": 443
         }
       ],
-      "SwaggerKey": "recuperaLinkApi",
       //Limite de requisições
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -28,7 +27,8 @@
         "Period": "10s",
         "PeriodTimespan": 10,
         "Limit": 2
-      }
+      },
+      "SwaggerKey": "recuperaLinkApi"
     }
   ],
   "SwaggerEndPoints": [

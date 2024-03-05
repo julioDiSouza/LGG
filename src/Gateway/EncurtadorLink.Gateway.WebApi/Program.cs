@@ -17,7 +17,6 @@ builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
 app.UseSwaggerForOcelotUI();
 app.UseOcelot().Wait();
 
