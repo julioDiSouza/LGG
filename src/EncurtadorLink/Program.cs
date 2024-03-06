@@ -1,7 +1,7 @@
 using System.Text;
 using FluentValidation;
 using EncurtadorLink.Rotas;
-using EncurtadorLink.Extensoes;
+using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using EncurtadorLink.Entities.Library.Sql;
@@ -13,12 +13,20 @@ using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.Contextos.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
+#region ..:: Configuracoes ::..
+
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+
+#if DEBUG
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+#else
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+#endif
+
 var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql");
 
-// Add services to the container.
-builder.Services.AddDbContext<MysqlContext>(options => options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
+builder.Services.AddDbContext<MysqlContext>(options => 
+options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -32,7 +40,31 @@ builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
 builder.Services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API - EncurtadorLink", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header usando Bearer scheme",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            }, 
+            new string[] { }
+        }
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(option => 
@@ -40,36 +72,53 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         option.TokenValidationParameters = new()
         {
             ValidateIssuer = true,
-            ValidIssuers = configuration.GetSection("TokenJWT:Issuers").Get<List<string>>(),
+            ValidIssuers = builder.Configuration.GetSection("TokenJWT:Issuers").Get<List<string>>(),
             ValidateAudience = true,
-            ValidAudiences = configuration.GetSection("TokenJWT:Audiences").Get<List<string>>(),
+            ValidAudiences = builder.Configuration.GetSection("TokenJWT:Audiences").Get<List<string>>(),
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-        Encoding.UTF8.GetBytes(configuration["TokenJWT:ChaveInterna"]!.ToString())
+        Encoding.UTF8.GetBytes(builder.Configuration["TokenJWT:ChaveInterna"]!.ToString())
         ),
             ValidateLifetime = true
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true)
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-    app.AplicarMigrations();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - EncurtadorLink v1");
+    });
+    //app.AplicarMigrations();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
+#endregion ..:: Fim - Configuracoes ::..
+
 // Rotas
-app.Raiz("api");
-app.Teste("api/teste");
+app.RecuperaUrl("/");
+app.UrlCurta("api/url-curta");
+app.Login("api");
 app.Token("api/token");
 app.Usuario("api/usuario");
 app.Cliente("api/cliente");
+app.Teste("api/teste");
 
 app.Run();
 

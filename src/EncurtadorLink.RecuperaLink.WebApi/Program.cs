@@ -19,9 +19,18 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 #endif
 
 builder.Services.AddScoped(typeof(IUrlMongoDbLazyService), typeof(UrlMongoDbLazyService));
+builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
 
 var app = builder.Build();
-app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment() || true)
 {
@@ -31,6 +40,8 @@ if (app.Environment.IsDevelopment() || true)
       c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - RecuperaLink v1");
   });
 }
+
+app.UseCors("CorsPolicy");
 
 app.MapGet("{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbLazyService urlMongoLazyService) =>
 {

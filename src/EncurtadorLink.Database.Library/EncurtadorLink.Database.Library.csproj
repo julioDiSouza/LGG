@@ -26,4 +26,10 @@
     <ProjectReference Include="..\EncurtadorLink.Entities.Library\EncurtadorLink.Entities.Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+
+
 </Project>

@@ -8,12 +8,26 @@ namespace EncurtadorLink.Database.Library.Contextos
     {
         public MysqlContext(DbContextOptions options) : base(options)
         {
-
+            
         }
 
         public DbSet<UrlSql> UrlSql { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<ClienteAplicacao> ClienteAplicacao { get; set; }
+
+        /*
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var _connectionString = "xxx";
+
+                optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString),
+                    builder => builder.MigrationsAssembly("EncurtadorLink"));
+                base.OnConfiguring(optionsBuilder);
+            }
+        }
+        */
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

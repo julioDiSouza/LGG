@@ -8,13 +8,13 @@ namespace EncurtadorLink.Rotas
         public static void Teste(this WebApplication app, string rota)
         {
             _rota= rota;
-            app.Monitoramento();
+            app.Ping();
             app.Autenticacao();
         }
 
-        public static void Monitoramento(this WebApplication app)
+        public static void Ping(this WebApplication app)
         {
-            app.MapGet(_rota + "/monitoramento", [AllowAnonymous] () => {
+            app.MapGet(_rota + "/ping", [AllowAnonymous] () => {
                 return Results.Ok("Api no ar.");
             });
         }

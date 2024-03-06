@@ -7,11 +7,10 @@
     },
     "Routes": [
       {
-        //Serviço RecuperaLink
+        //Api - RecuperaLink
         //Entrada
         "UpstreamPathTemplate": "/{everything}",
-        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-        "SwaggerKey": "recuperaLinkApi",
+        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
         //Saída
         "DownstreamPathTemplate": "/{everything}",
         "DownstreamScheme": "https",
@@ -28,7 +27,8 @@
           "Period": "10s",
           "PeriodTimespan": 10,
           "Limit": 2
-        }
+        },
+        "SwaggerKey": "recuperaLinkApi"
       }
     ],
     "SwaggerEndPoints": [
