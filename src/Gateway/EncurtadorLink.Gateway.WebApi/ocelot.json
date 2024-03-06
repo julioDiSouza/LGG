@@ -16,7 +16,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "recuperalink.azurewebsites.net",
+          "Host": "encurtador-link-api.azurewebsites.net",
           "Port": 443
         }
       ],
@@ -24,21 +24,21 @@
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
-        "Period": "10s",
+        "Period": "1s",
         "PeriodTimespan": 10,
-        "Limit": 2
+        "Limit": 1
       },
-      "SwaggerKey": "recuperaLinkApi"
+      "SwaggerKey": "apiSwagger"
     }
   ],
   "SwaggerEndPoints": [
     {
-      "Key": "recuperaLinkApi",
+      "Key": "apiSwagger",
       "Config": [
         {
-          "Name": "Gateway: API - RecuperaLink",
+          "Name": "Gateway: API - EncurtadorLink",
           "Version": "v1",
-          "Url": "https://recuperalink.azurewebsites.net/swagger/v1/swagger.json"
+          "Url": "https://encurtador-link-api.azurewebsites.net/swagger/v1/swagger.json"
         }
       ]
     }
