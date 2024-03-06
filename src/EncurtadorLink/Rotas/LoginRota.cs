@@ -5,10 +5,10 @@ using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
-    public static class RaizRota
+    public static class LoginRota
     {
         private static string _rota = string.Empty;
-        public static void Raiz(this WebApplication app, string rota)
+        public static void Login(this WebApplication app, string rota)
         {
             _rota = rota;
             app.LoginAsync();

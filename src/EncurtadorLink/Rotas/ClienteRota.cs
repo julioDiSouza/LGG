@@ -50,7 +50,7 @@ namespace EncurtadorLink.Rotas
 
                     await clienteService.CadastrarAsync(clienteModel);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return Results.Problem("Falha ao cadastrar cliente.");
                 }
