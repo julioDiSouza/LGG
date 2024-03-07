@@ -3,7 +3,7 @@ using EncurtadorLink.Database.Library.Contextos;
 
 namespace EncurtadorLink.Extensoes
 {
-    public static class MigracaoExtensao
+    public static class MigracaoExtencao
     {
         public static void AplicarMigrations(this WebApplication app)
         {

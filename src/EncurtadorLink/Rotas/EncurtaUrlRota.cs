@@ -9,7 +9,7 @@ namespace EncurtadorLink.Rotas
     {
         private static string _rota = string.Empty;
 
-        public static void UrlCurta(this WebApplication app, string rota)
+        public static void EncurtaUrl(this WebApplication app, string rota)
         {
             _rota = rota;
             app.CriaUrlCurta();

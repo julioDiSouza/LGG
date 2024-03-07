@@ -38,7 +38,6 @@ builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
 builder.Services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
-
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
@@ -96,14 +95,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || true)
+var ativarSwaggerPROD = true;
+if (app.Environment.IsDevelopment() || ativarSwaggerPROD)
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - EncurtadorLink v1");
     });
-    //app.AplicarMigrations();
+}
+
+var ativarExcecaoGenericaDEV = true;
+if (!app.Environment.IsDevelopment() || ativarExcecaoGenericaDEV)
+{
+    app.UseExceptionHandler("/erro");
 }
 
 app.UseCors("CorsPolicy");
@@ -113,12 +118,13 @@ app.UseAuthorization();
 
 // Rotas
 app.RecuperaUrl("/");
-app.UrlCurta("api/url-curta");
+app.EncurtaUrl("api/encurta-url");
 app.Login("api");
 app.Token("api/token");
 app.Usuario("api/usuario");
 app.Cliente("api/cliente");
 app.Teste("api/teste");
+app.ExcecaoGlobal("/erro");
 
 app.Run();
 

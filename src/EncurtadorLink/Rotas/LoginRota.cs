@@ -42,7 +42,7 @@ namespace EncurtadorLink.Rotas
 
         public static void LogoutAsync(this WebApplication app)
         {
-            app.MapGet(_rota + "/logout", [Authorize] async (
+            app.MapGet(_rota + "/logout", [AllowAnonymous] async (
                 ITokenService tokenService
                 ) =>
             {
