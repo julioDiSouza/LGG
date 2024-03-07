@@ -29,7 +29,7 @@ namespace EncurtadorLink.Rotas
 
                 var sucesso = await usuarioService.CadastrarAsync(usuarioModel);
 
-                return sucesso ? Results.Ok() : Results.Problem("Falha ao cadastrar usuário.");
+                return sucesso ? Results.Ok() : Results.BadRequest(new MensagemRetornoModel(400, "Falha ao cadastrar usuario."));
             });
         }
     }

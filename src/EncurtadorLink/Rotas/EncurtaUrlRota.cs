@@ -29,7 +29,7 @@ namespace EncurtadorLink.Rotas
                     return Results.ValidationProblem(resultado.ToDictionary());
 
                 if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
-                    return Results.BadRequest("URL é inválida");
+                    return Results.BadRequest(new MensagemRetornoModel(400, "URL é inválida."));
 
                 var enderecoCurto = app.Configuration["EnderecoCurto"]!;
 

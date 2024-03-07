@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EncurtadorLink.Shared.Library.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EncurtadorLink.Rotas
 {
@@ -15,14 +16,14 @@ namespace EncurtadorLink.Rotas
         public static void Ping(this WebApplication app)
         {
             app.MapGet(_rota + "/ping", [AllowAnonymous] () => {
-                return Results.Ok("Api no ar.");
+                return Results.Ok(new MensagemRetornoModel(200, "Api no ar."));
             });
         }
 
         public static void Autenticacao(this WebApplication app)
         {
             app.MapGet(_rota + "/autenticacao", [Authorize] () => {
-                return Results.Ok("Autenticado.");
+                return Results.Ok(new MensagemRetornoModel(200, "Autenticado."));
             });
         }
     }
