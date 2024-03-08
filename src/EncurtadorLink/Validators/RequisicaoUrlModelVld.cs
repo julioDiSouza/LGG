@@ -3,13 +3,13 @@ using EncurtadorLink.Shared.Library.Models;
 
 namespace EncurtadorLink.Validators
 {
-    public class RequisicaoUrlModelVld : AbstractValidator<RequisicaoUrlModel>
+    public class RequisicaoUrlModelVld : AbstractValidator<UrlModelRequisicao>
     {
         public RequisicaoUrlModelVld()
         {
-            RuleFor(x => x.Url)
-            .NotEmpty().WithMessage("Url é obrigatório")
-            .Must(x => x?.Length <= 1000).WithMessage("Url deve conter menos que 1000 caracteres");
+            RuleFor(x => x.UrlLonga)
+            .NotEmpty().WithMessage("UrlLonga é obrigatório")
+            .Must(x => x?.Length <= 1000).WithMessage("UrlLonga deve conter menos que 1000 caracteres");
         }
     }
 }

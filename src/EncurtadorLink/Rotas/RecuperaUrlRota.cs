@@ -16,18 +16,19 @@ namespace EncurtadorLink.Rotas
 
         public static void RecuperarUrlLonga(this WebApplication app)
         {
-            app.MapGet(_rota + "{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbService urlMongoService) => {
-                try
+            app.MapGet(_rota + "{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbService urlMongoService) => 
+            {
+                if (codigo.Length == Constantes.TAMANHO_CODIGO_UNICO)
                 {
-                    if (codigo.Length == Constantes.TAMANHO_CODIGO_UNICO)
+                    try
                     {
                         var urlMongo = await urlMongoService.ConsultarPorCodigoAsync(codigo);
 
                         if (urlMongo is not null)
                             return Results.Redirect(urlMongo.UrlLonga);
                     }
+                    catch (Exception) { }
                 }
-                catch (Exception) { }
 
                 return Results.NotFound();
             });

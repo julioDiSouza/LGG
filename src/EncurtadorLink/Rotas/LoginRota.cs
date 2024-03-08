@@ -18,10 +18,10 @@ namespace EncurtadorLink.Rotas
         public static void LoginAsync(this WebApplication app)
         {
             app.MapPost(_rota + "/login", [AllowAnonymous] async (
-                RequisicaoLoginModel requisicao,
+                LoginModelRequisicao requisicao,
                 ITokenService tokenService,
                 HttpContext httpContext,
-                IValidator<RequisicaoLoginModel> validacao
+                IValidator<LoginModelRequisicao> validacao
                 ) =>
             {
                 var resultado = await validacao.ValidateAsync(requisicao);

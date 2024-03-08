@@ -18,17 +18,17 @@ namespace EncurtadorLink.Rotas
         public static void CriaUrlCurta(this WebApplication app)
         {
             app.MapPost(_rota , [Authorize] async (
-                RequisicaoUrlModel requisicao,
+                UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
-                IValidator<RequisicaoUrlModel> validacao
+                IValidator<UrlModelRequisicao> validacao
                 ) =>
             {
                 var resultado = await validacao.ValidateAsync(requisicao);
                 if (!resultado.IsValid)
                     return Results.ValidationProblem(resultado.ToDictionary());
 
-                if (!Uri.TryCreate(requisicao.Url, UriKind.Absolute, out _))
+                if (!Uri.TryCreate(requisicao.UrlLonga, UriKind.Absolute, out _))
                     return Results.BadRequest(new MensagemRetornoModel(400, "URL é inválida."));
 
                 var enderecoCurto = app.Configuration["EnderecoCurto"]!;
@@ -36,7 +36,7 @@ namespace EncurtadorLink.Rotas
                 var urlSql = new UrlSqlModel
                 {
                     Id = Guid.NewGuid(),
-                    UrlLonga = requisicao.Url,
+                    UrlLonga = requisicao.UrlLonga,
                     UrlCurta = enderecoCurto,
                     IP = httpContext.Connection.RemoteIpAddress?.ToString()!,
                     DataInclusao = DateTime.Now

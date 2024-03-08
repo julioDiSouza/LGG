@@ -28,7 +28,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             _udt = udt;
         }
 
-        public (ITokenModel, bool) ObterTokenAplicacao(RequisicaoTokenModel requisicao, string ip)
+        public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao, string ip)
         {
             var cliente = _udt.ClienteRepositorio.ConsultarClientePorIdAsync(requisicao.ClientId);
 
@@ -46,7 +46,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             return (CriarToken(claims, issuer: tipo.ToString()), true);
         }
 
-        public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(RequisicaoLoginModel requisicao, string ip)
+        public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao, string ip)
         {
             var resultado = await _signInManager
                 .PasswordSignInAsync(requisicao.Email.ObterUserName(), requisicao.Senha, false, false);
