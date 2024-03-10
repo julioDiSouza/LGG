@@ -1,6 +1,6 @@
 ﻿{
   "GlobalConfiguration": {
-    "BaseUrl": "https://gateway-encurtadorlink.azurewebsites.net",
+    "BaseUrl": "https://l4u.in",
     "RateLimitOptions": {
       "QuotaExceededMessage": "Limite de solicitacoes excedido, tente novamente mais tarde."
     }
