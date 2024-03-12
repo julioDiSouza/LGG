@@ -16,7 +16,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             var lazyClient = new Lazy<MongoClient>(new MongoClient(configuration.GetConnectionString("DataBaseMongoDb")));
             var mongoClient = lazyClient.Value;
 
-            _colecao = mongoClient.GetDatabase(configuration["Database"]!).GetCollection<UrlMongoDbModel>("urlMongoDB");
+            _colecao = mongoClient.GetDatabase(configuration["DatabaseMongoDbName"]!).GetCollection<UrlMongoDbModel>("urlMongoDB");
         }
 
         #endregion ..:: Fim Construtor e variaveis ::..
