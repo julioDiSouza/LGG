@@ -18,16 +18,12 @@ namespace EncurtadorLink.Rotas
 
         public static void ListarClientesAsync(this WebApplication app)
         {
-            app.MapGet(_rota , [AllowAnonymous] async ([FromServices] IClienteService clienteService) => 
+            app.MapGet(_rota , [Authorize] async ([FromServices] IClienteService clienteService) => 
             {
-                try
-                {
-                    var clientes = await clienteService.ListarClientesAsync();
+                var clientes = await clienteService.ListarClientesAsync();
 
-                    if (clientes is not null)
-                        return Results.Ok(clientes);
-                }
-                catch (Exception) { }
+                if (clientes is not null)
+                    return Results.Ok(clientes);
 
                 return Results.NotFound();
             });
@@ -41,21 +37,14 @@ namespace EncurtadorLink.Rotas
                 IValidator<ClienteModelCriar> validacao
                 ) =>
             {
-                try
-                {
-                    var resultado = await validacao.ValidateAsync(clienteModel);
+                var resultado = await validacao.ValidateAsync(clienteModel);
 
                     if (!resultado.IsValid)
                         return Results.ValidationProblem(resultado.ToDictionary());
 
-                    await clienteService.CadastrarAsync(clienteModel);
-                }
-                catch (Exception ex)
-                {
-                    return Results.Problem("Falha ao cadastrar cliente.");
-                }
+                var sucesso = await clienteService.CadastrarAsync(clienteModel);
 
-                return Results.Ok();
+                return sucesso ? Results.Ok() : Results.BadRequest(new MensagemRetornoModel(400, "Falha ao cadastrar cliente."));
             });
         }
     }

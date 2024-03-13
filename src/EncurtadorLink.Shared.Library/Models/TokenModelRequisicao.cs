@@ -2,7 +2,7 @@
 
 namespace EncurtadorLink.Shared.Library.Models
 {
-    public class RequisicaoTokenModel
+    public class TokenModelRequisicao
     {
         [JsonProperty("client_id")]
         public string ClientId { get; set; } = string.Empty;

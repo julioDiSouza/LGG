@@ -37,9 +37,9 @@ namespace EncurtadorLink.Rotas
 
         #region ..:: Privados ::..
 
-        private static RequisicaoTokenModel MontaRequisicao(HttpContext context)
+        private static TokenModelRequisicao MontaRequisicao(HttpContext context)
         {
-            return new RequisicaoTokenModel
+            return new TokenModelRequisicao
             {
                 ClientId = context.Request.Headers["client_id"]!,
                 ClientSecret = context.Request.Headers["client_secret"]!

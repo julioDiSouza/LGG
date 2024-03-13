@@ -1,6 +1,6 @@
 ﻿{
   "GlobalConfiguration": {
-    "BaseUrl": "https://gateway-encurtadorlink.azurewebsites.net",
+    "BaseUrl": "https://l4u.in",
     "RateLimitOptions": {
       "QuotaExceededMessage": "Limite de solicitacoes excedido, tente novamente mais tarde."
     }
@@ -25,8 +25,8 @@
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
         "Period": "1s",
-        "PeriodTimespan": 10,
-        "Limit": 1
+        "PeriodTimespan": 30,
+        "Limit": 100
       },
       "SwaggerKey": "apiSwagger"
     }

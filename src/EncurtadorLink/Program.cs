@@ -10,7 +10,6 @@ using EncurtadorLink.Database.Library.Contextos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EncurtadorLink.Database.Library.UnidadeTrabalho;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using EncurtadorLink.Database.Library.Contextos.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
 #region ..:: Configuracoes ::..
@@ -18,7 +17,7 @@ using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 var builder = WebApplication.CreateBuilder(args);
 
 #if DEBUG
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 #else
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 #endif
@@ -27,20 +26,19 @@ var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql")
 
 builder.Services.AddDbContext<MysqlContext>(options => 
 options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
+
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddScoped(typeof(MongoDbContext));
 builder.Services.AddScoped(typeof(IUrlService), typeof(UrlService));
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
-builder.Services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
-
+builder.Services.AddSingleton<IUrlMongoDbLazyService, UrlMongoDbLazyService>();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API - EncurtadorLink", Version = "v1" });
@@ -65,7 +63,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(option => 
     {
@@ -82,7 +79,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true
         };
     });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
@@ -96,14 +92,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || true)
+var ativarSwaggerPROD = true;
+if (app.Environment.IsDevelopment() || ativarSwaggerPROD)
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - EncurtadorLink v1");
     });
-    //app.AplicarMigrations();
+}
+
+var ativarExcecaoGenericaDEV = true;
+if (!app.Environment.IsDevelopment() || ativarExcecaoGenericaDEV)
+{
+    app.UseExceptionHandler("/erro");
 }
 
 app.UseCors("CorsPolicy");
@@ -113,12 +115,13 @@ app.UseAuthorization();
 
 // Rotas
 app.RecuperaUrl("/");
-app.UrlCurta("api/url-curta");
+app.EncurtaUrl("api/encurta-url");
 app.Login("api");
 app.Token("api/token");
 app.Usuario("api/usuario");
 app.Cliente("api/cliente");
 app.Teste("api/teste");
+app.ExcecaoGlobal("/erro");
 
 app.Run();
 

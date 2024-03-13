@@ -18,11 +18,11 @@ namespace EncurtadorLink.CriaLink.Function
         private readonly IConfiguration _configuration;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly JwtSecurityTokenHandler _tokenHandler;
-        private readonly IValidator<RequisicaoUrlModel> _validacao;
+        private readonly IValidator<UrlModelRequisicao> _validacao;
         private readonly ILogger<CriaLink> _logger;
         private readonly IUrlService _urlService;
 
-        public CriaLink(IConfiguration configuration, IUrlService urlService, ILogger<CriaLink> logger, IValidator<RequisicaoUrlModel> validacao)
+        public CriaLink(IConfiguration configuration, IUrlService urlService, ILogger<CriaLink> logger, IValidator<UrlModelRequisicao> validacao)
         {
             _configuration = configuration;
             _urlService = urlService;
@@ -50,20 +50,20 @@ namespace EncurtadorLink.CriaLink.Function
                     return new StatusCodeResult(StatusCodes.Status401Unauthorized);
 
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var reqModel = JsonConvert.DeserializeObject<RequisicaoUrlModel>(requestBody);
+                var reqModel = JsonConvert.DeserializeObject<UrlModelRequisicao>(requestBody);
 
                 var resultado = await _validacao.ValidateAsync(reqModel!);
 
                 if (!resultado.IsValid)
                     return new BadRequestObjectResult(resultado.ToDictionary());
 
-                if (!Uri.TryCreate(reqModel!.Url, UriKind.Absolute, out _))
+                if (!Uri.TryCreate(reqModel!.UrlLonga, UriKind.Absolute, out _))
                     return new BadRequestObjectResult("URL é inválida");
 
                 var urlSqlModel = new UrlSqlModel
                 {
                     Id = Guid.NewGuid(),
-                    UrlLonga = reqModel.Url,
+                    UrlLonga = reqModel.UrlLonga,
                     UrlCurta = _configuration["EnderecoCurto"]!,
                     IP = req.HttpContext.Connection.RemoteIpAddress?.ToString()!,
                     DataInclusao = DateTime.Now

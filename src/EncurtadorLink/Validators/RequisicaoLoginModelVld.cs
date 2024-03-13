@@ -3,7 +3,7 @@ using EncurtadorLink.Shared.Library.Models;
 
 namespace EncurtadorLink.Validators
 {
-    public class RequisicaoLoginModelVld : AbstractValidator<RequisicaoLoginModel>
+    public class RequisicaoLoginModelVld : AbstractValidator<LoginModelRequisicao>
     {
         public RequisicaoLoginModelVld()
         {

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 using EncurtadorLink.Entities.Library.Mongo;
-using EncurtadorLink.Database.Library.Contextos.Interfaces;
+using EncurtadorLink.Database.Library.Contextos;
 using EncurtadorLink.Database.Library.Repositorios.Mongo.Interfaces;
 
 namespace EncurtadorLink.Database.Library.Repositorios.Mongo
@@ -9,7 +9,7 @@ namespace EncurtadorLink.Database.Library.Repositorios.Mongo
     {
         private readonly IMongoCollection<UrlMongoDb> _colecao;
 
-        public UrlMongoDbRepositorio(IMongoDbContext contexto)
+        public UrlMongoDbRepositorio(MongoDbContext contexto)
         {
             _colecao = contexto.DataBase.GetCollection<UrlMongoDb>("urlMongoDB");
         }
