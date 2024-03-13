@@ -26,19 +26,19 @@ var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql")
 
 builder.Services.AddDbContext<MysqlContext>(options => 
 options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
+
 builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddScoped(typeof(MongoDbContext));
 builder.Services.AddScoped(typeof(IUrlService), typeof(UrlService));
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
-builder.Services.AddScoped(typeof(MongoDbContext));
+builder.Services.AddSingleton<IUrlMongoDbLazyService, UrlMongoDbLazyService>();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API - EncurtadorLink", Version = "v1" });
@@ -63,7 +63,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(option => 
     {
@@ -80,7 +79,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true
         };
     });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
