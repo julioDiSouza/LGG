@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using EncurtadorLink.Shared.Library;
+﻿using EncurtadorLink.Shared.Library;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
@@ -16,13 +15,14 @@ namespace EncurtadorLink.Rotas
 
         public static void RecuperarUrlLonga(this WebApplication app)
         {
-            app.MapGet(_rota + "{codigo}", [AllowAnonymous] async (string codigo, [FromServices] IUrlMongoDbService urlMongoService) => 
+            app.MapGet(_rota + "{codigo}", [AllowAnonymous] async (HttpContext httpContext, string codigo) => 
             {
                 if (codigo.Length == Constantes.TAMANHO_CODIGO_UNICO)
                 {
                     try
                     {
-                        var urlMongo = await urlMongoService.ConsultarPorCodigoAsync(codigo);
+                        var urlService = httpContext.RequestServices.GetRequiredService<IUrlMongoDbLazyService>();
+                        var urlMongo = await urlService.ConsultarPorCodigoAsync(codigo);
 
                         if (urlMongo is not null)
                             return Results.Redirect(urlMongo.UrlLonga);

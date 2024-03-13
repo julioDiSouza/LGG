@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using EncurtadorLink.Database.Library.Contextos;
 using EncurtadorLink.Database.Library.UnidadeTrabalho;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using EncurtadorLink.Database.Library.Contextos.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
 var host = new HostBuilder()
@@ -32,7 +31,7 @@ var host = new HostBuilder()
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
-        services.AddScoped(typeof(IMongoDbContext), typeof(MongoDbContext));
+        services.AddScoped(typeof(MongoDbContext));
         services.AddScoped(typeof(IUrlService), typeof(UrlService));
 
         services.AddApplicationInsightsTelemetryWorkerService();
