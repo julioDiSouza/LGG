@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EncurtadorLink.Entities.Library.Sql
 {
@@ -14,5 +15,10 @@ namespace EncurtadorLink.Entities.Library.Sql
         public bool Ativo { get; set; }
         [Required]
         public DateTime DataInclusao { get; set; }
+        [Required]
+        [ForeignKey("Role")]
+        public string TipoRole { get; set; } = string.Empty;
+
+        public virtual Role Role { get; set; }
     }
 }

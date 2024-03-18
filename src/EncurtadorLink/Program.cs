@@ -17,7 +17,7 @@ using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 var builder = WebApplication.CreateBuilder(args);
 
 #if DEBUG
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
 #else
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 #endif

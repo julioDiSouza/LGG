@@ -1,4 +1,6 @@
-﻿namespace EncurtadorLink.Shared.Library.Extensoes
+﻿using EncurtadorLink.Entities.Library.Enumeradores;
+
+namespace EncurtadorLink.Shared.Library.Extensoes
 {
     public static class Extensao
     {
@@ -19,6 +21,11 @@
 
             var arr = email.Split('@');
             return arr[0];
+        }
+
+        public static RoleEnum ConverterParaRole(this string texto)
+        {
+            return (RoleEnum)Enum.Parse(typeof(RoleEnum), texto);
         }
     }
 }

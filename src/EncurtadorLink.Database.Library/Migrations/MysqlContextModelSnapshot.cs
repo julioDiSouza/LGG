@@ -22,7 +22,7 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -77,6 +77,10 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("TipoRole")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -94,6 +98,8 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("TipoRole");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -128,10 +134,16 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("TipoRole")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("TipoRole");
 
                     b.ToTable("Cliente");
                 });
@@ -158,9 +170,25 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Property<int>("Tipo")
                         .HasColumnType("int");
 
+                    b.Property<string>("TipoRole")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("ClienteId");
 
+                    b.HasIndex("TipoRole");
+
                     b.ToTable("ClienteAplicacao");
+                });
+
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Role", b =>
+                {
+                    b.Property<string>("TipoRole")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("TipoRole");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.UrlSql", b =>
@@ -179,7 +207,7 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.Property<string>("IP")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("UrlCurta")
                         .IsRequired()
@@ -204,7 +232,7 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -241,7 +269,7 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -264,7 +292,7 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -288,7 +316,7 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -300,10 +328,10 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -315,7 +343,7 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -341,7 +369,26 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Role", "Role")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("TipoRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cliente");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Cliente", b =>
+                {
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Role", "Role")
+                        .WithMany("Clientes")
+                        .HasForeignKey("TipoRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.ClienteAplicacao", b =>
@@ -352,7 +399,15 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Role", "Role")
+                        .WithMany("Aplicacoes")
+                        .HasForeignKey("TipoRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cliente");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -409,6 +464,15 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Cliente", b =>
                 {
                     b.Navigation("Aplicacoes");
+                });
+
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Role", b =>
+                {
+                    b.Navigation("Aplicacoes");
+
+                    b.Navigation("Clientes");
+
+                    b.Navigation("Usuarios");
                 });
 #pragma warning restore 612, 618
         }
