@@ -1,5 +1,4 @@
-﻿using EncurtadorLink.Entities.Library.Enumeradores;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EncurtadorLink.Entities.Library.Sql
 {
@@ -13,10 +12,12 @@ namespace EncurtadorLink.Entities.Library.Sql
         [Required]
         public string Nome { get; set; } = string.Empty;
         [Required]
-        public ClienteAplicacaoTipoEnum Tipo { get; set; }
-        [Required]
         public bool Ativo { get; set; }
         [Required]
         public DateTime DataInclusao { get; set; }
+        [Required]
+        public string TipoRole { get; set; } = string.Empty;
+
+        public virtual Role Role { get; set; }
     }
 }

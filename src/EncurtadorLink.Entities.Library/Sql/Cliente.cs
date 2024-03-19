@@ -19,7 +19,7 @@ namespace EncurtadorLink.Entities.Library.Sql
         public bool Ativo { get; set; }
         [Required]
         public DateTime DataInclusao { get; set; }
-
+        
         public virtual ICollection<ClienteAplicacao> Aplicacoes { get; set; }
     }
 }

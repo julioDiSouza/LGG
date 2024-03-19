@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Extensoes;
-using EncurtadorLink.Entities.Library.Enumeradores;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
@@ -40,10 +39,10 @@ namespace EncurtadorLink.UseCases.Library.Services
                 )
                 return (new TokenErroModel { Erro = "Cliente inválido.", Descricao = "Cliente ou credenciais inválidas." }, false);
 
-            var tipo = cliente.Aplicacoes.FirstOrDefault(x => x.Ativo == true)!.Tipo;
-            var claims = MontarClaims(cliente.Email.ObterUserName(), cliente.Id, tipo, ip);
+            var clienteAplicacao = cliente.Aplicacoes.FirstOrDefault(x => x.Ativo == true)!;
+            var claims = MontarClaims(cliente.Email.ObterUserName(), cliente.Id, clienteAplicacao.TipoRole, ip);
 
-            return (CriarToken(claims, issuer: tipo.ToString()), true);
+            return (CriarToken(claims), true);
         }
 
         public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao, string ip)
@@ -58,9 +57,9 @@ namespace EncurtadorLink.UseCases.Library.Services
                     .Users
                     .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
 
-                var claims = MontarClaims(identityUser!.UserName!, identityUser.ClienteId, ClienteAplicacaoTipoEnum.WEB, ip);
+                var claims = MontarClaims(identityUser!.UserName!, identityUser.ClienteId, identityUser.TipoRole, ip);
 
-                return (CriarToken(claims, issuer: ClienteAplicacaoTipoEnum.WEB.ToString()), true);
+                return (CriarToken(claims), true);
             }
 
             return (new TokenErroModel { Erro = "Usuário inválido.", Descricao = "Usuário ou senha inválida." }, false);
@@ -73,7 +72,7 @@ namespace EncurtadorLink.UseCases.Library.Services
 
         #region ..:: Privados ::..
 
-        private TokenModel CriarToken(Claim[] claims, string issuer)
+        private TokenModel CriarToken(Claim[] claims)
         {
             var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_chaveInterna));
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
@@ -81,7 +80,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 claims: claims,
                 signingCredentials: credenciais,
                 expires: DateTime.Now.AddSeconds(_segundos),
-                issuer: issuer,
+                issuer: "EncurtadorLink",
                 audience: "EncurtadorLink"
                 );
 
@@ -93,25 +92,15 @@ namespace EncurtadorLink.UseCases.Library.Services
             };
         }
 
-        private Claim[] MontarClaims(string username, Guid clienteId, ClienteAplicacaoTipoEnum tipo, string ip)
+        private Claim[] MontarClaims(string username, Guid clienteId, string role, string ip)
         {
-            switch (tipo)
+            return new Claim[]
             {
-                case ClienteAplicacaoTipoEnum.WEB:
-                case ClienteAplicacaoTipoEnum.APP:
-                case ClienteAplicacaoTipoEnum.API:
-                    return new Claim[]
-                    {
-                        new Claim("username", username),
-                        new Claim("id", clienteId.ToString()),
-                        new Claim("ip", ip)
-                    };
-                default:
-                    return new Claim[]
-                    {
-                        new Claim("ip", ip)
-                    };
-            }
+                new Claim("name", username),
+                new Claim("role", role),
+                new Claim("id", clienteId.ToString()),
+                new Claim("ip", ip)
+            };
         }
 
         #endregion ..:: Fim Privados ::..

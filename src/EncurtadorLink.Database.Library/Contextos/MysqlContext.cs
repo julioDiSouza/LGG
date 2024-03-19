@@ -15,19 +15,19 @@ namespace EncurtadorLink.Database.Library.Contextos
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<ClienteAplicacao> ClienteAplicacao { get; set; }
 
-        /*
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var _connectionString = "xxx";
+                var _connectionString = "server=localhost; database=db_encurtador; user=root; password=root";
 
                 optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString),
                     builder => builder.MigrationsAssembly("EncurtadorLink"));
                 base.OnConfiguring(optionsBuilder);
             }
         }
-        */
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,12 @@ namespace EncurtadorLink.Database.Library.Contextos
                 builder.HasKey(ca => ca.ClienteId);
                 builder.HasOne(ca => ca.Cliente).WithMany(c => c.Aplicacoes).HasForeignKey(c => c.ClienteId);
                 builder.Property(c => c.Nome).HasMaxLength(50);
+                builder.HasOne(c => c.Role).WithMany(r => r.Aplicacoes).HasForeignKey(c => c.TipoRole);
+            });
+
+            modelBuilder.Entity<Role>(builder =>
+            {
+                builder.HasKey(r => r.TipoRole);
             });
         }
     }
