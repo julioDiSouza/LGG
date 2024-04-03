@@ -40,7 +40,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 return (new TokenErroModel { Erro = "Cliente inválido.", Descricao = "Cliente ou credenciais inválidas." }, false);
 
             var clienteAplicacao = cliente.Aplicacoes.FirstOrDefault(x => x.Ativo == true)!;
-            var claims = MontarClaims(cliente.Email.ObterUserName(), cliente.Id, clienteAplicacao.TipoRole, ip);
+            var claims = MontarClaims(cliente.Email.ObterUserName(), cliente.Id, clienteAplicacao.Role, ip);
 
             return (CriarToken(claims), true);
         }
@@ -57,7 +57,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                     .Users
                     .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
 
-                var claims = MontarClaims(identityUser!.UserName!, identityUser.ClienteId, identityUser.TipoRole, ip);
+                var claims = MontarClaims(identityUser!.UserName!, identityUser.ClienteId, identityUser.Role, ip);
 
                 return (CriarToken(claims), true);
             }

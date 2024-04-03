@@ -1,32 +1,45 @@
-<div class="outer">
-  <div class="container">
-    <div class="row">
-      <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3 centralizado">
-        <div class="panel border bg-white">
-          <div class="panel-heading">
-            <h3 class="pt-3 font-weight-bold">Login</h3>
-          </div>
-          <div class="panel-body p-3">
-            <form>
-              <div class="form-group pt-3">
-                <div class="input-field">
-                  <span class="fa fa-user p-2"></span>
-                  <input type="text" placeholder="Email">
-                </div>
+<div class="container">
+  <div class="row">
+    <div class="offset-md-2 col-lg-4 col-md-7 offset-lg-4 offset-md-3 centralizado">
+      <div class="panel border bg-white">
+        <div class="panel-heading">
+          <h3 class="pt-3 font-weight-bold">Login</h3>
+        </div>
+        <div class="panel-body p-3">
+          <form [formGroup]="loginForm">
+            <div class="form-group pt-3">
+              <div class="input-field" [class.error]="loginForm.controls['email'].dirty && loginForm.hasError('required','email')">
+                <span class="fa fa-user p-2"></span>
+                <input formControlName="email" type="email" placeholder="Email">
               </div>
-              <div class="form-group pt-3">
-                <div class="input-field">
-                  <span class="fa fa-lock p-2"></span>
-                  <input [type]="type" placeholder="Senha">
-                  <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
-                </div>
+            </div>
+            <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required','email')"  class="text-danger">
+              *Email é obrigatório
+            </small>
+            <div class="form-group pt-3">
+              <div class="input-field" [class.error]="loginForm.controls['senha'].dirty && loginForm.hasError('required','senha')">
+                <span class="fa fa-lock p-2"></span>
+                <input formControlName="senha" [type]="type" placeholder="Senha">
+                <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
               </div>
-              <div class="form-inline fr mt-4">
-                <a id="forget" class="font-weight-bold">Esqueci a senha</a>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Login</button>
-              <div class="text-center pt-4 text-muted">Não possui conta? <a id="forget" routerLink="/signup">Cadastrar</a></div>
-            </form>
+            </div>
+            <small *ngIf="loginForm.controls['senha'].dirty && loginForm.hasError('required','senha')"  class="text-danger">
+              *Senha é obrigatória
+            </small>
+            <div class="form-inline fr mt-4">
+              <a id="forget" class="font-weight-bold">Esqueci a senha</a>
+            </div>
+            <button (click)="onLogin()" type="submit" class="btn btn-circle btn-primary btn-block mt-4 w-100">
+              Entrar
+            </button>
+            <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="forget" routerLink="/signup">Cadastre-se</a>
+            </div>
+          </form>
+        </div>
+        <div class="mx-3 my-2 py-2 border-t">
+          <div class="text-center py-3">
+            <a href="https://www.facebook.com" target="_blank" class="px-3"><img src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png" alt="" style="width: 43px; height: 43px;"></a>
+            <a href="https://www.google.com" target="_blank" class="px-2"><img src="https://cdn.iconscout.com/icon/free/png-256/free-google-160-189824.png" alt="" style="width: 43px; height: 43px;"></a>
           </div>
         </div>
       </div>

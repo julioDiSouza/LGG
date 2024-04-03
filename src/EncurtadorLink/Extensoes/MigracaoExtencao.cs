@@ -11,7 +11,7 @@ namespace EncurtadorLink.Extensoes
 
             var dbContext = scope.ServiceProvider.GetRequiredService<MysqlContext>();
 
-            dbContext.Database.Migrate();
+            //dbContext.Database.Migrate();
         }
     }
 }

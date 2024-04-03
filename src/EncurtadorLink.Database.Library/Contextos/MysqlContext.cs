@@ -20,7 +20,7 @@ namespace EncurtadorLink.Database.Library.Contextos
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var _connectionString = "server=localhost; database=db_encurtador; user=root; password=root";
+                var _connectionString = "...";
 
                 optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString),
                     builder => builder.MigrationsAssembly("EncurtadorLink"));
@@ -45,10 +45,9 @@ namespace EncurtadorLink.Database.Library.Contextos
             modelBuilder.Entity<Cliente>(builder =>
             {
                 builder.HasKey(c => c.Id);
-                builder.Property(c => c.Nome).HasMaxLength(50);
+                builder.Property(c => c.NomeCompleto).HasMaxLength(50);
                 builder.Property(c => c.Email).HasMaxLength(50);
                 builder.HasIndex(u => u.Email).IsUnique();
-                builder.Property(c => c.Documento).HasMaxLength(14);
             });
 
             modelBuilder.Entity<ClienteAplicacao>(builder =>
@@ -56,12 +55,6 @@ namespace EncurtadorLink.Database.Library.Contextos
                 builder.HasKey(ca => ca.ClienteId);
                 builder.HasOne(ca => ca.Cliente).WithMany(c => c.Aplicacoes).HasForeignKey(c => c.ClienteId);
                 builder.Property(c => c.Nome).HasMaxLength(50);
-                builder.HasOne(c => c.Role).WithMany(r => r.Aplicacoes).HasForeignKey(c => c.TipoRole);
-            });
-
-            modelBuilder.Entity<Role>(builder =>
-            {
-                builder.HasKey(r => r.TipoRole);
             });
         }
     }

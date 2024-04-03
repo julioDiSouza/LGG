@@ -41,7 +41,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             usuarioIdentity!.ClienteId = cliente.Id;
             usuarioIdentity.Ativo = true;
             usuarioIdentity.DataInclusao = dataAgora;
-            usuarioIdentity.TipoRole = nameof(RoleEnum.Admin);
+            usuarioIdentity.Role = nameof(RoleEnum.Admin);
 
             await _udt.ClienteRepositorio.AdicionarAsync(cliente);
 

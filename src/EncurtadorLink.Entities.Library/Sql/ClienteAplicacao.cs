@@ -16,8 +16,6 @@ namespace EncurtadorLink.Entities.Library.Sql
         [Required]
         public DateTime DataInclusao { get; set; }
         [Required]
-        public string TipoRole { get; set; } = string.Empty;
-
-        public virtual Role Role { get; set; }
+        public string Role { get; set; } = string.Empty;
     }
 }

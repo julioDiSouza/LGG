@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <h3 class="mt-3">
+      Olá, {{nome}}
+    </h3>
+  </div>
+  <div class="row" *ngIf="role === 'Admin'">
+    <p class="mt-3">
+      Mensagem do administrador
+    </p>
+  </div>
+  <button (click)="logOut()" class="btn btn-danger">
+    Log out
+  </button>
+</div>
