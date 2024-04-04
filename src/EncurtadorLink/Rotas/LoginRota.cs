@@ -29,9 +29,7 @@ namespace EncurtadorLink.Rotas
                 if (!resultado.IsValid)
                     return Results.ValidationProblem(resultado.ToDictionary());
 
-                var ip = httpContext.Connection.RemoteIpAddress?.ToString()!;
-
-                var (token, sucesso) = await tokenService.ObterTokenLoginAsync(requisicao, ip);
+                var (token, sucesso) = await tokenService.ObterTokenLoginAsync(requisicao);
 
                 if (!sucesso)
                     return Results.BadRequest(token);

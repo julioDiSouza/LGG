@@ -23,6 +23,15 @@ namespace EncurtadorLink.Shared.Library.Extensoes
             return arr[0];
         }
 
+        public static string ObterPrimeiroNome(this string nomeCompleto)
+        {
+            if (nomeCompleto is null)
+                return nomeCompleto;
+
+            var arr = nomeCompleto.Split(' ');
+            return arr[0];
+        }
+
         public static RoleEnum ConverterParaRole(this string texto)
         {
             return (RoleEnum)Enum.Parse(typeof(RoleEnum), texto);

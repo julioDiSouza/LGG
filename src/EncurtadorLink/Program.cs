@@ -73,10 +73,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidAudiences = builder.Configuration.GetSection("TokenJWT:Audiences").Get<List<string>>(),
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-        Encoding.UTF8.GetBytes(builder.Configuration["TokenJWT:ChaveInterna"]!.ToString())
-        ),
-            ValidateLifetime = true
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenJWT:ChaveInterna"]!.ToString())),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 builder.Services.AddCors(options =>
