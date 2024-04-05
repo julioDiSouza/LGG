@@ -47,8 +47,9 @@ export class LoginComponent implements OnInit {
         next:(res)=>{
           this.loginForm.reset();
           this.authService.storeToken(res.accessToken);
+          this.authService.storeRefreshToken(res.refreshToken);
           const tokenPayLoad = this.authService.decodedToken();
-          this.userStoreService.setNomeForStore(tokenPayLoad.name);
+          this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
           this.userStoreService.setRoleForStore(tokenPayLoad.role);
           this.toast.success({detail:'Sucesso', summary:'Você está conectado.', duration:5000});
           this.router.navigate(['admin']);

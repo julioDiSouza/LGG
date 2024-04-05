@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
@@ -33,9 +33,9 @@ export class TokenInterceptor implements HttpInterceptor {
       catchError((err:any)=>{
         if(err instanceof HttpErrorResponse){
           if(err.status === 401){
-            this.toast.warning({detail:'Aviso', summary:'Você está desconectado.'});
-            this.authService.signOut();
+            return this.handleUnAuthorizedError(request, next);
           }
+
           if(err.status === 403){
             this.toast.warning({detail:'Aviso', summary:'Acesso não permitido.'});
             this.router.navigate(['home']);
@@ -46,4 +46,30 @@ export class TokenInterceptor implements HttpInterceptor {
       })
     );
   }
+
+  handleUnAuthorizedError(req: HttpRequest<any>, next: HttpHandler){
+      return this.authService.renewToken({
+        AccessToken: this.authService.getToken(),
+        RefreshToken: this.authService.getRefreshToken()
+      })
+      .pipe(
+        switchMap((data:any)=>{
+          this.authService.storeRefreshToken(data.refreshToken);
+          this.authService.storeToken(data.accessToken);
+
+          req = req.clone({
+            setHeaders: {Authorization:`Bearer ${data.accessToken}`}
+          });
+
+          return next.handle(req);
+        }),
+        catchError((err)=>{
+          return throwError(()=>{
+            this.toast.warning({detail:'Aviso', summary:'Você está desconectado.'});
+            this.authService.signOut();
+          })
+        })
+      )
+  }
+
 }

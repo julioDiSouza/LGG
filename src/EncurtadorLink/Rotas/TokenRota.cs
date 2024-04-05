@@ -38,7 +38,7 @@ namespace EncurtadorLink.Rotas
         public static void ObterRefreshTokenAsync(this WebApplication app)
         {
             app.MapPost(_rota + "/refresh", [AllowAnonymous] async (
-                [FromBody] TokenRefreshModelRequisicao requisicao, 
+                TokenRefreshModelRequisicao requisicao, 
                 ITokenService tokenService
             ) =>
             {

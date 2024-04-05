@@ -8,7 +8,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthService {
 
-  private baseUrl: string = "https://l4u.in/api";
+  //private baseUrl: string = "https://l4u.in/api";
+  private baseUrl: string = "https://localhost:7181/api";
+
   private userPayload:any;
 
   constructor(
@@ -31,12 +33,24 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}/login`, loginObj);
   }
 
+  renewToken(tokenDto:any){
+    return this.http.post<any>(`${this.baseUrl}/token/refresh`, tokenDto);
+  }
+
   storeToken(tokenValue: string){
     localStorage.setItem('token', tokenValue)
   }
 
+  storeRefreshToken(tokenValue: string){
+    localStorage.setItem('refreshToken', tokenValue)
+  }
+
   getToken(){
     return localStorage.getItem('token');
+  }
+
+  getRefreshToken(){
+    return localStorage.getItem('refreshToken');
   }
 
   isLoggedIn(): boolean{
@@ -58,5 +72,4 @@ export class AuthService {
     if(this.userPayload)
       return this.userPayload.role;
   }
-
 }

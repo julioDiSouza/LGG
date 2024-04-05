@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
 
-  private baseUrl: string = "https://l4u.in/api";
+  //private baseUrl: string = "https://l4u.in/api";
+  private baseUrl: string = "https://localhost:7181/api";
 
   constructor(
     private http: HttpClient
