@@ -16,5 +16,6 @@ namespace EncurtadorLink.Entities.Library.Sql
         public DateTime DataInclusao { get; set; }
         
         public virtual ICollection<ClienteAplicacao> Aplicacoes { get; set; }
+        public virtual ICollection<UrlSql> Urls { get; set; }
     }
 }

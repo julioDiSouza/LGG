@@ -1,17 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { EncryptionService } from '../../services/encryption.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  //private baseUrl: string = "https://l4u.in/api";
-  private baseUrl: string = "https://localhost:7181/api";
+  private baseUrl: string = environment.apiServer + '/api';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private encryption: EncryptionService
   ) { }
+
+  encurtarUrl(model:any){
+    return this.http.post<any>(`${this.baseUrl}/encurta-url`, model);
+  }
+
+  encurtarUrlPublico(model:any){
+    return this.http.post<any>(`${this.baseUrl}/encurta-url/publico?temp_token=${encodeURIComponent(this.encryption.getTempToken())}`, model);
+  }
 
   ping(){
     return this.http.get<any>(`${this.baseUrl}/teste/ping`);

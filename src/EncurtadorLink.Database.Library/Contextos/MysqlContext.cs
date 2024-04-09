@@ -36,6 +36,7 @@ namespace EncurtadorLink.Database.Library.Contextos
             modelBuilder.Entity<UrlSql>(builder =>
             {
                 builder.HasKey(x => x.Id);
+                builder.HasIndex(x => x.ClienteId);
                 builder.Property(x => x.Codigo).HasMaxLength(10);
                 builder.HasIndex(x => x.Codigo).IsUnique();
                 builder.HasIndex(x => x.IP);

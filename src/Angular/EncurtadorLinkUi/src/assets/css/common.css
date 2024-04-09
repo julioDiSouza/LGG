@@ -7,7 +7,14 @@
   margin-bottom: 10px;
 }
 
-#forget{
+#forgot{
+  min-width: 100px;
+  margin-left: auto;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#signup{
   min-width: 100px;
   margin-left: auto;
   text-decoration: none;

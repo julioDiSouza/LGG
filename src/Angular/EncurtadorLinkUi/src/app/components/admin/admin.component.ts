@@ -12,6 +12,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AdminComponent implements OnInit {
 
+  public _urlLonga!:string;
+  public _urlLongaPublica!:string;
+
   constructor(
     private authService: AuthService,
     private toast: NgToastService,
@@ -54,8 +57,23 @@ export class AdminComponent implements OnInit {
   }
 
   encrypt(){
-    let resultado = this.encryptionService.encryptUsingAES256('ApexLegends');
-    console.log(resultado);
+    alert(this.encryptionService);
+  }
+
+  encurtar(){
+    this.apiService.encurtarUrl({ urlLonga: this._urlLonga }).subscribe({
+      next:(res)=>{
+        alert(res.urlCurta);
+      }
+    })
+  }
+
+  encurtarPublico(){
+    this.apiService.encurtarUrlPublico({ urlLonga: this._urlLongaPublica }).subscribe({
+      next:(res)=>{
+        alert(res.urlCurta);
+      }
+    })
   }
 
 }

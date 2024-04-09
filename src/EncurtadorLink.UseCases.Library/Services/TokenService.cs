@@ -11,6 +11,7 @@ using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Classes;
 using EncurtadorLink.Shared.Library.Extensoes;
+using EncurtadorLink.Shared.Library.Services.Interfaces;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
@@ -18,9 +19,10 @@ namespace EncurtadorLink.UseCases.Library.Services
 {
     public class TokenService : ITokenService
     {
+        private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly ICriptografador _criptografador;
         private readonly IUnidadeTrabalho _udt;
         private readonly ILogger<LogGenerico> _logger;
         private readonly string _chaveInterna;
@@ -28,16 +30,17 @@ namespace EncurtadorLink.UseCases.Library.Services
         private readonly int _segundosRefresh;
 
         public TokenService(IConfiguration configuration, SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager, IUnidadeTrabalho udt, ILogger<LogGenerico> logger)
+            UserManager<ApplicationUser> userManager, ICriptografador criptografador, IUnidadeTrabalho udt, ILogger<LogGenerico> logger)
         {
-            _chaveInterna = configuration["TokenJWT:ChaveInterna"]!;
-            _segundos = int.Parse(configuration["TokenJWT:Segundos"]!);
-            _segundosRefresh = int.Parse(configuration["TokenJWT:SegundosRefresh"]!);
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
+            _criptografador = criptografador;
             _udt = udt;
             _logger = logger;
+            _chaveInterna = configuration["TokenJWT:ChaveInterna"]!;
+            _segundos = int.Parse(configuration["TokenJWT:Segundos"]!);
+            _segundosRefresh = int.Parse(configuration["TokenJWT:SegundosRefresh"]!);
         }
 
         public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao)
@@ -61,28 +64,36 @@ namespace EncurtadorLink.UseCases.Library.Services
 
         public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao)
         {
-            var resultado = await _signInManager
+            try
+            {
+                var resultado = await _signInManager
                 .PasswordSignInAsync(requisicao.Email.ObterUserName(), requisicao.Senha, false, false);
 
-            if (resultado.Succeeded)
-            {
-                var identityUser = _signInManager
-                    .UserManager
-                    .Users
-                    .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
+                if (resultado.Succeeded)
+                {
+                    var identityUser = _signInManager
+                        .UserManager
+                        .Users
+                        .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
 
-                var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role);
-                var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
+                    var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role);
+                    var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
 
-                identityUser.RefreshToken = CriarRefreshToken();
-                identityUser.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
+                    identityUser.RefreshToken = CriarRefreshToken();
+                    identityUser.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
 
-                await _userManager.UpdateAsync(identityUser);
+                    await _userManager.UpdateAsync(identityUser);
 
-                return (MontarTokenModel(tokenJWT, identityUser.RefreshToken), true);
+                    return (MontarTokenModel(tokenJWT, identityUser.RefreshToken), true);
+                }
+
+                return (new TokenErroModel { Status = 400, Erro = "Usuário inválido.", Detail = "Usuário ou senha inválida." }, false);
             }
+            catch (Exception ex)
+            {
 
-            return (new TokenErroModel { Status = 400, Erro = "Usuário inválido.", Detail = "Usuário ou senha inválida." }, false);
+                throw;
+            }
         }
 
         public async Task<(ITokenModel, bool)> ObterRefreshTokenAsync(TokenRefreshModelRequisicao requisicao)
@@ -92,6 +103,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 var principal = ObterPrincipioTokenExpirado(requisicao.AccessToken);
                 var username = principal.FindFirst("name")!.Value;
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                requisicao.RefreshToken = _criptografador.DecryptString(requisicao.RefreshToken);
 
                 if (user != null && user.RefreshToken == requisicao.RefreshToken && user.RefreshTokenDataExpiracao > DateTime.Now)
                 {
@@ -153,7 +165,8 @@ namespace EncurtadorLink.UseCases.Library.Services
                 new Claim("name", nome),
                 new Claim("firstname", primeiroNome),
                 new Claim("role", role),
-                new Claim("id", clienteId.ToString())
+                new Claim("id", clienteId.ToString()),
+                new Claim("loginkey", Convert.ToBase64String(_criptografador.Encrypt(nome))) 
             };
         }
 

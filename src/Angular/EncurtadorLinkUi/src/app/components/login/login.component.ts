@@ -1,7 +1,7 @@
 import { UserStoreService } from './../../services/user-store.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
@@ -13,11 +13,13 @@ import { NgToastService } from 'ng-angular-popup';
 })
 export class LoginComponent implements OnInit {
 
+  public loginForm!: FormGroup;
   type: string = "password";
   isText: boolean = false;
   eyeIcon: string = "fa fa-eye-slash";
-  loginForm!: FormGroup;
-
+  public resetPasswordEmail!:string;
+  public isValidEmail!:boolean;
+  clicado:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -60,6 +62,27 @@ export class LoginComponent implements OnInit {
       })
     }else{
       ValidateForm.validateAllFormFields(this.loginForm);
+    }
+  }
+
+  checkValidEmail(event:string){
+    this.clicado = true;
+    const value = event;
+    const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
+    this.isValidEmail = pattern.test(value);
+    return this.isValidEmail;
+  }
+
+  confirmToSend(){
+    this.clicado = true;
+
+    if(this.checkValidEmail(this.resetPasswordEmail)){
+
+      const buttonRef = document.getElementById('closeBtn');
+      buttonRef?.click();
+      this.toast.success({detail:'Enviado', summary:'Verifique sua caixa de e-mail.', duration:5000});
+      this.resetPasswordEmail='';
+      this.clicado = false;
     }
   }
 

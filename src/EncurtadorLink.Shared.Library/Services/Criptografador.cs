@@ -1,11 +1,20 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
+using EncurtadorLink.Shared.Library.Services.Interfaces;
 
-namespace EncurtadorLink.Shared.Library.Classes
+namespace EncurtadorLink.Shared.Library.Services
 {
-    public class Criptografador
+    public class Criptografador : ICriptografador
     {
-        private CryptoStream EncryptStream(Stream responseStream)
+        private readonly string _cryptoKey;
+
+        public Criptografador(IConfiguration configuration)
+        {
+            _cryptoKey = configuration["CryptoKey"]!;
+        }
+
+        public CryptoStream EncryptStream(Stream responseStream)
         {
             Aes aes = GetEncryptionAlgorithm();
             ToBase64Transform base64Transform = new ToBase64Transform();
@@ -15,10 +24,10 @@ namespace EncurtadorLink.Shared.Library.Classes
             return cryptoStream;
         }
 
-        private byte[] Encrypt(string plainText)
+        public byte[] Encrypt(string plainText)
         {
             byte[] encrypted;
-            using (AesManaged aes = new AesManaged())
+            using (Aes aes = GetEncryptionAlgorithm())
             {
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
                 using (MemoryStream ms = new MemoryStream())
@@ -33,8 +42,8 @@ namespace EncurtadorLink.Shared.Library.Classes
             }
             return encrypted;
         }
-        
-        private Stream DecryptStream(Stream cipherStream)
+
+        public Stream DecryptStream(Stream cipherStream)
         {
             Aes aes = GetEncryptionAlgorithm();
             FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
@@ -44,7 +53,7 @@ namespace EncurtadorLink.Shared.Library.Classes
             return decryptedStream;
         }
 
-        private string DecryptString(string cipherText)
+        public string DecryptString(string cipherText)
         {
             Aes aes = GetEncryptionAlgorithm();
             byte[] buffer = Convert.FromBase64String(cipherText);
@@ -55,15 +64,26 @@ namespace EncurtadorLink.Shared.Library.Classes
             return streamReader.ReadToEnd();
         }
 
+        public bool TokenTemporarioValido(string tempToken)
+        {
+            var dataString = DecryptString(tempToken);
+            var dataToken = Convert.ToDateTime(dataString);
+
+            return dataToken >= BrasilDateTime().AddMinutes(-5);
+        }
+
+        private DateTime BrasilDateTime()
+        {
+            TimeZoneInfo brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
+        }
+
         private Aes GetEncryptionAlgorithm()
         {
-            var secretKey = "prod_b&9408@30aX";
-            var encryptKey = secretKey;
-            var encryptIV = secretKey;
-
             Aes aes = Aes.Create();
-            var secret_key = Encoding.UTF8.GetBytes(encryptKey);
-            var initialization_vector = Encoding.UTF8.GetBytes(encryptIV);
+            var secret_key = Encoding.UTF8.GetBytes(_cryptoKey);
+            var initialization_vector = Encoding.UTF8.GetBytes(_cryptoKey);
             aes.Key = secret_key;
             aes.IV = initialization_vector;
             return aes;

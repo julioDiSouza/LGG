@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiServer: 'https://localhost:7181',
+  cryptoKey: 'dev_db&9408@30aX'
 };
 
 /*

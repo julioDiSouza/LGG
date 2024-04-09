@@ -27,12 +27,12 @@
               *Senha é obrigatória
             </small>
             <div class="form-inline fr mt-4">
-              <a id="forget" class="font-weight-bold">Esqueci a senha</a>
+              <a id="forgot" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">Esqueci a senha</a>
             </div>
             <button (click)="onLogin()" type="submit" class="btn btn-circle btn-primary btn-block mt-4 w-100">
               Entrar
             </button>
-            <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="forget" routerLink="/signup">Cadastre-se</a>
+            <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="signup" routerLink="/signup">Cadastre-se</a>
             </div>
           </form>
         </div>
@@ -43,6 +43,42 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="exampleModalLabel">
+          <span style="font-size: 25px; font-weight:700">
+            Esqueceu a senha?
+          </span>
+          <br>
+          <small>
+            Por favor, insira seu E-mail para receber o link de renovação.
+          </small>
+        </p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group pt-3">
+          <div class="input-field">
+            <span class="fa fa-user p-2"></span>
+            <input [(ngModel)]="resetPasswordEmail" (ngModelChange)="checkValidEmail($event)" type="text" placeholder="Email">
+          </div>
+          <small *ngIf="!resetPasswordEmail && clicado" class="text-danger">*Email é obrigatório</small>
+          <small *ngIf="!isValidEmail && resetPasswordEmail" class="text-danger">*Email é inválido</small>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button class="btn btn-primary" (click)="confirmToSend()">Enviar</button>
+      </div>
+
     </div>
   </div>
 </div>

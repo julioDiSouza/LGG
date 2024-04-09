@@ -10,6 +10,8 @@ import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
+import { EncryptionService } from '../services/encryption.service';
+
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -17,7 +19,8 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private toast: NgToastService,
-    private router: Router
+    private router: Router,
+    private encryption: EncryptionService
     ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -50,7 +53,9 @@ export class TokenInterceptor implements HttpInterceptor {
   handleUnAuthorizedError(req: HttpRequest<any>, next: HttpHandler){
       return this.authService.renewToken({
         AccessToken: this.authService.getToken(),
-        RefreshToken: this.authService.getRefreshToken()
+        RefreshToken: this.encryption.encryptUsingAES256(
+          this.authService.getRefreshToken()
+        )
       })
       .pipe(
         switchMap((data:any)=>{

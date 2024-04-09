@@ -2,20 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { EncryptionService } from './../../services/encryption.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  //private baseUrl: string = "https://l4u.in/api";
-  private baseUrl: string = "https://localhost:7181/api";
-
+  private baseUrl: string = environment.apiServer + '/api';
   private userPayload:any;
 
   constructor(
     private http: HttpClient,
-    private router: Router) {
+    private router: Router,
+    private encryptionService: EncryptionService
+    ) {
       this.userPayload = this.decodedToken();
      }
 
@@ -57,6 +59,21 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  isLoggedInValid(): boolean{
+
+    if(!localStorage.getItem('token'))
+      return false;
+
+    let decodedToken = this.decodedToken();
+
+    if(!decodedToken.loginkey)
+      return false;
+
+    let loginkey = this.encryptionService.decryptUsingAES256(decodedToken.loginkey);
+
+    return decodedToken.name === loginkey;
+  }
+
   decodedToken(){
     const jwtHelper = new JwtHelperService();
     const token = this.getToken()!;
@@ -65,7 +82,9 @@ export class AuthService {
 
   getNameFromToken(){
     if(this.userPayload)
-      return this.userPayload.name;
+      return this.userPayload.firstname + ',';
+
+    return '';
   }
 
   getRoleFromToken(){

@@ -6,6 +6,7 @@ namespace EncurtadorLink.Shared.Library.Models
     {
         [Required]
         public Guid Id { get; set; }
+        public Guid? ClienteId { get; set; }
         [Required]
         public string UrlLonga { get; set; } = string.Empty;
         [Required]

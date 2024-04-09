@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EncurtadorLink.Database.Library.UnidadeTrabalho;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
+using EncurtadorLink.Shared.Library.Services;
+using EncurtadorLink.Shared.Library.Services.Interfaces;
 
 #region ..:: Configuracoes ::..
 
@@ -37,6 +39,7 @@ builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
+builder.Services.AddScoped(typeof(ICriptografador), typeof(Criptografador));
 builder.Services.AddSingleton<IUrlMongoDbLazyService, UrlMongoDbLazyService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
