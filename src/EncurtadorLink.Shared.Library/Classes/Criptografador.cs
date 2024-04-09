@@ -1,22 +1,13 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
-using Microsoft.Extensions.Configuration;
-using EncurtadorLink.Shared.Library.Services.Interfaces;
 
-namespace EncurtadorLink.Shared.Library.Services
+namespace EncurtadorLink.Shared.Library.Classes
 {
-    public class Criptografador : ICriptografador
+    public static class Criptografador
     {
-        private readonly string _cryptoKey;
-
-        public Criptografador(IConfiguration configuration)
+        public static CryptoStream EncryptStream(Stream responseStream, string cryptoKey)
         {
-            _cryptoKey = configuration["CryptoKey"]!;
-        }
-
-        public CryptoStream EncryptStream(Stream responseStream)
-        {
-            Aes aes = GetEncryptionAlgorithm();
+            Aes aes = GetEncryptionAlgorithm(cryptoKey);
             ToBase64Transform base64Transform = new ToBase64Transform();
             CryptoStream base64EncodedStream = new CryptoStream(responseStream, base64Transform, CryptoStreamMode.Write);
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
@@ -24,10 +15,10 @@ namespace EncurtadorLink.Shared.Library.Services
             return cryptoStream;
         }
 
-        public byte[] Encrypt(string plainText)
+        public static byte[] Encrypt(string plainText, string cryptoKey)
         {
             byte[] encrypted;
-            using (Aes aes = GetEncryptionAlgorithm())
+            using (Aes aes = GetEncryptionAlgorithm(cryptoKey))
             {
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
                 using (MemoryStream ms = new MemoryStream())
@@ -43,9 +34,9 @@ namespace EncurtadorLink.Shared.Library.Services
             return encrypted;
         }
 
-        public Stream DecryptStream(Stream cipherStream)
+        public static Stream DecryptStream(Stream cipherStream, string cryptoKey)
         {
-            Aes aes = GetEncryptionAlgorithm();
+            Aes aes = GetEncryptionAlgorithm(cryptoKey);
             FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
             CryptoStream base64DecodedStream = new CryptoStream(cipherStream, base64Transform, CryptoStreamMode.Read);
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
@@ -53,9 +44,9 @@ namespace EncurtadorLink.Shared.Library.Services
             return decryptedStream;
         }
 
-        public string DecryptString(string cipherText)
+        public static string DecryptString(string cipherText, string cryptoKey)
         {
-            Aes aes = GetEncryptionAlgorithm();
+            Aes aes = GetEncryptionAlgorithm(cryptoKey);
             byte[] buffer = Convert.FromBase64String(cipherText);
             MemoryStream memoryStream = new MemoryStream(buffer);
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
@@ -64,26 +55,26 @@ namespace EncurtadorLink.Shared.Library.Services
             return streamReader.ReadToEnd();
         }
 
-        public bool TokenTemporarioValido(string tempToken)
+        public static bool TokenTemporarioValido(string tempToken, string cryptoKey)
         {
-            var dataString = DecryptString(tempToken);
+            var dataString = DecryptString(tempToken, cryptoKey);
             var dataToken = Convert.ToDateTime(dataString);
 
             return dataToken >= BrasilDateTime().AddMinutes(-5);
         }
 
-        private DateTime BrasilDateTime()
+        private static DateTime BrasilDateTime()
         {
             TimeZoneInfo brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
 
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
         }
 
-        private Aes GetEncryptionAlgorithm()
+        private static Aes GetEncryptionAlgorithm(string cryptoKey)
         {
             Aes aes = Aes.Create();
-            var secret_key = Encoding.UTF8.GetBytes(_cryptoKey);
-            var initialization_vector = Encoding.UTF8.GetBytes(_cryptoKey);
+            var secret_key = Encoding.UTF8.GetBytes(cryptoKey);
+            var initialization_vector = Encoding.UTF8.GetBytes(cryptoKey);
             aes.Key = secret_key;
             aes.IV = initialization_vector;
             return aes;

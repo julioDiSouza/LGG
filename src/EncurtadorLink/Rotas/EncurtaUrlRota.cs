@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
+using EncurtadorLink.Filtros;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
-using EncurtadorLink.Shared.Library.Services.Interfaces;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
@@ -10,17 +10,19 @@ namespace EncurtadorLink.Rotas
     public static class UrlCurtaRota
     {
         private static string _rota = string.Empty;
+        private static IConfiguration _configuration;
 
-        public static void EncurtaUrl(this WebApplication app, string rota)
+        public static void EncurtaUrl(this WebApplication app, string rota, IConfiguration configuration)
         {
             _rota = rota;
+            _configuration = configuration;
             app.CriaUrlCurtaAsync();
             app.CriaUrlCurtaPublicoAsync();
         }
 
         public static void CriaUrlCurtaAsync(this WebApplication app)
         {
-            app.MapPost(_rota , [Authorize] async (
+            app.MapPost(_rota + "/logado" , [Authorize] async (
                 UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
@@ -33,21 +35,17 @@ namespace EncurtadorLink.Rotas
 
         public static void CriaUrlCurtaPublicoAsync(this WebApplication app)
         {
-            app.MapPost(_rota + "/publico", [AllowAnonymous] async (
+            app.MapPost(_rota, async (
                 UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
                 IValidator<UrlModelRequisicao> validacao,
-                ICriptografador criptografador
+                IConfiguration configuration
                 ) =>
             {
-                var tokenValido = criptografador.TokenTemporarioValido(httpContext.Request.Query["temp_token"]!);
-
-                if (!tokenValido)
-                    return Results.BadRequest(new MensagemRetornoModel(400, "Token inválido."));
-
                 return await ProcessarUrlAsync(app, requisicao, urlService, httpContext, validacao);
-            });
+            })
+            .AddEndpointFilter(new AllowAnonymousTempToken(_configuration));
         }
 
         #region ..:: Privados ::..

@@ -37,7 +37,7 @@ export class EncryptionService {
     return decrypted.toString(CryptoJS.enc.Utf8);
   }
 
-  getTempToken(){
+  getTempToken() {
     const localDate = new Date(new Date().getTime() + (-3 * 60 * 60 * 1000));
     let dataAtual = localDate.toISOString().slice(0, 19).replace('T', ' ');
     return this.encryptUsingAES256(dataAtual);

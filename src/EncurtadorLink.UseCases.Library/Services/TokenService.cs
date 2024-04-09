@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Classes;
+using EncurtadorLink.Shared.Library.Services;
 using EncurtadorLink.Shared.Library.Extensoes;
-using EncurtadorLink.Shared.Library.Services.Interfaces;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
 
@@ -22,25 +22,25 @@ namespace EncurtadorLink.UseCases.Library.Services
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ICriptografador _criptografador;
         private readonly IUnidadeTrabalho _udt;
         private readonly ILogger<LogGenerico> _logger;
         private readonly string _chaveInterna;
         private readonly int _segundos;
         private readonly int _segundosRefresh;
+        private readonly string _cryptoKey;
 
         public TokenService(IConfiguration configuration, SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager, ICriptografador criptografador, IUnidadeTrabalho udt, ILogger<LogGenerico> logger)
+            UserManager<ApplicationUser> userManager, IUnidadeTrabalho udt, ILogger<LogGenerico> logger)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
-            _criptografador = criptografador;
             _udt = udt;
             _logger = logger;
             _chaveInterna = configuration["TokenJWT:ChaveInterna"]!;
             _segundos = int.Parse(configuration["TokenJWT:Segundos"]!);
             _segundosRefresh = int.Parse(configuration["TokenJWT:SegundosRefresh"]!);
+            _cryptoKey = configuration["CryptoKey"]!;
         }
 
         public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao)
@@ -102,10 +102,13 @@ namespace EncurtadorLink.UseCases.Library.Services
             {
                 var principal = ObterPrincipioTokenExpirado(requisicao.AccessToken);
                 var username = principal.FindFirst("name")!.Value;
+                var id = principal.FindFirst("id")!.Value;
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
-                requisicao.RefreshToken = _criptografador.DecryptString(requisicao.RefreshToken);
 
-                if (user != null && user.RefreshToken == requisicao.RefreshToken && user.RefreshTokenDataExpiracao > DateTime.Now)
+                requisicao.RefreshToken = Criptografador.DecryptString(requisicao.RefreshToken, _cryptoKey);
+
+                if (user != null && user.RefreshToken == requisicao.RefreshToken && 
+                    user.RefreshTokenDataExpiracao > DateTime.Now && user.ClienteId.ToString() == id)
                 {
                     user.RefreshToken = CriarRefreshToken();
                     user.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
@@ -166,7 +169,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 new Claim("firstname", primeiroNome),
                 new Claim("role", role),
                 new Claim("id", clienteId.ToString()),
-                new Claim("loginkey", Convert.ToBase64String(_criptografador.Encrypt(nome))) 
+                new Claim("loginkey", Convert.ToBase64String(Criptografador.Encrypt(nome, _cryptoKey))) 
             };
         }
 
