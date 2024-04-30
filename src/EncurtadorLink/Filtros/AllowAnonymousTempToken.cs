@@ -15,7 +15,7 @@ namespace EncurtadorLink.Filtros
         {
             try
             {
-                var tokenValido = Criptografador.TokenTemporarioValido(context.HttpContext.Request.Query["temp_token"]!, _configuration["CryptoKey"]!);
+                var tokenValido = Criptografador.TokenTemporarioValido(context.HttpContext.Request.Query["temp_token"]!, _configuration["TempTokenKey"]!);
 
                 if (tokenValido)
                     return await next(context);

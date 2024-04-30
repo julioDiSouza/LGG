@@ -55,17 +55,23 @@ namespace EncurtadorLink.Shared.Library.Classes
             return streamReader.ReadToEnd();
         }
 
-        public static bool TokenTemporarioValido(string tempToken, string cryptoKey)
+        public static bool TokenTemporarioValido(string tempToken, string tempTokenKey)
         {
-            var dataString = DecryptString(tempToken, cryptoKey);
+            var dataString = DecryptString(tempToken, tempTokenKey);
             var dataToken = Convert.ToDateTime(dataString);
 
-            return dataToken >= BrasilDateTime().AddMinutes(-5);
+            return dataToken >= BrazilDateTime().AddMinutes(-5);
         }
 
-        private static DateTime BrasilDateTime()
+        public static string RandomToken() =>
+            Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        public static DateTime BrazilDateTime()
         {
-            TimeZoneInfo brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            TimeZoneInfo brazilTimeZone = 
+                TimeZoneInfo.GetSystemTimeZones().Any(x => x.Id == "E. South America Standard Time") ? 
+                TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time") :
+                TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");
 
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
         }

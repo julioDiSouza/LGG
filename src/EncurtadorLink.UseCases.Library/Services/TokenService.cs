@@ -96,6 +96,38 @@ namespace EncurtadorLink.UseCases.Library.Services
             }
         }
 
+        public async Task<(ITokenModel, bool)> ObterTokenGoogleAsync(LoginModelGoogle model, IClienteService clienteService)
+        {
+            var identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
+
+            if (identityUser == null)
+            {
+                var senha = CriarRefreshToken();
+
+                var clienteModel = new ClienteModelCriar
+                {
+                    NomeCompleto = model.Nome,
+                    Email = model.Email,
+                    Senha = senha,
+                    ReSenha = senha
+                };
+
+                var sucesso = await clienteService.CadastrarAsync(clienteModel);
+
+                identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
+            }
+
+            var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role);
+            var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
+
+            identityUser.RefreshToken = CriarRefreshToken();
+            identityUser.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
+
+            await _userManager.UpdateAsync(identityUser);
+
+            return (MontarTokenModel(tokenJWT, identityUser.RefreshToken), true);
+        }
+
         public async Task<(ITokenModel, bool)> ObterRefreshTokenAsync(TokenRefreshModelRequisicao requisicao)
         {
             try

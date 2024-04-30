@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="offset-md-2 col-lg-4 col-md-7 offset-lg-4 offset-md-3 centralizado">
+      <div class="panel border bg-white">
+        <div class="panel-heading">
+          <h3 class="pt-3 font-weight-bold">Atualização de senha</h3>
+        </div>
+        <div class="panel-body p-3">
+          <form [formGroup]="resetPasswordForm">
+            <div class="form-group pt-3">
+              <div class="input-field" [class.error]="resetPasswordForm.controls['senha'].dirty && resetPasswordForm.hasError('required','senha')">
+                <span class="fa fa-lock p-2"></span>
+                <input formControlName="senha" [type]="type" placeholder="Nova senha">
+                <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
+              </div>
+            </div>
+            <small *ngIf="resetPasswordForm.controls['senha'].dirty && resetPasswordForm.hasError('required','senha')"  class="text-danger">
+              *Nova senha é obrigatória
+            </small>
+            <div class="form-group pt-3">
+              <div class="input-field" [class.error]="resetPasswordForm.controls['reSenha'].dirty && resetPasswordForm.hasError('required','reSenha')">
+                <span class="fa fa-lock p-2"></span>
+                <input formControlName="reSenha" [type]="type" placeholder="Confirmar nova senha">
+                <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
+              </div>
+            </div>
+            <small *ngIf="resetPasswordForm.controls['reSenha'].dirty && resetPasswordForm.hasError('required','reSenha')"  class="text-danger">
+              *Confirmar nova senha é obrigatório
+            </small>
+            <small *ngIf="resetPasswordForm.hasError('confirmPasswordValidator','reSenha')"  class="text-danger">
+              *Senhas digitadas não estão iguais
+            </small>
+            <button (click)="onResetConfirm()"  type="submit" class="btn btn-primary btn-block btn-circle mt-4 w-100">Atualizar</button>
+            <div class="text-center pt-4 text-muted mb-4">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

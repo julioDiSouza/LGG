@@ -6,6 +6,7 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
     {
         public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao);
         Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao);
+        Task<(ITokenModel, bool)> ObterTokenGoogleAsync(LoginModelGoogle model, IClienteService clienteService);
         Task<(ITokenModel, bool)> ObterRefreshTokenAsync(TokenRefreshModelRequisicao requisicao);
         Task LogoutAsync();
     }

@@ -11,6 +11,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { HomeComponent } from './components/home/home.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
+import { ResetComponent } from './components/reset/reset.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
     LoginComponent,
     SignupComponent,
     HomeComponent,
-    AdminComponent
+    AdminComponent,
+    ResetComponent
   ],
   imports: [
     BrowserModule,

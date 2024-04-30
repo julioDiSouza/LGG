@@ -1,5 +1,6 @@
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { EncryptionService } from './../../services/encryption.service';
@@ -21,6 +22,11 @@ export class AuthService {
       this.userPayload = this.decodedToken();
      }
 
+  loginWithGoogle(credential: string) : Observable<any>{
+    const header = new HttpHeaders().set('Content-type','application/json');
+    return this.http.post(this.baseUrl + "/login-google", JSON.stringify(credential), { headers: header });
+  }
+
   signup(signupObj: any){
     return this.http.post<any>(`${this.baseUrl}/cliente`, signupObj);
   }
@@ -28,7 +34,8 @@ export class AuthService {
   signOut(){
     localStorage.clear();
     //localStorage.removeItem('token');
-    this.router.navigate(['login']);
+    //this.router.navigate(['login']);
+    window.open("/login","_self")
   }
 
   login(loginObj: any){

@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 })
 export class EncryptionService {
   private secretKey = environment.cryptoKey;
+  private tempTokenKey = environment.tempTokenKey;
   private key = CryptoJS.enc.Utf8.parse(this.secretKey);
   private iv = CryptoJS.enc.Utf8.parse(this.secretKey);
 
@@ -40,7 +41,18 @@ export class EncryptionService {
   getTempToken() {
     const localDate = new Date(new Date().getTime() + (-3 * 60 * 60 * 1000));
     let dataAtual = localDate.toISOString().slice(0, 19).replace('T', ' ');
-    return this.encryptUsingAES256(dataAtual);
+    var encrypted = CryptoJS.AES.encrypt(
+      CryptoJS.enc.Utf8.parse(dataAtual),
+      CryptoJS.enc.Utf8.parse(this.tempTokenKey),
+      {
+        keySize: 128 / 8,
+        iv: CryptoJS.enc.Utf8.parse(this.tempTokenKey),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      }
+    );
+
+    return encrypted.toString();
   }
 
 }

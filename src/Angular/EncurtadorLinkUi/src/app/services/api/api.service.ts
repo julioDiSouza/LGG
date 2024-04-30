@@ -16,11 +16,11 @@ export class ApiService {
   ) { }
 
   encurtarUrl(model:any){
-    return this.http.post<any>(`${this.baseUrl}/encurta-url`, model);
+    return this.http.post<any>(`${this.baseUrl}/encurta-url/logado`, model);
   }
 
   encurtarUrlPublico(model:any){
-    return this.http.post<any>(`${this.baseUrl}/encurta-url/publico?temp_token=${encodeURIComponent(this.encryption.getTempToken())}`, model);
+    return this.http.post<any>(`${this.baseUrl}/encurta-url/?temp_token=${encodeURIComponent(this.encryption.getTempToken())}`, model);
   }
 
   ping(){
