@@ -33,6 +33,8 @@ pass: db-Apex1
 
 *** Docker ***
 Docker--
+dockerhub_pass
+password: docker@apex1
 STATUS
 docker ps
 
@@ -55,6 +57,7 @@ docker build -t encurtadorlinkacr.azurecr.io/<repositorio> .
 
 LOGIN
 docker login encurtadorlinkacr.azurecr.io --username encurtadorlinkacr --password 8XL/49RLSCu5UkB4XCfxxrvKL4lAjGp4gG6Tq4cSnK+ACRDdbZdY
+docker login -u "juliodidocker" -p "docker@apex1" docker.io
 
 PUSH
 docker push encurtadorlinkacr.azurecr.io/recuperalink:latest

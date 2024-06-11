@@ -13,6 +13,7 @@ senha: Glowmix1@
 xxx
 login vps: root
 senha vps: Pass_jps_maq1
+xxx
 banco de dados:
 nome: db_encurtador
 usuário: root
@@ -32,6 +33,8 @@ pass: db-Apex1
 
 *** Docker ***
 Docker--
+dockerhub_pass
+password: docker@apex1
 STATUS
 docker ps
 
