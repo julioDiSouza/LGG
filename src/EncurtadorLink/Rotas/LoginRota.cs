@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using Google.Apis.Auth;
+using EncurtadorLink.Shared.Library.Classes;
+using Newtonsoft.Json;
 
 namespace EncurtadorLink.Rotas
 {
@@ -19,6 +21,7 @@ namespace EncurtadorLink.Rotas
             app.LoginAsync();
             app.LogoutAsync();
             app.LoginGoogleAsync();
+            app.LoginFacebook();
         }
 
         public static void LoginAsync(this WebApplication app)
@@ -94,5 +97,28 @@ namespace EncurtadorLink.Rotas
                 }
             });
         }
+
+        public static void LoginFacebook(this WebApplication app)
+        {
+            app.MapPost(_rota + "/login-facebook", [AllowAnonymous] (
+                [FromBody] string credential
+                ) =>
+            {
+                try
+                {
+                    credential = Criptografador.DecryptString(credential, _configuration["CryptoKey"]!);
+                    var model = JsonConvert.DeserializeObject<LoginModelFacebook>(credential);
+                    model.Senha = Guid.NewGuid().ToString();
+
+                    return Results.Ok(model);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            });
+        }
+
     }
 }

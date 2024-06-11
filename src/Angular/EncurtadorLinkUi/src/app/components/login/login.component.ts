@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import { response } from 'express';
+import { FacebookService } from 'src/app/services/facebook.service';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,9 @@ export class LoginComponent implements OnInit {
   public isValidEmail!: boolean;
   clicado: boolean = false;
 
+  userInfo: any;
+  loggedIn = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -30,7 +34,8 @@ export class LoginComponent implements OnInit {
     private toast: NgToastService,
     private userStoreService: UserStoreService,
     private resetPasswordService: ResetPasswordService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private fbService: FacebookService
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +100,59 @@ export class LoginComponent implements OnInit {
         });
       }
     });
+  }
+
+  onFacebookLogin() {
+
+    this.fbService.login().then(
+      (response) => {
+        console.log('Logged in successfully!', response);
+        // Fetch user profile
+        this.fbService.getUserProfile().then(
+          (profile) => {
+            this.userInfo = profile;
+            this.loggedIn = true;
+          },
+          (error) => {
+            console.error('Error fetching user profile:', error);
+          }
+        ).then(
+          (response) => {
+            this.authService.loginWithFacebook(JSON.stringify(this.userInfo)).subscribe({
+              next: (res) => {
+                debugger
+              },
+              error: (err) => {
+                debugger
+              }
+            });
+          },
+          (error) =>{
+            debugger
+          }
+        );
+      },
+      (error) => {
+        console.error('Login error:', error);
+      }
+    )
+
+
+
+
+  }
+
+  onLogout() {
+    this.fbService.logout().then(
+      () => {
+        console.log('Logged out successfully!');
+        this.loggedIn = false;
+        this.userInfo = null;
+      },
+      (error) => {
+        console.error('Logout error:', error);
+      }
+    );
   }
 
   hideShowPass() {

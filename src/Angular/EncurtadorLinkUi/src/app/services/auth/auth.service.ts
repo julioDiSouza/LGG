@@ -27,6 +27,12 @@ export class AuthService {
     return this.http.post(this.baseUrl + "/login-google", JSON.stringify(credential), { headers: header });
   }
 
+  loginWithFacebook(credential: any) : Observable<any>{
+    const header = new HttpHeaders().set('Content-type','application/json');
+    credential = this.encryptionService.encryptUsingAES256(credential);
+    return this.http.post(this.baseUrl + "/login-facebook", JSON.stringify(credential), { headers: header });
+  }
+
   signup(signupObj: any){
     return this.http.post<any>(`${this.baseUrl}/cliente`, signupObj);
   }

@@ -48,6 +48,13 @@
               <a href="https://www.facebook.com" target="_blank" class="px-3"><img
                   src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png"
                   alt="" style="width: 43px; height: 43px;"></a>
+                  <div *ngIf="!loggedIn">
+                    <button (click)="onFacebookLogin()">Login with Facebook</button>
+                  </div>
+                  <div *ngIf="loggedIn">
+                    <p>Welcome, {{ userInfo.name }}!</p>
+                    <button (click)="onLogout()">Logout</button>
+                  </div>
             </div>
             <div class="col-6">
               <div id="buttonGoogle"></div>

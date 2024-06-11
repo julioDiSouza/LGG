@@ -14,6 +14,7 @@ using EncurtadorLink.Shared.Library.Services;
 using EncurtadorLink.Shared.Library.Extensoes;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
+using EncurtadorLink.Shared.Library.Enumeradores;
 
 namespace EncurtadorLink.UseCases.Library.Services
 {
@@ -56,7 +57,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 return (new TokenErroModel { Status = 400, Erro = "Cliente inválido.", Detail = "Cliente ou credenciais inválidas." }, false);
 
             var clienteAplicacao = cliente.Aplicacoes.FirstOrDefault(x => x.Ativo == true)!;
-            var claims = CriarClaims(cliente.Email.ObterUserName(), cliente.NomeCompleto.ObterPrimeiroNome() , cliente.Id, clienteAplicacao.Role);
+            var claims = CriarClaims(cliente.Email.ObterUserName(), cliente.NomeCompleto.ObterPrimeiroNome() , cliente.Id, clienteAplicacao.Role, nameof(LoginTipoEnum.Api));
             var tokenJWT = CriarTokenJWT(claims, _segundos);
 
             return (MontarTokenModel(tokenJWT), true);
@@ -76,7 +77,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                         .Users
                         .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
 
-                    var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role);
+                    var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.Email));
                     var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
 
                     identityUser.RefreshToken = CriarRefreshToken();
@@ -117,7 +118,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
             }
 
-            var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role);
+            var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.Google));
             var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
 
             identityUser.RefreshToken = CriarRefreshToken();
@@ -134,6 +135,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             {
                 var principal = ObterPrincipioTokenExpirado(requisicao.AccessToken);
                 var username = principal.FindFirst("name")!.Value;
+                var loginType = principal.FindFirst("logintype")!.Value;
                 var id = principal.FindFirst("id")!.Value;
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
 
@@ -145,7 +147,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                     user.RefreshToken = CriarRefreshToken();
                     user.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
 
-                    var claims = CriarClaims(user.UserName!, user.NomeCompleto.ObterPrimeiroNome(), user.ClienteId, user.Role);
+                    var claims = CriarClaims(user.UserName!, user.NomeCompleto.ObterPrimeiroNome(), user.ClienteId, user.Role, loginType);
                     var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
 
                     await _userManager.UpdateAsync(user);
@@ -193,7 +195,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 );
         }
 
-        private Claim[] CriarClaims(string nome, string primeiroNome, Guid clienteId, string role)
+        private Claim[] CriarClaims(string nome, string primeiroNome, Guid clienteId, string role, string tipoLogin)
         {
             return new Claim[]
             {
@@ -201,7 +203,8 @@ namespace EncurtadorLink.UseCases.Library.Services
                 new Claim("firstname", primeiroNome),
                 new Claim("role", role),
                 new Claim("id", clienteId.ToString()),
-                new Claim("loginkey", Convert.ToBase64String(Criptografador.Encrypt(nome, _cryptoKey))) 
+                new Claim("loginkey", Convert.ToBase64String(Criptografador.Encrypt(nome, _cryptoKey))),
+                new Claim("logintype", tipoLogin)
             };
         }
 

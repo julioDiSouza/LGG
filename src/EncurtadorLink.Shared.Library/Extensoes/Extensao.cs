@@ -1,6 +1,4 @@
-﻿using EncurtadorLink.Entities.Library.Enumeradores;
-
-namespace EncurtadorLink.Shared.Library.Extensoes
+﻿namespace EncurtadorLink.Shared.Library.Extensoes
 {
     public static class Extensao
     {
@@ -30,11 +28,6 @@ namespace EncurtadorLink.Shared.Library.Extensoes
 
             var arr = nomeCompleto.Split(' ');
             return arr[0];
-        }
-
-        public static RoleEnum ConverterParaRole(this string texto)
-        {
-            return (RoleEnum)Enum.Parse(typeof(RoleEnum), texto);
         }
     }
 }
