@@ -8,6 +8,7 @@ pass: root@Apex1
 
 *** Servidor *** 
 site: https://painel.kinghost.com.br
+IP: 177.153.58.19
 email: juliodisouza@gmail.com
 senha: Glowmix1@
 xxx
@@ -34,6 +35,7 @@ pass: db-Apex1
 *** Docker ***
 Docker--
 dockerhub_pass
+login: juliodidocker
 password: docker@apex1
 STATUS
 docker ps
@@ -57,6 +59,7 @@ docker build -t encurtadorlinkacr.azurecr.io/<repositorio> .
 
 LOGIN
 docker login encurtadorlinkacr.azurecr.io --username encurtadorlinkacr --password 8XL/49RLSCu5UkB4XCfxxrvKL4lAjGp4gG6Tq4cSnK+ACRDdbZdY
+docker login -u "juliodidocker" -p "docker@apex1" docker.io
 
 PUSH
 docker push encurtadorlinkacr.azurecr.io/recuperalink:latest

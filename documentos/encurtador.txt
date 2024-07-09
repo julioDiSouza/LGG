@@ -11,6 +11,7 @@ site: https://painel.kinghost.com.br
 email: juliodisouza@gmail.com
 senha: Glowmix1@
 xxx
+IP: 177.153.58.19
 login vps: root
 senha vps: Pass_jps_maq1
 xxx
@@ -34,6 +35,7 @@ pass: db-Apex1
 *** Docker ***
 Docker--
 dockerhub_pass
+login: juliodidocker
 password: docker@apex1
 STATUS
 docker ps

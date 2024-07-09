@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  nginx:
+    build:
+      context: './nginx'
+      dockerfile: DockerFile
+    ports:
+      - 80:80
+    restart: unless-stopped    
