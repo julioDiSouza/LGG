@@ -90,8 +90,12 @@ img{
   content: 'ou conecte-se com';
   position: absolute;
   top: -13px;
-  left: 33%;
+  left: 30%;
   background-color: #fff;
   padding: 0 8px;
+}
 
+.likelink{
+  cursor: pointer;
+  color: #4343ff;
 }

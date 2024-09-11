@@ -11,13 +11,13 @@
               <div class="input-field"
                 [class.error]="loginForm.controls['email'].dirty && loginForm.hasError('required','email')">
                 <span class="fa fa-user p-2"></span>
-                <input formControlName="email" type="email" placeholder="Email">
+                <input formControlName="email" type="email" placeholder="Email" [(ngModel)]="inputEmail" (ngModelChange)="checkValidLoginEmail($event)">
               </div>
             </div>
-            <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required','email')"
-              class="text-danger">
+            <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required','email')" class="text-danger">
               *Email é obrigatório
             </small>
+            <small *ngIf="!isValidLoginEmail && inputEmail" class="text-danger">*Email é inválido</small>
             <div class="form-group pt-3">
               <div class="input-field"
                 [class.error]="loginForm.controls['senha'].dirty && loginForm.hasError('required','senha')">
@@ -34,8 +34,9 @@
               <a id="forgot" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">Esqueci a
                 senha</a>
             </div>
-            <button (click)="onLogin()" type="submit" class="btn btn-circle btn-primary btn-block mt-4 w-100">
+            <button (click)="onLogin()" type="submit" class="btn btn-circle btn-primary btn-block mt-4 w-100" [disabled]="isLoadingEntrar">
               Entrar
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoadingEntrar"></span>
             </button>
             <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="signup"
                 routerLink="/signup">Cadastre-se</a>
@@ -43,22 +44,17 @@
           </form>
         </div>
         <div class="mx-3 my-2 py-2 border-t">
-          <div class="text-center py-3 row">
-            <div class="col-6">
-              <a href="https://www.facebook.com" target="_blank" class="px-3"><img
-                  src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png"
-                  alt="" style="width: 43px; height: 43px;"></a>
-                  <div *ngIf="!loggedIn">
-                    <button (click)="onFacebookLogin()">Login with Facebook</button>
-                  </div>
-                  <div *ngIf="loggedIn">
-                    <p>Welcome, {{ userInfo.name }}!</p>
-                    <button (click)="onLogout()">Logout</button>
-                  </div>
+          <div class="py-3 row">
+            <div class="col-4"></div>
+            <div class="col-2">
+              <span (click)="onFacebookLogin()">
+                <img  src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png" style="width: 38px; height: 38px; cursor: pointer;">
+              </span>
             </div>
-            <div class="col-6">
+            <div class="col-2 px-3">
               <div id="buttonGoogle"></div>
             </div>
+            <div class="col-4"></div>
           </div>
         </div>
       </div>

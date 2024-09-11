@@ -17,15 +17,17 @@ import { FacebookService } from 'src/app/services/facebook.service';
 })
 export class LoginComponent implements OnInit {
   public loginForm!: FormGroup;
+  public resetPasswordEmail!: string;
+  public inputEmail!: string;
+  public isValidEmail!: boolean;
+  public isValidLoginEmail!: boolean;
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa fa-eye-slash';
-  public resetPasswordEmail!: string;
-  public isValidEmail!: boolean;
   clicado: boolean = false;
-
   userInfo: any;
   loggedIn = false;
+  isLoadingEntrar = false;
 
   constructor(
     private fb: FormBuilder,
@@ -103,7 +105,6 @@ export class LoginComponent implements OnInit {
   }
 
   onFacebookLogin() {
-
     this.fbService.login().then(
       (response) => {
         console.log('Logged in successfully!', response);
@@ -136,10 +137,6 @@ export class LoginComponent implements OnInit {
         console.error('Login error:', error);
       }
     )
-
-
-
-
   }
 
   onLogout() {
@@ -162,7 +159,8 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.valid && this.checkValidLoginEmail(this.inputEmail)) {
+      this.isLoadingEntrar = true;
       this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
           this.loginForm.reset();
@@ -184,6 +182,10 @@ export class LoginComponent implements OnInit {
             summary: 'Falha ao realizar Login.',
             duration: 5000,
           });
+          this.isLoadingEntrar = false;
+        },
+        complete: () => {
+          this.isLoadingEntrar = false;
         },
       });
     } else {
@@ -197,6 +199,13 @@ export class LoginComponent implements OnInit {
     const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
     this.isValidEmail = pattern.test(value);
     return this.isValidEmail;
+  }
+
+  checkValidLoginEmail(event: string) {
+    const value = event;
+    const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
+    this.isValidLoginEmail = pattern.test(value);
+    return this.isValidLoginEmail;
   }
 
   confirmToSend() {

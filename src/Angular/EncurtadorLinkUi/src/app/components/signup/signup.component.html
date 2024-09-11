@@ -45,9 +45,12 @@
             <small *ngIf="signUpForm.controls['reSenha'].dirty && signUpForm.hasError('required','reSenha')"  class="text-danger">
               *Confirmar Senha é obrigatório
             </small>
-            <button (click)="onSignUp()" type="submit" class="btn btn-primary btn-block btn-circle mt-4 w-100">Criar</button>
+            <button (click)="onSignUp()" type="submit" class="btn btn-primary btn-block btn-circle mt-4 w-100" [disabled]="isLoadingCriar">
+              Criar
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoadingCriar"></span>
+            </button>
             <div class="text-center pt-4 text-muted mb-4">
-              Já possui uma conta? <a id="forget" routerLink="/login">Login</a>
+              Já possui uma conta? <span id="forget" class="likelink" (click)="toLogin()">Login</span>
             </div>
           </form>
         </div>

@@ -15,6 +15,9 @@ export class SignupComponent implements OnInit {
   isText: boolean = false;
   eyeIcon: string = "fa fa-eye-slash";
   signUpForm!: FormGroup;
+  isLoadingCriar = false;
+  public isValidEmail!: boolean;
+  clicado: boolean = false;
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) { }
 
@@ -35,10 +38,24 @@ export class SignupComponent implements OnInit {
 
   onSignUp(){
     if(this.signUpForm.valid){
-      this.router.navigate(['login']);
+
+      this.isLoadingCriar = true;
+
     }else{
       ValidateForm.validateAllFormFields(this.signUpForm);
     }
+  }
+
+  toLogin(){
+    window.open("/login","_self")
+  }
+
+  checkValidEmail(event: string) {
+    this.clicado = true;
+    const value = event;
+    const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
+    this.isValidEmail = pattern.test(value);
+    return this.isValidEmail;
   }
 
 }
