@@ -43,7 +43,17 @@ namespace EncurtadorLink.UseCases.Library.Services
             usuarioIdentity.DataInclusao = dataAgora;
             usuarioIdentity.Role = nameof(RoleEnum.Admin);
 
+            var clienteAplicacao = new ClienteAplicacao();
+            clienteAplicacao.ClienteId = cliente.Id;
+            clienteAplicacao.ClienteSecret = Guid.NewGuid();
+            clienteAplicacao.Nome = clienteCriar.NomeCompleto;
+            clienteAplicacao.Ativo = true;
+            clienteAplicacao.DataInclusao = DateTime.Now;
+            clienteAplicacao.Role = nameof(RoleEnum.Api);
+
             await _udt.ClienteRepositorio.AdicionarAsync(cliente);
+
+            await _udt.ClienteAplicacaoRepositorio.AdicionarAsync(clienteAplicacao);
 
             var resultadoIdentity = await _userManager.CreateAsync(usuarioIdentity!, clienteCriar.Senha);
 

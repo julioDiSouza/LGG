@@ -20,7 +20,7 @@ namespace EncurtadorLink.Database.Library.Contextos
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var _connectionString = "...";
+                var _connectionString = "server=localhost; database=db_encurtador; user=root; password=root";
 
                 optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString),
                     builder => builder.MigrationsAssembly("EncurtadorLink"));

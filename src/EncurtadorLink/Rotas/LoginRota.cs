@@ -83,7 +83,7 @@ namespace EncurtadorLink.Rotas
                         Senha = Guid.NewGuid().ToString()
                     };
 
-                    var (token, sucesso) = await tokenService.ObterTokenGoogleAsync(model, clienteService);
+                    var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
 
                     if (!sucesso)
                         return Results.BadRequest(token);

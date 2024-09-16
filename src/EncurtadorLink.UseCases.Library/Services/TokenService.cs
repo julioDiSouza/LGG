@@ -10,11 +10,10 @@ using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Classes;
-using EncurtadorLink.Shared.Library.Services;
 using EncurtadorLink.Shared.Library.Extensoes;
+using EncurtadorLink.Shared.Library.Enumeradores;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using EncurtadorLink.Shared.Library.Enumeradores;
 
 namespace EncurtadorLink.UseCases.Library.Services
 {
@@ -97,7 +96,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             }
         }
 
-        public async Task<(ITokenModel, bool)> ObterTokenGoogleAsync(LoginModelGoogle model, IClienteService clienteService)
+        public async Task<(ITokenModel, bool)> ObterTokenSsoAsync(LoginModelGoogle model, IClienteService clienteService)
         {
             var identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
 
