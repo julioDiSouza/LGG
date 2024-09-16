@@ -6,6 +6,7 @@ using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using Google.Apis.Auth;
 using EncurtadorLink.Shared.Library.Classes;
 using Newtonsoft.Json;
+using EncurtadorLink.UseCases.Library.Services;
 
 namespace EncurtadorLink.Rotas
 {
@@ -76,7 +77,7 @@ namespace EncurtadorLink.Rotas
 
                     var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
 
-                    var model = new LoginModelGoogle
+                    var model = new LoginModelSso
                     {
                         Nome = payload.Name,
                         Email = payload.Email,
@@ -100,17 +101,24 @@ namespace EncurtadorLink.Rotas
 
         public static void LoginFacebook(this WebApplication app)
         {
-            app.MapPost(_rota + "/login-facebook", [AllowAnonymous] (
-                [FromBody] string credential
+            app.MapPost(_rota + "/login-facebook", [AllowAnonymous] async (
+                [FromBody] string credential,
+                ITokenService tokenService,
+                IClienteService clienteService
                 ) =>
             {
                 try
                 {
                     credential = Criptografador.DecryptString(credential, _configuration["CryptoKey"]!);
-                    var model = JsonConvert.DeserializeObject<LoginModelFacebook>(credential);
+                    var model = JsonConvert.DeserializeObject<LoginModelSso>(credential);
                     model.Senha = Guid.NewGuid().ToString();
 
-                    return Results.Ok(model);
+                    var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
+
+                    if (!sucesso)
+                        return Results.BadRequest(token);
+
+                    return Results.Ok(token);
                 }
                 catch (Exception ex)
                 {

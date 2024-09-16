@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.Entities.Library.Enumeradores;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using EncurtadorLink.Entities.Library.Enumeradores;
 
 namespace EncurtadorLink.UseCases.Library.Services
 {
@@ -48,7 +48,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             clienteAplicacao.ClienteSecret = Guid.NewGuid();
             clienteAplicacao.Nome = clienteCriar.NomeCompleto;
             clienteAplicacao.Ativo = true;
-            clienteAplicacao.DataInclusao = DateTime.Now;
+            clienteAplicacao.DataInclusao = dataAgora;
             clienteAplicacao.Role = nameof(RoleEnum.Api);
 
             await _udt.ClienteRepositorio.AdicionarAsync(cliente);

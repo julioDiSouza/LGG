@@ -1,8 +1,10 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { Router } from '@angular/router';
+import { matchpassword } from 'src/app/helpers/matchpassword.validator.validator';
+import { StrongPasswordRegx } from 'src/app/helpers/strong.password.regx';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +20,7 @@ export class SignupComponent implements OnInit {
   isLoadingCriar = false;
   public isValidEmail!: boolean;
   clicado: boolean = false;
+  public inputEmail!: string;
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) { }
 
@@ -25,9 +28,20 @@ export class SignupComponent implements OnInit {
     this.signUpForm = this.fb.group({
       nomeCompleto: ['', Validators.required],
       email: ['', Validators.required],
-      senha: ['', Validators.required],
-      reSenha: ['', Validators.required]
-    })
+      senha: [null, Validators.required],
+      reSenha: [null, Validators.required]
+    },
+  {
+    validators:matchpassword
+  })
+  }
+
+  get passwordFormField() {
+    return this.signUpForm.get('senha');
+  }
+
+  get senhaValida() {
+    return StrongPasswordRegx.test(this.passwordFormField?.value);
   }
 
   hideShowPass(){
@@ -37,9 +51,12 @@ export class SignupComponent implements OnInit {
   }
 
   onSignUp(){
-    if(this.signUpForm.valid){
-
+    debugger
+    if(this.signUpForm.valid && this.checkValidEmail(this.inputEmail) && this.senhaValida){
       this.isLoadingCriar = true;
+      debugger
+
+
 
     }else{
       ValidateForm.validateAllFormFields(this.signUpForm);
@@ -51,11 +68,14 @@ export class SignupComponent implements OnInit {
   }
 
   checkValidEmail(event: string) {
-    this.clicado = true;
     const value = event;
     const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
     this.isValidEmail = pattern.test(value);
     return this.isValidEmail;
   }
+
+
+
+
 
 }

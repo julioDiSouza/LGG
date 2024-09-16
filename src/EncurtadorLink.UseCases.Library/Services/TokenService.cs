@@ -96,7 +96,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             }
         }
 
-        public async Task<(ITokenModel, bool)> ObterTokenSsoAsync(LoginModelGoogle model, IClienteService clienteService)
+        public async Task<(ITokenModel, bool)> ObterTokenSsoAsync(LoginModelSso model, IClienteService clienteService)
         {
             var identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
 
@@ -106,7 +106,7 @@ namespace EncurtadorLink.UseCases.Library.Services
 
                 var clienteModel = new ClienteModelCriar
                 {
-                    NomeCompleto = model.Nome,
+                    NomeCompleto = model.Nome ?? model.Name,
                     Email = model.Email,
                     Senha = senha,
                     ReSenha = senha

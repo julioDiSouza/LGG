@@ -81,18 +81,18 @@ export class LoginComponent implements OnInit {
     await this.authService.loginWithGoogle(response.credential).subscribe({
       next: (res) => {
         this.loginForm.reset();
-          this.authService.storeToken(res.accessToken);
-          this.authService.storeRefreshToken(res.refreshToken);
-          const tokenPayLoad = this.authService.decodedToken();
-          this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
-          this.userStoreService.setRoleForStore(tokenPayLoad.role);
-          this.toast.success({
-            detail: 'Sucesso',
-            summary: 'Você está conectado.',
-            duration: 5000,
-          });
-          window.open("/admin","_self")
-          //this.router.navigate(['admin']);
+        this.authService.storeToken(res.accessToken);
+        this.authService.storeRefreshToken(res.refreshToken);
+        const tokenPayLoad = this.authService.decodedToken();
+        this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
+        this.userStoreService.setRoleForStore(tokenPayLoad.role);
+        this.toast.success({
+          detail: 'Sucesso',
+          summary: 'Você está conectado.',
+          duration: 5000,
+        });
+        window.open("/admin","_self")
+        //this.router.navigate(['admin']);
       },
       error: (err) => {
         this.toast.error({
@@ -107,7 +107,6 @@ export class LoginComponent implements OnInit {
   onFacebookLogin() {
     this.fbService.login().then(
       (response) => {
-        console.log('Logged in successfully!', response);
         // Fetch user profile
         this.fbService.getUserProfile().then(
           (profile) => {
@@ -121,15 +120,29 @@ export class LoginComponent implements OnInit {
           (response) => {
             this.authService.loginWithFacebook(JSON.stringify(this.userInfo)).subscribe({
               next: (res) => {
-                debugger
+                this.loginForm.reset();
+                this.authService.storeToken(res.accessToken);
+                this.authService.storeRefreshToken(res.refreshToken);
+                const tokenPayLoad = this.authService.decodedToken();
+                this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
+                this.userStoreService.setRoleForStore(tokenPayLoad.role);
+                window.open("/admin","_self")
               },
               error: (err) => {
-                debugger
+                this.toast.error({
+                  detail: 'Erro',
+                  summary: 'Falha ao Logar pelo Facebook.',
+                  duration: 5000,
+                });
               }
             });
           },
           (error) =>{
-            debugger
+            this.toast.error({
+              detail: 'Erro',
+              summary: 'Falha ao Logar pelo Facebook.',
+              duration: 5000,
+            });
           }
         );
       },
