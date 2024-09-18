@@ -42,7 +42,7 @@ namespace EncurtadorLink.Rotas
                     if (!resultado.IsValid)
                         return Results.ValidationProblem(resultado.ToDictionary());
 
-                var sucesso = await clienteService.CadastrarAsync(clienteModel);
+                var sucesso = await clienteService.CadastroViaWebAsync(clienteModel);
 
                 return sucesso ? Results.Ok() : Results.BadRequest(new MensagemRetornoModel(400, "Falha ao cadastrar cliente."));
             });

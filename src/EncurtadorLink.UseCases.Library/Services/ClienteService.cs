@@ -5,6 +5,7 @@ using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Entities.Library.Enumeradores;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace EncurtadorLink.UseCases.Library.Services
 {
@@ -26,6 +27,16 @@ namespace EncurtadorLink.UseCases.Library.Services
             var entidades = await _udt.ClienteRepositorio.ListarClientesAsync();
 
             return _mapper.Map<List<ClienteModel>>(entidades) ?? null;
+        }
+
+        public async Task<bool> CadastroViaWebAsync(ClienteModelCriar clienteCriar)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == clienteCriar.Email.ToUpper());
+
+            if (user == null)
+                return await CadastrarAsync(clienteCriar);
+
+            return true;
         }
 
         public async Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar)

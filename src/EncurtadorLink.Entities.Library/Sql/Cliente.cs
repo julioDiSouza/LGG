@@ -17,5 +17,6 @@ namespace EncurtadorLink.Entities.Library.Sql
         
         public virtual ICollection<ClienteAplicacao> Aplicacoes { get; set; }
         public virtual ICollection<UrlSql> Urls { get; set; }
+        public virtual ICollection<FilaEmail> FilaEmails { get; set; }
     }
 }

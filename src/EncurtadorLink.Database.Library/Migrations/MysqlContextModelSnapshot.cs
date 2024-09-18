@@ -172,6 +172,47 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.ToTable("ClienteAplicacao");
                 });
 
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.FilaEmail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConfirmationToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DataEnvio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataInclusao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("ResetPasswordDataExpiracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("Email");
+
+                    b.ToTable("FilaEmail");
+                });
+
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.UrlSql", b =>
                 {
                     b.Property<Guid>("Id")
@@ -369,6 +410,17 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.FilaEmail", b =>
+                {
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Cliente", "Cliente")
+                        .WithMany("FilaEmails")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.UrlSql", b =>
                 {
                     b.HasOne("EncurtadorLink.Entities.Library.Sql.Cliente", null)
@@ -430,6 +482,8 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Cliente", b =>
                 {
                     b.Navigation("Aplicacoes");
+
+                    b.Navigation("FilaEmails");
 
                     b.Navigation("Urls");
                 });

@@ -57,6 +57,14 @@ namespace EncurtadorLink.Database.Library.Contextos
                 builder.HasOne(ca => ca.Cliente).WithMany(c => c.Aplicacoes).HasForeignKey(c => c.ClienteId);
                 builder.Property(c => c.Nome).HasMaxLength(50);
             });
+
+            modelBuilder.Entity<FilaEmail>(builder =>
+            {
+                builder.HasKey(c => c.Id);
+                builder.HasOne(ca => ca.Cliente).WithMany(c => c.FilaEmails).HasForeignKey(c => c.ClienteId);
+                builder.Property(c => c.Email).HasMaxLength(50);
+                builder.HasIndex(x => x.Email);
+            });
         }
     }
 }

@@ -15,6 +15,16 @@ namespace EncurtadorLink.Shared.Library.Classes
             return cryptoStream;
         }
 
+        public static Stream DecryptStream(Stream cipherStream, string cryptoKey)
+        {
+            Aes aes = GetEncryptionAlgorithm(cryptoKey);
+            FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
+            CryptoStream base64DecodedStream = new CryptoStream(cipherStream, base64Transform, CryptoStreamMode.Read);
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            CryptoStream decryptedStream = new CryptoStream(base64DecodedStream, decryptor, CryptoStreamMode.Read);
+            return decryptedStream;
+        }
+
         public static byte[] Encrypt(string plainText, string cryptoKey)
         {
             byte[] encrypted;
@@ -34,14 +44,24 @@ namespace EncurtadorLink.Shared.Library.Classes
             return encrypted;
         }
 
-        public static Stream DecryptStream(Stream cipherStream, string cryptoKey)
+        public static string EncryptToString(string plainText, string cryptoKey)
         {
-            Aes aes = GetEncryptionAlgorithm(cryptoKey);
-            FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
-            CryptoStream base64DecodedStream = new CryptoStream(cipherStream, base64Transform, CryptoStreamMode.Read);
-            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            CryptoStream decryptedStream = new CryptoStream(base64DecodedStream, decryptor, CryptoStreamMode.Read);
-            return decryptedStream;
+            string encrypted;
+            using (Aes aes = GetEncryptionAlgorithm(cryptoKey))
+            {
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(cs))
+                            sw.Write(plainText);
+                        var bytes = ms.ToArray();
+                        encrypted = Convert.ToBase64String(bytes);
+                    }
+                }
+            }
+            return encrypted;
         }
 
         public static string DecryptString(string cipherText, string cryptoKey)

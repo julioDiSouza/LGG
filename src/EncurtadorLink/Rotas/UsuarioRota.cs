@@ -2,17 +2,20 @@
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Classes;
-using EncurtadorLink.Shared.Library.Services.Interfaces;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
+using EncurtadorLink.Shared.Library.Enumeradores;
+using System.Web;
 
 namespace EncurtadorLink.Rotas
 {
     public static class UsuarioRota
     {
         private static string _rota = string.Empty;
-        public static void Usuario(this WebApplication app, string rota)
+        private static IConfiguration _configuration;
+        public static void Usuario(this WebApplication app, string rota, IConfiguration configuration)
         {
             _rota = rota;
+            _configuration = configuration;
             app.CadastrarUsuarioAsync();
             app.EmailRecuperacaoSenhaAsync();
             app.NovaSenhaAsync();
@@ -42,7 +45,7 @@ namespace EncurtadorLink.Rotas
             app.MapPost(_rota + "/atualizacao-senha", async (
                 EmailModelRequisicao model,
                 IUsuarioService usuarioService,
-                IEmailService emailService
+                IIEmailService emailService
                 ) =>
             {
                 if (string.IsNullOrWhiteSpace(model?.Email))
@@ -51,14 +54,26 @@ namespace EncurtadorLink.Rotas
                 var usuario = await usuarioService.ConsultarPorEmailAsync(model.Email);
 
                 if (usuario is null)
-                    return Results.NotFound(new MensagemRetornoModel(404, "Email não encontrado."));
+                    return Results.Ok(new MensagemRetornoModel(404, "Email não cadastrado."));
 
                 var emailToken = Criptografador.RandomToken();
+                var dataExpiracao = Criptografador.BrazilDateTime().AddMinutes(15);
 
                 usuario.ResetPasswordToken = emailToken;
-                usuario.ResetPasswordDataExpiracao = Criptografador.BrazilDateTime().AddMinutes(15);
+                usuario.ResetPasswordDataExpiracao = dataExpiracao;
 
                 await usuarioService.AtualizarAsync(usuario);
+
+                var filaEmail = new FilaEmailModel();
+                filaEmail.Id = Guid.NewGuid();
+                filaEmail.ClienteId = usuario.ClienteId;
+                filaEmail.Email = model.Email;
+                filaEmail.ResetPasswordToken = HttpUtility.UrlEncode(Criptografador.EncryptToString("__valido__" + emailToken, _configuration["CryptoKey"]!));
+                filaEmail.ResetPasswordDataExpiracao = dataExpiracao;
+                filaEmail.DataInclusao = Criptografador.BrazilDateTime();
+                filaEmail.Tipo = FilaEmailEnum.ResetSenha;
+
+                await emailService.CriarFilaEmailAsync(filaEmail);  
 
                 /*
                 emailService.SendEmail(
@@ -70,7 +85,7 @@ namespace EncurtadorLink.Rotas
                     );
                 */
 
-                return Results.Ok();
+                return Results.Ok(new MensagemRetornoModel(200, "Email enviado."));
             });
         }
 

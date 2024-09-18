@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EncurtadorLink.Database.Library\EncurtadorLink.Database.Library.csproj" />
     <ProjectReference Include="..\EncurtadorLink.Shared.Library\EncurtadorLink.Shared.Library.csproj" />
     <ProjectReference Include="..\EncurtadorLink.UseCases.Library\EncurtadorLink.UseCases.Library.csproj" />
   </ItemGroup>

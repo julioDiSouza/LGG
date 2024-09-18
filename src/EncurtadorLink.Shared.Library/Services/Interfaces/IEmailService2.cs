@@ -2,7 +2,7 @@
 
 namespace EncurtadorLink.Shared.Library.Services.Interfaces
 {
-    public interface IEmailService
+    public interface IEmailService2
     {
         void SendEmail(EmailModel emailModel);
     }

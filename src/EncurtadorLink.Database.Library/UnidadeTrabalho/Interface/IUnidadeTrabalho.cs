@@ -9,5 +9,6 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho.Interface
         IClienteRepositorio ClienteRepositorio { get; }
         IClienteAplicacaoRepositorio ClienteAplicacaoRepositorio { get; }
         IUrlSqlRepositorio UrlSqlRepositorio { get; }
+        IFilaEmailRepositorio FilaEmailRepositorio { get; }
     }
 }

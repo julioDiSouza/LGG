@@ -45,7 +45,7 @@ builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
 builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
-builder.Services.AddScoped(typeof(IEmailService), typeof(EmailService));
+builder.Services.AddScoped(typeof(IIEmailService), typeof(EmailService));
 builder.Services.AddSingleton<IUrlMongoDbLazyService, UrlMongoDbLazyService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -126,7 +126,7 @@ app.RecuperaUrl("/");
 app.EncurtaUrl("api/encurta-url", builder.Configuration);
 app.Login("api", builder.Configuration);
 app.Token("api/token");
-app.Usuario("api/usuario");
+app.Usuario("api/usuario", builder.Configuration);
 app.Cliente("api/cliente");
 app.Teste("api/teste");
 app.ExcecaoGlobal("/erro");

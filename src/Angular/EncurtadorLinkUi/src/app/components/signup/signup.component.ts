@@ -4,7 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { Router } from '@angular/router';
 import { matchpassword } from 'src/app/helpers/matchpassword.validator.validator';
-import { StrongPasswordRegx } from 'src/app/helpers/strong.password.regx';
+import { strongPassword } from 'src/app/helpers/strong-password.validator';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-signup',
@@ -18,11 +19,12 @@ export class SignupComponent implements OnInit {
   eyeIcon: string = "fa fa-eye-slash";
   signUpForm!: FormGroup;
   isLoadingCriar = false;
-  public isValidEmail!: boolean;
+  isValidEmail!: boolean;
   clicado: boolean = false;
-  public inputEmail!: string;
+  inputEmail!: string;
+  filaEmail: boolean = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private toast: NgToastService) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -32,16 +34,12 @@ export class SignupComponent implements OnInit {
       reSenha: [null, Validators.required]
     },
   {
-    validators:matchpassword
+    validators: [matchpassword, strongPassword]
   })
   }
 
   get passwordFormField() {
     return this.signUpForm.get('senha');
-  }
-
-  get senhaValida() {
-    return StrongPasswordRegx.test(this.passwordFormField?.value);
   }
 
   hideShowPass(){
@@ -51,13 +49,25 @@ export class SignupComponent implements OnInit {
   }
 
   onSignUp(){
-    debugger
-    if(this.signUpForm.valid && this.checkValidEmail(this.inputEmail) && this.senhaValida){
+    if(this.signUpForm.valid && this.checkValidEmail(this.inputEmail)){
       this.isLoadingCriar = true;
-      debugger
-
-
-
+      this.auth.signup(this.signUpForm.value).subscribe({
+        next: (res) => {
+          this.signUpForm.reset();
+          this.filaEmail = true;  
+        },
+        error: (err) => {
+          this.toast.error({
+            detail: 'Erro',
+            summary: 'Falha ao realizar Login.',
+            duration: 10000,
+          });
+          this.isLoadingCriar = false;
+        },
+        complete: () => {
+          this.isLoadingCriar = false;
+        }
+      })
     }else{
       ValidateForm.validateAllFormFields(this.signUpForm);
     }
@@ -73,9 +83,4 @@ export class SignupComponent implements OnInit {
     this.isValidEmail = pattern.test(value);
     return this.isValidEmail;
   }
-
-
-
-
-
 }

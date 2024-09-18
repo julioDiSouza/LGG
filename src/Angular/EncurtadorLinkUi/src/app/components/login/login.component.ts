@@ -16,15 +16,16 @@ import { FacebookService } from 'src/app/services/facebook.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup;
-  public resetPasswordEmail!: string;
-  public inputEmail!: string;
-  public isValidEmail!: boolean;
-  public isValidLoginEmail!: boolean;
+  loginForm!: FormGroup;
+  resetPasswordEmail!: string;
+  inputEmail!: string;
+  isValidEmail!: boolean;
+  isValidLoginEmail!: boolean;
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa fa-eye-slash';
   clicado: boolean = false;
+  clicadoEnviar: boolean = false;
   userInfo: any;
   loggedIn = false;
   isLoadingEntrar = false;
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
       google.accounts.id.initialize({
         client_id: '23453760117-s0k68aeohem2lrhfabo198ckikvdstu2.apps.googleusercontent.com',
         callback: this.handleCredentialResponse.bind(this),
-        auto_select: false,
+        auto_select: true,
         cancel_on_tap_outside: true,
       });
 
@@ -107,7 +108,6 @@ export class LoginComponent implements OnInit {
   onFacebookLogin() {
     this.fbService.login().then(
       (response) => {
-        // Fetch user profile
         this.fbService.getUserProfile().then(
           (profile) => {
             this.userInfo = profile;
@@ -118,6 +118,7 @@ export class LoginComponent implements OnInit {
           }
         ).then(
           (response) => {
+            this.isLoadingEntrar = true;
             this.authService.loginWithFacebook(JSON.stringify(this.userInfo)).subscribe({
               next: (res) => {
                 this.loginForm.reset();
@@ -134,6 +135,7 @@ export class LoginComponent implements OnInit {
                   summary: 'Falha ao Logar pelo Facebook.',
                   duration: 5000,
                 });
+                this.isLoadingEntrar = false;
               }
             });
           },
@@ -143,6 +145,7 @@ export class LoginComponent implements OnInit {
               summary: 'Falha ao Logar pelo Facebook.',
               duration: 5000,
             });
+            this.isLoadingEntrar = false;
           }
         );
       },
@@ -223,26 +226,40 @@ export class LoginComponent implements OnInit {
 
   confirmToSend() {
     this.clicado = true;
-
     if (this.checkValidEmail(this.resetPasswordEmail)) {
+      this.clicadoEnviar = true;
       this.resetPasswordService
         .sendResetPasswordLink({ Email: this.resetPasswordEmail })
         .subscribe({
           next: (res) => {
-            this.toast.success({
-              detail: 'Email enviado',
-              summary: 'Verifique sua caixa de e-mail.',
-              duration: 5000,
-            });
+            if(res.status == 200){
+              this.toast.success({
+                detail: 'Solicitação recebida',
+                summary: 'Em breve, verifique sua caixa de e-mail.',
+                duration: 10000,
+              });
+            }
+             
+            if(res.status == 404){
+              this.toast.warning({
+                detail: 'Email não localizado',
+                summary: 'Por favor realize o cadastro.',
+                duration: 8000,
+              });
+            }
+
             this.closeResetSenhaModal();
+            this.clicadoEnviar = false;
           },
           error: (err) => {
             this.toast.error({
               detail: 'Algo deu errado',
               summary: 'Por favor tente novamente mais tarde.',
-              duration: 5000,
+              duration: 8000,
             });
+            
             this.closeResetSenhaModal();
+            this.clicadoEnviar = false;
           },
         });
     }

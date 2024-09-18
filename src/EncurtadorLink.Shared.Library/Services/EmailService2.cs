@@ -6,11 +6,11 @@ using EncurtadorLink.Shared.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Shared.Library.Services
 {
-    public class EmailService : IEmailService
+    public class EmailService2 : IEmailService2
     {
         private readonly IConfiguration _configuration;
 
-        public EmailService(IConfiguration configuration)
+        public EmailService2(IConfiguration configuration)
         {
             _configuration = configuration;
         }
