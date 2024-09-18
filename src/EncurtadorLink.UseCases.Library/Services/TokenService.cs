@@ -64,36 +64,31 @@ namespace EncurtadorLink.UseCases.Library.Services
 
         public async Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao)
         {
-            try
-            {
-                var resultado = await _signInManager
+            var resultado = await _signInManager
                 .PasswordSignInAsync(requisicao.Email.ObterUserName(), requisicao.Senha, false, false);
 
-                if (resultado.Succeeded)
-                {
-                    var identityUser = _signInManager
-                        .UserManager
-                        .Users
-                        .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
-
-                    var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.Email));
-                    var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
-
-                    identityUser.RefreshToken = CriarRefreshToken();
-                    identityUser.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
-
-                    await _userManager.UpdateAsync(identityUser);
-
-                    return (MontarTokenModel(tokenJWT, identityUser.RefreshToken), true);
-                }
-
-                return (new TokenErroModel { Status = 400, Erro = "Usuário inválido.", Detail = "Usuário ou senha inválida." }, false);
-            }
-            catch (Exception ex)
+            if (resultado.Succeeded)
             {
+                var identityUser = _signInManager
+                    .UserManager
+                    .Users
+                    .FirstOrDefault(u => u.NormalizedUserName == requisicao.Email.ObterUserName().ToUpper());
 
-                throw;
+                if (!identityUser!.EmailConfirmed)
+                    return UsuarioInvalido();
+
+                var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.Email));
+                var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
+
+                identityUser.RefreshToken = CriarRefreshToken();
+                identityUser.RefreshTokenDataExpiracao = DateTime.Now.AddSeconds(_segundos);
+
+                await _userManager.UpdateAsync(identityUser);
+
+                return (MontarTokenModel(tokenJWT, identityUser.RefreshToken), true);
             }
+
+            return UsuarioInvalido();
         }
 
         public async Task<(ITokenModel, bool)> ObterTokenSsoAsync(LoginModelSso model, IClienteService clienteService)
@@ -244,6 +239,9 @@ namespace EncurtadorLink.UseCases.Library.Services
 
             return principal;
         }
+
+        private (TokenErroModel, bool) UsuarioInvalido() =>
+            (new TokenErroModel { Status = 400, Erro = "Usuário inválido.", Detail = "Usuário ou senha inválida." }, false);
 
         #endregion ..:: Fim Privados ::..
     }

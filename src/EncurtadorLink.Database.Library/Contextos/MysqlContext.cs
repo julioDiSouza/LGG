@@ -14,8 +14,9 @@ namespace EncurtadorLink.Database.Library.Contextos
         public DbSet<UrlSql> UrlSql { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<ClienteAplicacao> ClienteAplicacao { get; set; }
+        public DbSet<FilaEmail> FilaEmail { get; set; }
 
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

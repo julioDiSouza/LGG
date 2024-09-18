@@ -22,6 +22,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             var filaEmail = _mapper.Map<FilaEmail>(model);
 
             await _udt.FilaEmailRepositorio.AdicionarAsync(filaEmail);
+            await _udt.FilaEmailRepositorio.ApagarAnterioresRawAsync(filaEmail);
         }
     }
 }

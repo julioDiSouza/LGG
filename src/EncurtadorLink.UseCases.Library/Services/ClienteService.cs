@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using System.Web;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.Shared.Library.Classes;
+using EncurtadorLink.Shared.Library.Enumeradores;
 using EncurtadorLink.Entities.Library.Enumeradores;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using Microsoft.EntityFrameworkCore;
 
 namespace EncurtadorLink.UseCases.Library.Services
 {
@@ -14,12 +18,14 @@ namespace EncurtadorLink.UseCases.Library.Services
         private readonly IUnidadeTrabalho _udt;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
+        private IConfiguration _configuration;
 
-        public ClienteService(IUnidadeTrabalho udt, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public ClienteService(IUnidadeTrabalho udt, IMapper mapper, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _udt = udt;
             _mapper = mapper;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         public async Task<List<ClienteModel>?> ListarClientesAsync()
@@ -34,7 +40,24 @@ namespace EncurtadorLink.UseCases.Library.Services
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == clienteCriar.Email.ToUpper());
 
             if (user == null)
-                return await CadastrarAsync(clienteCriar);
+            {
+                await CadastrarAsync(clienteCriar);
+                user = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == clienteCriar.Email.ToUpper());
+            }
+
+            if (user.EmailConfirmed)
+                return true;
+
+            var filaEmail = new FilaEmail();
+            filaEmail.Id = Guid.NewGuid();
+            filaEmail.ClienteId = user.ClienteId;
+            filaEmail.Email = clienteCriar.Email;
+            filaEmail.ConfirmationToken = HttpUtility.UrlEncode(Criptografador.EncryptToString($"email={clienteCriar.Email}&key={user.ClienteId}", _configuration["CryptoKey"]!));
+            filaEmail.DataInclusao = Criptografador.BrazilDateTime();
+            filaEmail.Tipo = (int)FilaEmailEnum.Confirmacao;
+
+            await _udt.FilaEmailRepositorio.AdicionarAsync(filaEmail);
+            await _udt.FilaEmailRepositorio.ApagarAnterioresRawAsync(filaEmail);
 
             return true;
         }

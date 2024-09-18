@@ -235,7 +235,7 @@ export class LoginComponent implements OnInit {
             if(res.status == 200){
               this.toast.success({
                 detail: 'Solicitação recebida',
-                summary: 'Em breve, verifique sua caixa de e-mail.',
+                summary: 'Em breve você receberá uma mensagem, verifique sua caixa de e-mail.',
                 duration: 10000,
               });
             }
