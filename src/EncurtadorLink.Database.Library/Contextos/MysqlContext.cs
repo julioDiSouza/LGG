@@ -66,6 +66,13 @@ namespace EncurtadorLink.Database.Library.Contextos
                 builder.Property(c => c.Email).HasMaxLength(50);
                 builder.HasIndex(x => x.Email);
             });
+
+            modelBuilder.Entity<ApplicationUser>(builder =>
+            {
+                builder.HasIndex(a => a.Email).IsUnique();
+                builder.HasIndex(a => a.NormalizedEmail).IsUnique();
+                builder.HasIndex(a => a.ResetPasswordToken);
+            });
         }
     }
 }

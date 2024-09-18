@@ -105,19 +105,25 @@ namespace EncurtadorLink.Rotas
                 if (model.NovaSenha != model.ReNovaSenha)
                     return Results.BadRequest(new MensagemRetornoModel(400, "Confirmação de senha inválida."));
 
-                var usuario = await usuarioService.ConsultarPorEmailAsync(model.Email);
+                var token = Criptografador.DecryptString(model.Codigo, _configuration["CryptoKey"]!);
+
+                if (!token.Contains("__valido__"))
+                    return Results.BadRequest(new MensagemRetornoModel(400, "Código inválido.")); 
+
+                var usuario = await usuarioService.ConsultarPorResetTokenAsync(token.Replace("__valido__",""));
 
                 if (usuario is null)
                     return Results.NotFound(new MensagemRetornoModel(404, "Usuário não encontrado."));
 
-                if (usuario.ResetPasswordToken != model.EmailToken || usuario.ResetPasswordDataExpiracao < Criptografador.BrazilDateTime())
-                    return Results.BadRequest(new MensagemRetornoModel(400, "Link encerrado, solicite um novo."));
+                if (usuario.ResetPasswordDataExpiracao < Criptografador.BrazilDateTime())
+                    return Results.Ok(new MensagemRetornoModel(400, "Link expirado, solicite um novo."));
 
-                usuario.ResetPasswordDataExpiracao = Criptografador.BrazilDateTime();
+                usuario.ResetPasswordDataExpiracao = null;
+                usuario.ResetPasswordToken = null;
 
                 await usuarioService.AtualizarSenhaAsync(usuario, model.NovaSenha);
 
-                return Results.Ok();
+                return Results.Ok(new MensagemRetornoModel(200, "Senha atualizada com sucesso."));
             });
         }
     }

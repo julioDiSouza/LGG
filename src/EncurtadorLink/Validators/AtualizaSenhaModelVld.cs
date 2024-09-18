@@ -7,11 +7,8 @@ namespace EncurtadorLink.Validators
     {
         public AtualizaSenhaModelVld()
         {
-            RuleFor(x => x.Email)
+            RuleFor(x => x.Codigo)
             .NotEmpty().WithMessage("Email é obrigatório");
-
-            RuleFor(x => x.EmailToken)
-            .NotEmpty().WithMessage("EmailToken é obrigatório");
 
             RuleFor(x => x.NovaSenha)
             .NotEmpty().WithMessage("NovaSenha é obrigatória");

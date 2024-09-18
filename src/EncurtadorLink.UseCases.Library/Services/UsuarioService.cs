@@ -29,6 +29,9 @@ namespace EncurtadorLink.UseCases.Library.Services
         public async Task<ApplicationUser?> ConsultarPorEmailAsync(string email) =>
             await _userManager.Users.FirstOrDefaultAsync(x => x.Email == email);
 
+        public async Task<ApplicationUser?> ConsultarPorResetTokenAsync(string resetToken) =>
+            await _userManager.Users.FirstOrDefaultAsync(x => x.ResetPasswordToken == resetToken);
+
         public async Task AtualizarAsync(ApplicationUser usuario) =>
             await _userManager.UpdateAsync(usuario);
 

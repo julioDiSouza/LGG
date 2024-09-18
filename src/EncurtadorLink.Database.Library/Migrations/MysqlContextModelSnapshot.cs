@@ -84,7 +84,7 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ResetPasswordToken")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -104,12 +104,18 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
+                        .IsUnique()
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("ResetPasswordToken");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });

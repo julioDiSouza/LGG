@@ -7,6 +7,7 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
     {
         Task<bool> CadastrarAsync(UsuarioModelCriar usuarioDto);
         Task<ApplicationUser?> ConsultarPorEmailAsync(string email);
+        Task<ApplicationUser?> ConsultarPorResetTokenAsync(string resetToken);
         Task AtualizarAsync(ApplicationUser usuario);
         Task AtualizarSenhaAsync(ApplicationUser usuario, string senha);
     }
