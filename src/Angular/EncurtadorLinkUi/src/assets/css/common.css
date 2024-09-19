@@ -39,7 +39,13 @@ a:hover{
 .panel{
   min-height: 300px;
   box-shadow: 0 0 5px 1px #bbb;
-  margin-top: 100px;
+  margin-top: 50px;
+  border-radius: 12px;
+}
+
+.panel-home{
+  min-height: 500px;
+  box-shadow: 0 0 5px 1px #bbb;
   border-radius: 12px;
 }
 
@@ -73,7 +79,7 @@ input[type='password']{
   box-shadow: none;
 }
 
-img{
+.img-circle{
   width: 40px;
   height: 40px;
   object-fit: cover;
@@ -98,4 +104,15 @@ img{
 .likelink{
   cursor: pointer;
   color: #4343ff;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.center-div {
+  display: flex;
+  justify-content: center; 
+  align-items: center;      
+  height: 400px;           
 }

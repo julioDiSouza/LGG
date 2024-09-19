@@ -12,6 +12,7 @@ import { ResetComponent } from './components/reset/reset.component';
 
 // Define routes
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomeComponent },

@@ -41,7 +41,7 @@ export class AuthService {
     localStorage.clear();
     //localStorage.removeItem('token');
     //this.router.navigate(['login']);
-    window.open("/login","_self")
+    window.open("/?status=logout","_self")
   }
 
   login(loginObj: any){
@@ -95,7 +95,7 @@ export class AuthService {
 
   getNameFromToken(){
     if(this.userPayload)
-      return this.userPayload.firstname + ',';
+      return this.userPayload.firstname;
 
     return '';
   }

@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
           summary: 'Você está conectado.',
           duration: 5000,
         });
-        window.open("/admin","_self")
+        window.open("/","_self")
         //this.router.navigate(['admin']);
       },
       error: (err) => {
@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit {
                 const tokenPayLoad = this.authService.decodedToken();
                 this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
                 this.userStoreService.setRoleForStore(tokenPayLoad.role);
-                window.open("/admin","_self")
+                window.open("/","_self")
               },
               error: (err) => {
                 this.toast.error({
@@ -190,7 +190,7 @@ export class LoginComponent implements OnInit {
             summary: 'Você está conectado.',
             duration: 5000,
           });
-          this.router.navigate(['admin']);
+          this.router.navigate(['/']);
         },
         error: (err) => {
           this.toast.error({

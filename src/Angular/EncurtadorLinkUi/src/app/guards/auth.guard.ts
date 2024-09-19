@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     if(this.authService.isLoggedInValid()){
       return true;
     }else{
-      this.toast.warning({detail:"Aviso", summary:"Você está desconectado.", duration:5000});
+      this.toast.warning({detail:"Aviso", summary:"Você está desconectado.", duration:8000});
       this.router.navigate(['login']);
       return false;
     }

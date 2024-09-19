@@ -31,16 +31,13 @@
               *Senha é obrigatória
             </small>
             <div class="form-inline fr mt-4">
-              <a id="forgot" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">Esqueci a
-                senha</a>
+              <a id="forgot" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">Esqueci a senha</a>
             </div>
             <button (click)="onLogin()" type="submit" class="btn btn-circle btn-primary btn-block mt-4 w-100" [disabled]="isLoadingEntrar">
               Entrar
               <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoadingEntrar"></span>
             </button>
-            <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="signup"
-                routerLink="/signup">Cadastre-se</a>
-            </div>
+            <div class="text-center pt-4 text-muted">Não tem uma conta? <a id="signup" routerLink="/signup">Cadastre-se</a></div>
           </form>
         </div>
         <div class="mx-3 my-2 py-2 border-t">
@@ -48,15 +45,16 @@
             <div class="col-4"></div>
             <div class="col-2">
               <span (click)="onFacebookLogin()">
-                <img  src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png" style="width: 38px; height: 38px; cursor: pointer;">
+                <img class="img-circle" src="https://www.gov.br/mre/pt-br/delbrasupa/facebook-logo-blue-circle-large-transparent-png.png" style="width: 38px; height: 38px; cursor: pointer;">
               </span>
             </div>
             <div class="col-2 px-3">
-              <div id="buttonGoogle"></div>
+              <div class="img-circle" id="buttonGoogle"></div>
             </div>
             <div class="col-4"></div>
           </div>
         </div>
+        <div class="text-center text-muted mb-2" style="margin-top: -15px;"><a id="signup" routerLink="/">Ir a Página inicial</a></div>
       </div>
     </div>
   </div>

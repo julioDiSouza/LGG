@@ -1,5 +1,7 @@
 import { UserStoreService } from './../../services/user-store.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -9,12 +11,15 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  public nome:string='';
-  public role:string='';
+  logado: boolean = false;
+  nome:string='';
+  role:string='';
 
   constructor(
     private authService: AuthService,
-    private userStoreService: UserStoreService
+    private userStoreService: UserStoreService, 
+    private toast: NgToastService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +35,19 @@ export class HomeComponent implements OnInit {
       this.role = val || roleFromStore;
     });
 
+    this.logado = this.authService.isLoggedInValid();
+
+    this.activatedRoute.queryParams.subscribe(val=>{
+      if(val['status'] === "logout"){
+        setTimeout(() => {
+          this.toast.warning({detail:'Aviso', summary:'Você está desconectado.', duration:5000});
+        }, 0); 
+      }
+    });
+  }
+
+  toLogin(){
+    window.open("/login","_self")
   }
 
   logOut(){
