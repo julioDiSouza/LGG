@@ -66,6 +66,7 @@ namespace EncurtadorLink.Rotas
 
             var enderecoCurto = app.Configuration["EnderecoCurto"]!;
 
+
             var urlSql = new UrlSqlModel
             {
                 Id = Guid.NewGuid(),
