@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
           summary: 'Você está conectado.',
           duration: 5000,
         });
-        window.open("/","_self")
+        window.open("/?status=loggedin","_self")
         //this.router.navigate(['admin']);
       },
       error: (err) => {
@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit {
                 const tokenPayLoad = this.authService.decodedToken();
                 this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
                 this.userStoreService.setRoleForStore(tokenPayLoad.role);
-                window.open("/","_self")
+                window.open("/?status=loggedin","_self")
               },
               error: (err) => {
                 this.toast.error({
@@ -158,7 +158,6 @@ export class LoginComponent implements OnInit {
   onLogout() {
     this.fbService.logout().then(
       () => {
-        console.log('Logged out successfully!');
         this.loggedIn = false;
         this.userInfo = null;
       },
@@ -190,7 +189,7 @@ export class LoginComponent implements OnInit {
             summary: 'Você está conectado.',
             duration: 5000,
           });
-          this.router.navigate(['/']);
+          window.open("/?status=loggedin","_self")
         },
         error: (err) => {
           this.toast.error({

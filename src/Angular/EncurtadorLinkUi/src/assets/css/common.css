@@ -110,6 +110,10 @@ input[type='password']{
   cursor: pointer;
 }
 
+.nav-green{
+  color: #039625;
+}
+
 .center-div {
   display: flex;
   justify-content: center; 

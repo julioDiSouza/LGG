@@ -112,7 +112,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
             }
 
-            var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.Google));
+            var claims = CriarClaims(identityUser!.UserName!, identityUser!.NomeCompleto.ObterPrimeiroNome()!, identityUser.ClienteId, identityUser.Role, nameof(LoginTipoEnum.SSO));
             var tokenJWT = CriarTokenJWT(claims, _segundosRefresh);
 
             identityUser.RefreshToken = CriarRefreshToken();

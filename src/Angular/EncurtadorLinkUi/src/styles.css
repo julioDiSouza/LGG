@@ -18,7 +18,9 @@ body{
 .cubes span:nth-child(1){
   left: 60px;
   animation-delay:0.6s;
-  border: 5px solid #2C87C5;
+  height: 50px;
+  width: 50px;
+  background: #2C87C5;
 }
 .cubes span:nth-child(2){
   left: 20%;
@@ -37,7 +39,9 @@ body{
 .cubes span:nth-child(4){
   left: 20%;
   animation-delay: 7.5s;
-  border: 5px solid #F2B505;
+  width: 50px;
+  height: 50px;
+  background: #F2B505;
 }
 .cubes span:nth-child(5){
   left: 30%;
@@ -49,36 +53,44 @@ body{
 .cubes span:nth-child(6){
   left: 40%;
   animation-delay: 1s;
-  border: 5px solid #F2B505;
+  width: 60px;
+  height: 60px;
+  background: #F2B505;
 }
 .cubes span:nth-child(7){
   left: 50%;
   animation-delay: 7s;
-  border: 5px solid #2C87C5;
+  width: 80px;
+  height: 80px;
+  background: #2C87C5;
 }
 .cubes span:nth-child(8){
   left: 70%;
   animation-delay: 6s;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   background: #F2B505;
 }
 .cubes span:nth-child(9){
   left: 75%;
   animation-delay: 8s;
-  border: 5px solid #32A34F;
+  width: 50px;
+  height: 50px;
+  background: #32A34F;
 }
 .cubes span:nth-child(10){
   left: 90%;
   animation-delay: 7s;
   width: 90px;
   height: 90px;
-  background: #2C87C5;
+  background: #32A34F;
 }
 .cubes span:nth-child(11){
   left: 90%;
   animation-delay: 0s;
-  border: 5px solid #F2B505;
+  width: 50px;
+  height: 50px;
+  background: #F2B505;
 }
 @keyframes animate{
   0%{

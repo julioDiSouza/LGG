@@ -5,6 +5,7 @@
         Api,
         Email,
         Google,
-        Facebook
+        Facebook,
+        SSO
     }
 }
