@@ -44,7 +44,7 @@ namespace EncurtadorLink.Rotas
                 ) =>
             {
                 return await ProcessarUrlAsync(app, requisicao, urlService, httpContext, validacao);
-            });
+            }).AddEndpointFilter(new AllowAnonymousTempToken(_configuration));
         }
 
         #region ..:: Privados ::..

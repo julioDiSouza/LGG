@@ -49,7 +49,8 @@
               </span>
             </div>
             <div class="col-2 px-3">
-              <div class="img-circle" id="buttonGoogle"></div>
+              <div class="img-circle" id="buttonGoogle" [hidden]="!showGoogle"></div>
+              <div [hidden]="showGoogle"><img class="pointer" src="../../../assets/images/google_btn_logo.png"></div>
             </div>
             <div class="col-4"></div>
           </div>

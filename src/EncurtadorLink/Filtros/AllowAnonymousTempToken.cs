@@ -22,7 +22,7 @@ namespace EncurtadorLink.Filtros
             }
             catch (Exception) { }
 
-            context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.HttpContext.Response.WriteAsync("Token invalido.");
 
             return await next(context);

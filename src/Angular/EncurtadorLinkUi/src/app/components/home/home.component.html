@@ -41,7 +41,7 @@
         <div style="color: #F2B813; font-size: 20pt; font-weight: bold; margin-top: -12px; padding-left: 25px; width: 350px;">é totalmente &nbsp;</div>
         <div style="color: #32A34F; font-size: 30pt; font-weight: bold; width: 350px; margin-top: -40px; padding-right: 20px; text-align: right;">Grátis!</div>
         <div *ngIf="!logado">
-          Para mais opções realize o login clicando <span class="likelink" (click)="toLogin()">aqui.</span>
+          Para mais opções realize o login clicando <span class="likelink" (click)="toLogin()">aqui</span>
         </div>
         <div *ngIf="logado">
           <span class="badge rounded-pill text-bg-success">VOCÊ ESTÁ CONECTADO</span>
@@ -49,7 +49,28 @@
       </div>
     </div>
     <div class="col-sm-12 col-md-5 col-5">
-      <div style="padding-top: 150px; padding-bottom: 120px;">
+      <div style="padding-top: 150px; padding-bottom: 120px;" *ngIf="encurtado">
+        <p>
+          Feito! Seu link curto está pronto:
+        </p>
+        <div style="font-size: larger; font-weight: bold;">
+          {{linkCurto}}
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <button type="submit" class="btn btn-success btn-block btn-circle" style="width: 130px;" (click)="copiar()" [disabled]="isLoading" >
+              Copiar
+              &nbsp;
+              <span class="fa fa-files-o" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="col-8" style="padding-top: 35px;">
+            &nbsp;
+            <span class="likelink" (click)="novoLink()">novo link</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top: 150px; padding-bottom: 120px;" *ngIf="!encurtado">
         <form [formGroup]="urlForm">
           <div class="form-group pt-3">
             <div class="input-field">
@@ -57,7 +78,7 @@
               <input formControlName="url" type="text" placeholder="Insira aqui seu endereço longo: https://www...">
             </div>
             <small class="text-danger" *ngIf="urlForm.errors?.['urlValidatorError'] && urlForm.controls['url'].dirty && urlForm.controls['url'].value">
-              Endereço inválido.
+              O endereço deve ser válido e possuir http...
             </small>
           </div>
           <button type="submit" class="btn btn-primary btn-block btn-circle mt-4" style="width: 130px;" (click)="onEncurtar()" [disabled]="isLoading" >

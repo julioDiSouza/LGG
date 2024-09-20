@@ -20,7 +20,9 @@ export class HomeComponent implements OnInit {
   nome:string='';
   role:string='';
   navcolor: string='';
+  linkCurto: string='';
   isLoading: boolean = false;
+  encurtado: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -60,7 +62,7 @@ export class HomeComponent implements OnInit {
       }
       if(val['status'] === "loggedin"){
         setTimeout(() => {
-          this.navcolor = "nav-green";
+          this.navcolor = "nav-color";
           this.toast.success({detail:'Aviso', summary:'Você está conectado.', duration:5000});
         }, 0); 
       }
@@ -74,14 +76,11 @@ export class HomeComponent implements OnInit {
         UrlLonga: this.urlForm.value.url
       }
 
-      this.apiService.encurtarUrl(model)
+      this.apiService.encurtarUrl(model, this.authService.isLoggedIn())
       .subscribe({
         next:(res)=>{
-          this.toast.success({
-            detail: 'Feito',
-            summary: 'Link encurtado com sucesso.',
-            duration: 5000
-          });
+          this.linkCurto = res.urlCurta;
+          this.encurtado = true;
           this.isLoading = false;
           this.urlForm.reset();
         },
@@ -99,6 +98,32 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  copiar(){
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(this.linkCurto)
+        .then(() => {
+          this.toast.success({
+            detail: 'Copiado',
+            summary: 'Ctrl + V disponível.',
+            duration: 5000
+          });
+        })
+        .catch(err => {
+          this.toast.error({
+            detail: 'Indisponível',
+            summary: 'Copie manualmente.',
+            duration: 5000
+          });
+        });
+    } else {
+      this.toast.error({
+        detail: 'Indisponível',
+        summary: 'Opção não disponivel neste navegador.',
+        duration: 5000
+      });
+    }
+  }
+
   toLogin(){
     window.open("/login","_self")
   }
@@ -107,14 +132,8 @@ export class HomeComponent implements OnInit {
     this.authService.signOut();
   }
 
-  /*
-  isAbsoluteUrl(url: string): boolean {
-    try {
-      new URL(url);  // This will throw if the URL is not valid
-      return true;
-    } catch {
-      return false;
-    }
+  novoLink(){
+    this.encurtado = false;
+    this.linkCurto = '';
   }
-  */
 }

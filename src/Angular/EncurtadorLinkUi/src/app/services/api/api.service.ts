@@ -14,13 +14,17 @@ export class ApiService {
     private http: HttpClient,
     private encryption: EncryptionService
   ) { }
-
-  encurtarUrl(model:any){
-    return this.http.post<any>(`${this.baseUrl}/encurta-url/logado`, model);
+  
+  encurtarUrl(model:any, logado:boolean){
+    return logado ? this.encurtarUrlLogado(model) : this.encurtarUrlPublico(model);
   }
-
+  
   encurtarUrlPublico(model:any){
     return this.http.post<any>(`${this.baseUrl}/encurta-url/?temp_token=${encodeURIComponent(this.encryption.getTempToken())}`, model);
+  }
+
+  encurtarUrlLogado(model:any){
+    return this.http.post<any>(`${this.baseUrl}/encurta-url/logado`, model);
   }
 
   ping(){

@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
   userInfo: any;
   loggedIn = false;
   isLoadingEntrar = false;
+  showGoogle:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +49,10 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.required],
       senha: ['', Validators.required],
     });
+
+    setTimeout(() => {
+      this.showGoogle = true;
+    }, 2000);
   }
 
   botaoGoogle(){

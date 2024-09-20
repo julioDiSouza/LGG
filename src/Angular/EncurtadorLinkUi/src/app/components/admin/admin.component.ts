@@ -61,7 +61,7 @@ export class AdminComponent implements OnInit {
   }
 
   encurtar(){
-    this.apiService.encurtarUrl({ urlLonga: this._urlLonga }).subscribe({
+    this.apiService.encurtarUrl({ urlLonga: this._urlLonga }, this.authService.isLoggedIn()).subscribe({
       next:(res)=>{
         alert(res.urlCurta);
       }
