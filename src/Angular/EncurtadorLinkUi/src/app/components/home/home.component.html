@@ -11,7 +11,9 @@
     <div class="col-4">
       <div class="row">
         <div class="col-5 col-sm-12 col-md-5">
-          <span *ngIf="logado">Meus links</span>
+          <span *ngIf="logado" routerLink="/my" class="pointer">
+            Meus links
+          </span>
         </div>
         <div class="col-4 col-sm-12 col-md-4">
           <span class="pointer" routerLink="/about">

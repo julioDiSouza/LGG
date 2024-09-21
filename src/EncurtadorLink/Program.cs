@@ -123,7 +123,7 @@ app.UseAuthorization();
 
 // Rotas
 app.RecuperaUrl("/");
-app.EncurtaUrl("api/encurta-url", builder.Configuration);
+app.EncurtaUrl("api", builder.Configuration);
 app.Login("api", builder.Configuration);
 app.Token("api/token");
 app.Usuario("api/usuario", builder.Configuration);

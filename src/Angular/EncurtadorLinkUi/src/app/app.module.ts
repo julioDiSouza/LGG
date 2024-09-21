@@ -13,6 +13,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
 import { ResetComponent } from './components/reset/reset.component';
 import { AboutComponent } from './components/about/about.component';
+import { MyComponent } from './components/my/my.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AboutComponent } from './components/about/about.component';
     HomeComponent,
     AdminComponent,
     ResetComponent,
-    AboutComponent
+    AboutComponent,
+    MyComponent
   ],
   imports: [
     BrowserModule,

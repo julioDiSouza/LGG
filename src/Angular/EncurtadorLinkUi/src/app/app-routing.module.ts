@@ -10,6 +10,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ResetComponent } from './components/reset/reset.component';
 import { AboutComponent } from './components/about/about.component';
+import { MyComponent } from './components/my/my.component';
 
 // Define routes
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'my', component: MyComponent, canActivate: [AuthGuard]  },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'reset', component: ResetComponent },
   { path: 'about', component: AboutComponent }

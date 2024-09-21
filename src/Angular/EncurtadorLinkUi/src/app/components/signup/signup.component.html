@@ -21,7 +21,7 @@
             <div class="form-group pt-3">
               <div class="input-field"
                 [class.error]="signUpForm.controls['email'].dirty && signUpForm.hasError('required','email')">
-                <span class="fa fa-user p-2"></span>
+                <span class="fa fa-envelope p-2" style="font-size: small;"></span>
                 <input formControlName="email" type="email" placeholder="Email" [(ngModel)]="inputEmail"
                   (ngModelChange)="checkValidEmail($event)">
               </div>

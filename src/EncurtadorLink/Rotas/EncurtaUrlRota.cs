@@ -18,11 +18,13 @@ namespace EncurtadorLink.Rotas
             _configuration = configuration;
             app.CriaUrlCurtaAsync();
             app.CriaUrlCurtaPublicoAsync();
+            app.ObterUrlAsync();
+            app.ApagarUrlAsync();
         }
 
         public static void CriaUrlCurtaAsync(this WebApplication app)
         {
-            app.MapPost(_rota + "/logado" , [Authorize] async (
+            app.MapPost(_rota + "/encurta-url/logado", [Authorize] async (
                 UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
@@ -35,7 +37,7 @@ namespace EncurtadorLink.Rotas
 
         public static void CriaUrlCurtaPublicoAsync(this WebApplication app)
         {
-            app.MapPost(_rota, async (
+            app.MapPost(_rota + "/encurta-url", async (
                 UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
@@ -45,6 +47,34 @@ namespace EncurtadorLink.Rotas
             {
                 return await ProcessarUrlAsync(app, requisicao, urlService, httpContext, validacao);
             }).AddEndpointFilter(new AllowAnonymousTempToken(_configuration));
+        }
+
+        public static void ObterUrlAsync(this WebApplication app)
+        {
+            app.MapGet(_rota + "/urls/{pagina}", [Authorize] async (
+                int pagina,
+                IUrlService urlService,
+                HttpContext httpContext,
+                IValidator<UrlModelRequisicao> validacao
+                ) =>
+            {
+                return Results.Ok(await urlService.ObterUrlsPaginadasAsync(ObterId(httpContext), pagina));
+            });
+        }
+
+        public static void ApagarUrlAsync(this WebApplication app)
+        {
+            app.MapDelete(_rota + "/url/{id}", [Authorize] async (
+                Guid id,
+                IUrlService urlService,
+                HttpContext httpContext,
+                IValidator<UrlModelRequisicao> validacao
+                ) =>
+            {
+                await urlService.ApagarUrlAsync(ObterId(httpContext), id);
+
+                return Results.Ok();
+            });
         }
 
         #region ..:: Privados ::..
