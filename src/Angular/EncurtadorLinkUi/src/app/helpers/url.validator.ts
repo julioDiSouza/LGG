@@ -12,7 +12,7 @@ export const urlValidator : ValidatorFn = (control: AbstractControl):ValidationE
     absolute = false;
   }
 
-  if(!urlPattern.test(url?.value) || !absolute){
+  if(!absolute){
      return { urlValidatorError: true };
   }
   

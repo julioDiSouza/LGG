@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import ValidateForm from 'src/app/helpers/validateForm';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import { response } from 'express';
@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
   userInfo: any;
   loggedIn = false;
   isLoadingEntrar = false;
-  showGoogle:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,19 +39,20 @@ export class LoginComponent implements OnInit {
     private resetPasswordService: ResetPasswordService,
     private ngZone: NgZone,
     private fbService: FacebookService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.botaoGoogle();
-
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
       senha: ['', Validators.required],
     });
 
-    setTimeout(() => {
-      this.showGoogle = true;
-    }, 2000);
+    const script = document.createElement('script');
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    document.head.appendChild(script);
+
+    this.botaoGoogle();
   }
 
   botaoGoogle(){
@@ -97,8 +97,7 @@ export class LoginComponent implements OnInit {
           summary: 'Você está conectado.',
           duration: 5000,
         });
-        window.open("/?status=loggedin","_self")
-        //this.router.navigate(['admin']);
+        window.open("home/?status=loggedin","_self")
       },
       error: (err) => {
         this.toast.error({
@@ -132,7 +131,8 @@ export class LoginComponent implements OnInit {
                 const tokenPayLoad = this.authService.decodedToken();
                 this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
                 this.userStoreService.setRoleForStore(tokenPayLoad.role);
-                window.open("/?status=loggedin","_self")
+                window.open("home/?status=loggedin","_self")
+                //this.router.navigate(["/home/?status=loggedin"]);
               },
               error: (err) => {
                 this.toast.error({
@@ -194,7 +194,8 @@ export class LoginComponent implements OnInit {
             summary: 'Você está conectado.',
             duration: 5000,
           });
-          window.open("/?status=loggedin","_self")
+          window.open("home/?status=loggedin","_self")
+          //this.router.navigate(["/?status=loggedin"]);
         },
         error: (err) => {
           this.toast.error({

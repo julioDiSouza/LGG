@@ -54,6 +54,9 @@ export class HomeComponent implements OnInit {
 
     this.logado = this.authService.isLoggedInValid();
 
+    if(this.logado)
+      this.navcolor = "nav-color";
+
     this.activatedRoute.queryParams.subscribe(val=>{
       if(val['status'] === "loggedout"){
         setTimeout(() => {
@@ -62,7 +65,6 @@ export class HomeComponent implements OnInit {
       }
       if(val['status'] === "loggedin"){
         setTimeout(() => {
-          this.navcolor = "nav-color";
           this.toast.success({detail:'Aviso', summary:'Você está conectado.', duration:5000});
         }, 0); 
       }

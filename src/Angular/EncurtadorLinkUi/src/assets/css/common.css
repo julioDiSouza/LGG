@@ -37,14 +37,11 @@ a:hover{
 }
 
 .panel{
-  min-height: 300px;
   box-shadow: 0 0 5px 1px #bbb;
-  margin-top: 50px;
   border-radius: 12px;
 }
 
 .panel-home{
-  min-height: 500px;
   box-shadow: 0 0 5px 1px #bbb;
   border-radius: 12px;
 }
@@ -120,3 +117,25 @@ input[type='password']{
   align-items: center;      
   height: 400px;           
 }
+
+.div-lb-g{
+  border-left: 3px #32A34F solid; 
+  text-align: left; 
+  padding-left: 20px; 
+  margin-bottom: 20px;
+}
+
+.div-lb-y{
+  border-left: 3px #F2B505 solid; 
+  text-align: left; 
+  padding-left: 20px; 
+  margin-bottom: 20px;
+}
+
+.div-lb-b{
+  border-left: 3px #2C87C5 solid; 
+  text-align: left; 
+  padding-left: 20px; 
+  margin-bottom: 20px;
+}
+

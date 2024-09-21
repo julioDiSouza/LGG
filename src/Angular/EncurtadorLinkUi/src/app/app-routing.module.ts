@@ -9,6 +9,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ResetComponent } from './components/reset/reset.component';
+import { AboutComponent } from './components/about/about.component';
 
 // Define routes
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'reset', component: ResetComponent }
+  { path: 'reset', component: ResetComponent },
+  { path: 'about', component: AboutComponent }
 ];
 
 @NgModule({

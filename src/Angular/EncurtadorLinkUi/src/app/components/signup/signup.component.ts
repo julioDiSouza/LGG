@@ -74,7 +74,8 @@ export class SignupComponent implements OnInit {
   }
 
   toLogin(){
-    window.open("/login","_self")
+    //window.open("/login","_self")
+    this.router.navigate(['login']);
   }
 
   checkValidEmail(event: string) {

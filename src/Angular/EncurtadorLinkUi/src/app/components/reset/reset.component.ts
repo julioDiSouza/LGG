@@ -108,7 +108,8 @@ export class ResetComponent implements OnInit {
   }
 
   toLogin(){
-    window.open("/login","_self")
+    //window.open("/login","_self")
+    this.router.navigate(['login']);
   }
 
 }

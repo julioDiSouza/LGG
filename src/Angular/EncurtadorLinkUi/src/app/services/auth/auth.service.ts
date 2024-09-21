@@ -41,7 +41,7 @@ export class AuthService {
     localStorage.clear();
     //localStorage.removeItem('token');
     //this.router.navigate(['login']);
-    window.open("/?status=loggedout","_self")
+    window.open("home/?status=loggedout","_self")
   }
 
   login(loginObj: any){

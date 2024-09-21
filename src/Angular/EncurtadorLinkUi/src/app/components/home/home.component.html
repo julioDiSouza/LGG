@@ -14,10 +14,12 @@
           <span *ngIf="logado">Meus links</span>
         </div>
         <div class="col-4 col-sm-12 col-md-4">
-          Sobre
+          <span class="pointer" routerLink="/about">
+            Sobre
+          </span>
         </div>
         <div class="col-3 col-sm-12 col-md-3">
-          <span *ngIf="!logado" (click)="toLogin()" class="pointer">Entrar</span>
+          <span *ngIf="!logado" routerLink="/login" class="pointer">Entrar</span>
           <span *ngIf="logado" (click)="logOut()" class="pointer">Sair</span>
         </div>
       </div>
@@ -41,7 +43,7 @@
         <div style="color: #F2B813; font-size: 20pt; font-weight: bold; margin-top: -12px; padding-left: 25px; width: 350px;">é totalmente &nbsp;</div>
         <div style="color: #32A34F; font-size: 30pt; font-weight: bold; width: 350px; margin-top: -40px; padding-right: 20px; text-align: right;">Grátis!</div>
         <div *ngIf="!logado">
-          Para mais opções realize o login clicando <span class="likelink" (click)="toLogin()">aqui</span>
+          Para mais opções realize o login clicando <span class="likelink" routerLink="/login">aqui</span>
         </div>
         <div *ngIf="logado">
           <span class="badge rounded-pill text-bg-success">VOCÊ ESTÁ CONECTADO</span>
