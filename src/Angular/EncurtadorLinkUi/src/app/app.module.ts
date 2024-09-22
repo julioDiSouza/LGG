@@ -14,6 +14,17 @@ import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
 import { ResetComponent } from './components/reset/reset.component';
 import { AboutComponent } from './components/about/about.component';
 import { MyComponent } from './components/my/my.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-confirmacao.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +35,9 @@ import { MyComponent } from './components/my/my.component';
     AdminComponent,
     ResetComponent,
     AboutComponent,
-    MyComponent
+    MyComponent,
+    ModalConfirmacaoComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -32,13 +45,23 @@ import { MyComponent } from './components/my/my.component';
     ReactiveFormsModule,
     HttpClientModule,
     NgToastModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
   }],
+  entryComponents: [ModalConfirmacaoComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

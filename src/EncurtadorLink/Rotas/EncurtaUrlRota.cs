@@ -51,14 +51,15 @@ namespace EncurtadorLink.Rotas
 
         public static void ObterUrlAsync(this WebApplication app)
         {
-            app.MapGet(_rota + "/urls/{pagina}", [Authorize] async (
+            app.MapGet(_rota + "/urls/{pagina}/{quantidade}", [Authorize] async (
                 int pagina,
+                int quantidade,
                 IUrlService urlService,
                 HttpContext httpContext,
                 IValidator<UrlModelRequisicao> validacao
                 ) =>
             {
-                return Results.Ok(await urlService.ObterUrlsPaginadasAsync(ObterId(httpContext), pagina));
+                return Results.Ok(await urlService.ObterUrlsPaginadasAsync(ObterId(httpContext), pagina, quantidade));
             });
         }
 

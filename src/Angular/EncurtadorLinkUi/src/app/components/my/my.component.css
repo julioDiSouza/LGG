@@ -1,0 +1,19 @@
+table {
+  width: 100%;
+}
+
+.mat-column-UrlCurta {
+  width: 10%;
+}
+
+.mat-column-UrlLonga {
+  width: 40%;
+}
+
+.mat-column-excluir {
+  width: 5%;
+}
+
+.mat-paginator {
+  margin-top: 10px;
+}

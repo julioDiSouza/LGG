@@ -104,4 +104,9 @@ export class AuthService {
     if(this.userPayload)
       return this.userPayload.role;
   }
+
+  getUserId(){
+    if(this.userPayload)
+      return this.userPayload.id;
+  }
 }

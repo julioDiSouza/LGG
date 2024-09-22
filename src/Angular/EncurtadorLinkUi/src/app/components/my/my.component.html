@@ -1,39 +1,45 @@
-<div class="container" style="padding-top: 58px;">
+<div class="container">
+    <app-nav-bar></app-nav-bar>
     <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8 panel border bg-white">
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-10">
-                    <div class="text-center">
-                        <h3 class="p-3 font-weight-bold">Meus Links</h3>
+        <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
+        <div class="col col-lg-10">
+            <div class="row panel-home border bg-white">
+                <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
+                <div class="col col-lg-10 col-md-11 col-sm-11">
+                    <div class="panel-heading">
+                        <h2 class="pt-3 font-weight-bold">Meus Links</h2>
                     </div>
-                    <div class="text-center">
-                        <div class="div-lb-b">
-                            Site grátis para encurtamento de links.
-                        </div>
-                        <div class="div-lb-y">
-                            Este site foi desenvolvido para ter uma usabilidade rápida, prática e fácil, além de ser livre de
-                            anúncios. Outro motivo bem legal para a existencia deste site é a sua função de portifólio.
-                        </div>
-                        <div class="div-lb-g">
-                            Por trás desta interface existem conceitos e tecnologias modernas que são aplicadas em diversos
-                            aplicativos da industria atual.
-                        </div>
-                        <div class="div-lb-b">
-                            Utilize o quanto quiser, sempre que possível novas atualizações serão disponibilizadas. 
-                            Em caso de dúvidas ou sugestões envie uma mensagem para o endereço:
-                            <a href="mailto:juliodisouza@gmail.com" class="likelink">juliodisouza@gmail.com</a>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="text-center text-muted m-2" style="margin-top: -15px;">
-                        <a id="signup" routerLink="/">Ir à página inicial</a>
+                    <div class="mat-elevation-z0" style="margin-bottom: 30px;">
+                        <table mat-table [dataSource]="dataSource" class="mat-table">
+
+                            <ng-container matColumnDef="UrlCurta">
+                                <th mat-header-cell *matHeaderCellDef> Curto </th>
+                                <td mat-cell *matCellDef="let element">{{element.urlCurta}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="UrlLonga">
+                                <th mat-header-cell *matHeaderCellDef> Original </th>
+                                <td mat-cell *matCellDef="let element"> {{element.urlLonga}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="excluir">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Excluir </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                    <span class="fa fa-times pointer" style="font-size: large; color: #af2f2f;"
+                                        (click)="apagarConfirmacao(element.id)"></span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSize]="quantidade" [pageSizeOptions]="[5, 10]" [length]="total"
+                            (page)="mudarPagina($event)" showFirstLastButtons></mat-paginator>
                     </div>
                 </div>
-                <div class="col-1"></div>
+                <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
             </div>
         </div>
-        <div class="col-2"></div>
+        <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
     </div>
 </div>

@@ -39,4 +39,11 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}/teste/autenticacao-admin`);
   }
 
+  obterLinksCurtos(pagina:any, quantidade:any){
+    return this.http.get<any>(`${this.baseUrl}/urls/${pagina}/${quantidade}`);
+  }
+  
+  apagarLink(id:any){
+    return this.http.delete<any>(`${this.baseUrl}/url/${id}`);
+  }
 }

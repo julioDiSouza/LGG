@@ -44,9 +44,8 @@ namespace EncurtadorLink.UseCases.Library.Services
             return urlSqlModel;
         }
 
-        public async Task<ResultadoPaginadoModel<UrlSqlModelGrid>> ObterUrlsPaginadasAsync(Guid clienteId, int pagina)
+        public async Task<ResultadoPaginadoModel<UrlSqlModelGrid>> ObterUrlsPaginadasAsync(Guid clienteId, int pagina, int quantidade)
         {
-            var quantidade = 5;
             var (total, urls) = await _udt.UrlSqlRepositorio.ObterUrlsPaginadasAsync(clienteId, pagina, quantidade);
 
             var resultado = new ResultadoPaginadoModel<UrlSqlModelGrid>();
