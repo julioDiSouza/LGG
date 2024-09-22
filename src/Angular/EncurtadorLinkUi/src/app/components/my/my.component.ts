@@ -46,12 +46,8 @@ export class MyComponent implements OnInit {
     this.apiService.obterLinksCurtos(pagina, quantidade)
     .subscribe({
       next:(res)=>{
-        if(res?.total > 0){
-          this.dataSource = res.colecao;
-          this.total = res.total;
-        } else {
-          alert('sem links')
-        }
+        this.dataSource = res.colecao;
+        this.total = res.total;
       },
       error:(err)=>{
         this.toast.error({
