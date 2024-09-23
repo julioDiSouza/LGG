@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Web;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -52,12 +53,33 @@ namespace EncurtadorLink.UseCases.Library.Services
             filaEmail.Id = Guid.NewGuid();
             filaEmail.ClienteId = user.ClienteId;
             filaEmail.Email = clienteCriar.Email;
-            filaEmail.ConfirmationToken = HttpUtility.UrlEncode(Criptografador.EncryptToString($"email={clienteCriar.Email}&key={user.ClienteId}", _configuration["CryptoKey"]!));
+            filaEmail.ConfirmationToken = HttpUtility.UrlEncode(Criptografador.EncryptToString(
+                "{ \"email\":\"" + clienteCriar.Email + "\", \"id\":\"" + user.ClienteId + "\", \"status\":\"__valido__\"}", 
+                _configuration["CryptoKey"]!));
             filaEmail.DataInclusao = Criptografador.BrazilDateTime();
             filaEmail.Tipo = (int)FilaEmailEnum.Confirmacao;
 
             await _udt.FilaEmailRepositorio.AdicionarAsync(filaEmail);
             await _udt.FilaEmailRepositorio.ApagarAnterioresRawAsync(filaEmail);
+
+            return true;
+        }
+
+        public async Task<bool> ValidarClienteAsync(ClienteModelCodigo cliente)
+        {
+            var json = Criptografador.DecryptString(cliente.Codigo, _configuration["CryptoKey"]!);
+
+            if (!json.Contains("__valido__"))
+                return false;
+
+            var model = JsonSerializer.Deserialize<ClienteModelValidar>(json);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == model!.email && u.ClienteId == model.id);
+
+            if (user == null)
+                return false;
+
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
 
             return true;
         }

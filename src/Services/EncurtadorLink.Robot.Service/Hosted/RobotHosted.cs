@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using EncurtadorLink.Robot.Service.Services.Interfaces;
 using EncurtadorLink.Shared.Library.Models.Configuracoes;
 
@@ -8,12 +9,12 @@ namespace EncurtadorLink.Robot.Service.Hosted
     internal class RobotHosted : BackgroundService
     {
         private readonly ConfiguracaoAutenticacao _configuracaoAutenticacao;
-        private readonly IMonitoramento _monitoramento;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RobotHosted(IConfiguration configuration, IMonitoramento monitoramento)
+        public RobotHosted(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _configuracaoAutenticacao = configuration.GetSection("ConfiguracaoAutenticacao").Get<ConfiguracaoAutenticacao>()!;
-            _monitoramento = monitoramento;
+            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,17 +23,12 @@ namespace EncurtadorLink.Robot.Service.Hosted
             {
                 try
                 {
-
-                    await Task.Run(() =>
+                    using (var scope = _serviceProvider.CreateScope())
                     {
-                        Console.WriteLine("****************");
-                        Console.WriteLine("**  Rodando!  **");
-                        Console.WriteLine("****************");
-                        Console.WriteLine("");
-                    });
+                        var filaEmailService = scope.ServiceProvider.GetRequiredService<IFilaEmailService>();
 
-
-                    await _monitoramento.TestarAutenticacaoAsync();
+                        await filaEmailService.ProcessarFilaAsync();
+                    }
                 }
                 catch (Exception ex)
                 {

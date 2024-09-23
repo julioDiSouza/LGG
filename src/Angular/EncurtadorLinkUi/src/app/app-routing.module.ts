@@ -12,6 +12,7 @@ import { ResetComponent } from './components/reset/reset.component';
 import { AboutComponent } from './components/about/about.component';
 import { MyComponent } from './components/my/my.component';
 import { SpecComponent } from './components/spec/spec.component';
+import { ConfirmComponent } from './components/confirm/confirm.component';
 
 // Define routes
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'reset', component: ResetComponent },
   { path: 'about', component: AboutComponent },
   { path: 'spec', component: SpecComponent },
+  { path: 'confirm', component: ConfirmComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

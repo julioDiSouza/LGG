@@ -41,8 +41,7 @@ namespace EncurtadorLink.Rotas
                 UrlModelRequisicao requisicao,
                 IUrlService urlService,
                 HttpContext httpContext,
-                IValidator<UrlModelRequisicao> validacao,
-                IConfiguration configuration
+                IValidator<UrlModelRequisicao> validacao
                 ) =>
             {
                 return await ProcessarUrlAsync(app, requisicao, urlService, httpContext, validacao);
@@ -55,8 +54,7 @@ namespace EncurtadorLink.Rotas
                 int pagina,
                 int quantidade,
                 IUrlService urlService,
-                HttpContext httpContext,
-                IValidator<UrlModelRequisicao> validacao
+                HttpContext httpContext
                 ) =>
             {
                 return Results.Ok(await urlService.ObterUrlsPaginadasAsync(ObterId(httpContext), pagina, quantidade));
@@ -68,8 +66,7 @@ namespace EncurtadorLink.Rotas
             app.MapDelete(_rota + "/url/{id}", [Authorize] async (
                 Guid id,
                 IUrlService urlService,
-                HttpContext httpContext,
-                IValidator<UrlModelRequisicao> validacao
+                HttpContext httpContext
                 ) =>
             {
                 await urlService.ApagarUrlAsync(ObterId(httpContext), id);

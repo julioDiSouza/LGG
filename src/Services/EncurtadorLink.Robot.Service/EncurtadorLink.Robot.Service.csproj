@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.15" />
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\EncurtadorLink.Shared.Library\EncurtadorLink.Shared.Library.csproj" />
+    <ProjectReference Include="..\..\EncurtadorLink.UseCases.Library\EncurtadorLink.UseCases.Library.csproj" />
   </ItemGroup>
 
   <ItemGroup>

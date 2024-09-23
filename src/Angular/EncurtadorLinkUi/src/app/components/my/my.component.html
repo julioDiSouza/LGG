@@ -9,7 +9,10 @@
                     <div class="panel-heading">
                         <h2 class="pt-3 font-weight-bold">Meus Links</h2>
                     </div>
-                    <div class="table-responsive" style="margin-bottom: 30px; width: 100%;">
+                    <div style="text-align: center;" class="mb-4" *ngIf="total == 0">
+                      Você ainda não encurtou links.
+                    </div>
+                    <div class="table-responsive" style="margin-bottom: 30px;" *ngIf="total > 0">
                         <table mat-table [dataSource]="dataSource" class="mat-table">
 
                             <ng-container matColumnDef="UrlCurta">

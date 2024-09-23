@@ -1,9 +1,7 @@
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { ApiService } from 'src/app/services/api/api.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalConfirmacaoComponent } from '../modal-confirmacao/modal-confirmacao.component';
@@ -30,7 +28,6 @@ export class MyComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService,
     private toast: NgToastService,
     public dialog: MatDialog
   ) { }

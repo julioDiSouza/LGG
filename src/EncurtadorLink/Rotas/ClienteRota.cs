@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using EncurtadorLink.Filtros;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
@@ -9,11 +10,15 @@ namespace EncurtadorLink.Rotas
     public static class ClienteRota
     {
         private static string _rota = string.Empty;
-        public static void Cliente(this WebApplication app, string rota)
+        private static IConfiguration _configuration;
+
+        public static void Cliente(this WebApplication app, string rota, IConfiguration configuration)
         {
             _rota = rota;
+            _configuration = configuration;
             app.ListarClientesAsync();
             app.CadastrarClienteAsync();
+            app.ValidarClienteAsync();
         }
 
         public static void ListarClientesAsync(this WebApplication app)
@@ -46,6 +51,19 @@ namespace EncurtadorLink.Rotas
 
                 return sucesso ? Results.Ok() : Results.BadRequest(new MensagemRetornoModel(400, "Falha ao cadastrar cliente."));
             });
+        }
+
+        public static void ValidarClienteAsync(this WebApplication app)
+        {
+            app.MapPost(_rota + "/validacao", async (
+                ClienteModelCodigo cliente,
+                IClienteService clienteService 
+                ) =>
+            {
+                var resultado = await clienteService.ValidarClienteAsync(cliente);
+
+                return resultado ? Results.Ok() : Results.BadRequest();
+            }).AddEndpointFilter(new AllowAnonymousTempToken(_configuration));
         }
     }
 }

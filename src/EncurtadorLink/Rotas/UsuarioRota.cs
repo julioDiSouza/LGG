@@ -1,10 +1,10 @@
-﻿using FluentValidation;
+﻿using System.Web;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
 using EncurtadorLink.Shared.Library.Classes;
-using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Shared.Library.Enumeradores;
-using System.Web;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
@@ -74,16 +74,6 @@ namespace EncurtadorLink.Rotas
                 filaEmail.Tipo = FilaEmailEnum.ResetSenha;
 
                 await emailService.CriarFilaEmailAsync(filaEmail);  
-
-                /*
-                emailService.SendEmail(
-                    new EmailModel(
-                        to: model.Email, 
-                        subject: "l4u: Atualizar Senha.", 
-                        content: EmailBody.EmailStringBody(model.Email, emailToken)
-                        )
-                    );
-                */
 
                 return Results.Ok(new MensagemRetornoModel(200, "Email enviado."));
             });

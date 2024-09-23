@@ -15,6 +15,22 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql
             _dbContexto = dbContexto;
         }
 
+        public async Task<List<FilaEmail>> ObterPendenciasAsync()
+        {
+            var query = from f in _dbContexto.FilaEmail
+                        where f.DataEnvio == null 
+                        select f;
+
+            return await query
+                .OrderBy(u => u.DataInclusao)
+                .ToListAsync();
+        }
+
+        public async Task RegistrarEnvioAsync(FilaEmail filaEmail)
+        {
+            await AtualizarAsync(filaEmail);
+        }
+
         public async Task ApagarAnterioresAsync(FilaEmail filaEmail)
         {
             var query = from f in _dbContexto.FilaEmail 

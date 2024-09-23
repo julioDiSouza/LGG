@@ -2,7 +2,6 @@ import { ResetPasswordService } from './../../services/reset-password.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmPasswordValidator } from 'src/app/helpers/confirm-password.validator';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { NgToastService } from 'ng-angular-popup';
 import { EncryptionService } from 'src/app/services/encryption.service';
@@ -40,13 +39,12 @@ export class ResetComponent implements OnInit {
       senha: [null, Validators.required],
       reSenha: [null, Validators.required]
     },{
-      /*validator: ConfirmPasswordValidator("senha", "reSenha")*/
       validators:[matchpassword, strongPassword]
     });
 
     this.activatedRoute.queryParams.subscribe(val=>{
       this.codigo = decodeURIComponent(val['code']);
-      this.valido = this.crypto.decryptUsingAES256(decodeURIComponent(val['code'])).includes("__valido__");
+      this.valido = this.crypto.decryptUsingAES256(this.codigo).includes("__valido__");
     })
   }
 

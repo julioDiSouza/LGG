@@ -46,4 +46,8 @@ export class ApiService {
   apagarLink(id:any){
     return this.http.delete<any>(`${this.baseUrl}/url/${id}`);
   }
+
+  validarCliente(model:any){
+    return this.http.post<any>(`${this.baseUrl}/cliente/validacao/?temp_token=${encodeURIComponent(this.encryption.getTempToken())}`, model);
+  }
 }

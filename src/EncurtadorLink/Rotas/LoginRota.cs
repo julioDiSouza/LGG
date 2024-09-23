@@ -1,12 +1,11 @@
-﻿using FluentValidation;
+﻿using Newtonsoft.Json;
+using FluentValidation;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
-using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using Google.Apis.Auth;
 using EncurtadorLink.Shared.Library.Classes;
-using Newtonsoft.Json;
-using EncurtadorLink.UseCases.Library.Services;
+using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
 {
@@ -20,9 +19,9 @@ namespace EncurtadorLink.Rotas
             _rota = rota;
             _configuration = configuration;
             app.LoginAsync();
-            app.LogoutAsync();
             app.LoginGoogleAsync();
             app.LoginFacebook();
+            app.LogoutAsync();
         }
 
         public static void LoginAsync(this WebApplication app)
@@ -48,18 +47,6 @@ namespace EncurtadorLink.Rotas
             });
         }
 
-        public static void LogoutAsync(this WebApplication app)
-        {
-            app.MapGet(_rota + "/logout", [AllowAnonymous] async (
-                ITokenService tokenService
-                ) =>
-            {
-                await tokenService.LogoutAsync();
-
-                return Results.Ok();
-            });
-        }
-
         public static void LoginGoogleAsync(this WebApplication app)
         {
             app.MapPost(_rota + "/login-google", [AllowAnonymous] async (
@@ -68,34 +55,26 @@ namespace EncurtadorLink.Rotas
                 IClienteService clienteService 
                 ) =>
             {
-                try
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
                 {
-                    var settings = new GoogleJsonWebSignature.ValidationSettings()
-                    {
-                        Audience = new List<string> { _configuration["GoogleClientId"]!.ToString() }
-                    };
+                    Audience = new List<string> { _configuration["GoogleClientId"]!.ToString() }
+                };
 
-                    var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
 
-                    var model = new LoginModelSso
-                    {
-                        Nome = payload.Name,
-                        Email = payload.Email,
-                        Senha = Guid.NewGuid().ToString()
-                    };
-
-                    var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
-
-                    if (!sucesso)
-                        return Results.BadRequest(token);
-
-                    return Results.Ok(token);
-                }
-                catch (Exception ex)
+                var model = new LoginModelSso
                 {
+                    Nome = payload.Name,
+                    Email = payload.Email,
+                    Senha = Guid.NewGuid().ToString()
+                };
 
-                    throw;
-                }
+                var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
+
+                if (!sucesso)
+                    return Results.BadRequest(token);
+
+                return Results.Ok(token);
             });
         }
 
@@ -107,26 +86,29 @@ namespace EncurtadorLink.Rotas
                 IClienteService clienteService
                 ) =>
             {
-                try
-                {
-                    credential = Criptografador.DecryptString(credential, _configuration["CryptoKey"]!);
-                    var model = JsonConvert.DeserializeObject<LoginModelSso>(credential);
-                    model.Senha = Guid.NewGuid().ToString();
+                credential = Criptografador.DecryptString(credential, _configuration["CryptoKey"]!);
+                var model = JsonConvert.DeserializeObject<LoginModelSso>(credential);
+                model.Senha = Guid.NewGuid().ToString();
 
-                    var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
+                var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
 
-                    if (!sucesso)
-                        return Results.BadRequest(token);
+                if (!sucesso)
+                    return Results.BadRequest(token);
 
-                    return Results.Ok(token);
-                }
-                catch (Exception ex)
-                {
-
-                    throw;
-                }
+                return Results.Ok(token);
             });
         }
 
+        public static void LogoutAsync(this WebApplication app)
+        {
+            app.MapGet(_rota + "/logout", [AllowAnonymous] async (
+                ITokenService tokenService
+                ) =>
+            {
+                await tokenService.LogoutAsync();
+
+                return Results.Ok();
+            });
+        }
     }
 }

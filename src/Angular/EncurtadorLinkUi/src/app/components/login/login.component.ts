@@ -4,10 +4,9 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import ValidateForm from 'src/app/helpers/validateForm';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
-import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
-import { response } from 'express';
+import { CredentialResponse } from 'google-one-tap';
 import { FacebookService } from 'src/app/services/facebook.service';
 
 @Component({
@@ -33,11 +32,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
     private toast: NgToastService,
     private userStoreService: UserStoreService,
     private resetPasswordService: ResetPasswordService,
-    private ngZone: NgZone,
     private fbService: FacebookService
   ) { }
 

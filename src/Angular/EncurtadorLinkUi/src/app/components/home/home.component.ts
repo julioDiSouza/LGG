@@ -62,10 +62,17 @@ export class HomeComponent implements OnInit {
         setTimeout(() => {
           this.toast.warning({detail:'Aviso', summary:'Você está desconectado.', duration:5000});
         }, 0); 
-      }
-      if(val['status'] === "loggedin"){
+      } else if(val['status'] === "loggedin"){
         setTimeout(() => {
           this.toast.success({detail:'Aviso', summary:'Você está conectado.', duration:5000});
+        }, 0); 
+      } else if(val['status'] === "confirmed"){
+        setTimeout(() => {
+          this.toast.success({detail:'Aviso', summary:'Usuário confirmado. Faça o Login.', duration:5000});
+        }, 0); 
+      } else if(val['status'] === "unconfirmed"){
+        setTimeout(() => {
+          this.toast.warning({detail:'Aviso', summary:'Falha ao confirmar usuário.', duration:5000});
         }, 0); 
       }
     });

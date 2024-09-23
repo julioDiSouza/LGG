@@ -127,7 +127,7 @@ app.EncurtaUrl("api", builder.Configuration);
 app.Login("api", builder.Configuration);
 app.Token("api/token");
 app.Usuario("api/usuario", builder.Configuration);
-app.Cliente("api/cliente");
+app.Cliente("api/cliente", builder.Configuration);
 app.Teste("api/teste");
 app.ExcecaoGlobal("/erro");
 
