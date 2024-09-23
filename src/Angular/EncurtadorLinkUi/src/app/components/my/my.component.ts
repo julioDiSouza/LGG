@@ -83,7 +83,6 @@ export class MyComponent implements OnInit {
   }
 
   apagar(id: any) {
-    debugger
     this.apiService.apagarLink(id)
     .subscribe({
       next:(res)=>{

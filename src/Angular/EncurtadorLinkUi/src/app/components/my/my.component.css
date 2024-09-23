@@ -24,7 +24,7 @@ table {
   -webkit-overflow-scrolling: touch;
 }
 
-@media only screen and (max-width: 700px)  {
+@media (max-width: 991px)  {
   .table-responsive {
     overflow-x: auto;
     max-width: 90%;

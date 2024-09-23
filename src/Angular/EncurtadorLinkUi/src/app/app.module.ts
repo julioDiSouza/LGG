@@ -25,6 +25,7 @@ import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { SpecComponent } from './components/spec/spec.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
     AboutComponent,
     MyComponent,
     ModalConfirmacaoComponent,
-    NavBarComponent
+    NavBarComponent,
+    SpecComponent
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { ResetComponent } from './components/reset/reset.component';
 import { AboutComponent } from './components/about/about.component';
 import { MyComponent } from './components/my/my.component';
+import { SpecComponent } from './components/spec/spec.component';
 
 // Define routes
 const routes: Routes = [
@@ -21,7 +22,9 @@ const routes: Routes = [
   { path: 'my', component: MyComponent, canActivate: [AuthGuard]  },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'reset', component: ResetComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent },
+  { path: 'spec', component: SpecComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
