@@ -62,7 +62,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                 content: conteudo
             );
 
-            //await SendEmailAsync(emailModel);
+            await SendEmailAsync(emailModel);
             await _udt.FilaEmailRepositorio.RegistrarEnvioAsync(filaEmail);
         }
 
@@ -84,11 +84,12 @@ namespace EncurtadorLink.UseCases.Library.Services
                 {
                     client.Connect(_configuration["EnvioEmail:SmtpServer"]!, int.Parse(_configuration["EnvioEmail:Porta"]!), true);
                     client.Authenticate(_configuration["EnvioEmail:De"]!, _configuration["EnvioEmail:Senha"]!);
-                    await client.SendAsync(emailMessage);
+
+                    var response = await client.SendAsync(emailMessage);
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    //TODO Registrar log
                 }
                 finally
                 {

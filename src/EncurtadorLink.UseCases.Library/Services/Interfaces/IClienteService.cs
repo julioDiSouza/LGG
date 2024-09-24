@@ -7,6 +7,6 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
         Task<List<ClienteModel>?> ListarClientesAsync();
         Task<bool> CadastroViaWebAsync(ClienteModelCriar clienteCriar);
         Task<bool> ValidarClienteAsync(ClienteModelCodigo cliente);
-        Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar);
+        Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar, bool emailConfirmed = false);
     }
 }

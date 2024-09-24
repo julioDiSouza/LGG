@@ -59,7 +59,9 @@ namespace EncurtadorLink.UseCases.Library.Services
 
         public async Task ApagarUrlAsync(Guid clienteId, Guid urlId)
         {
-            await _udt.UrlSqlRepositorio.ApagarUrlAsync(clienteId, urlId);
+            var urlSql = await _udt.UrlSqlRepositorio.ApagarUrlAsync(clienteId, urlId);
+
+            await _udt.UrlMongoDbRepositorio.ApagarAsync(urlSql.Codigo);
         }
 
         #region ..:: Privados ::..

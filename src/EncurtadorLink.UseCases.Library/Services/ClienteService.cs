@@ -84,7 +84,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             return true;
         }
 
-        public async Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar)
+        public async Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar, bool emailConfirmed = false)
         {
             var dataAgora = DateTime.Now;
 
@@ -98,6 +98,7 @@ namespace EncurtadorLink.UseCases.Library.Services
             usuarioIdentity.Ativo = true;
             usuarioIdentity.DataInclusao = dataAgora;
             usuarioIdentity.Role = nameof(RoleEnum.Admin);
+            usuarioIdentity.EmailConfirmed = emailConfirmed;
 
             var clienteAplicacao = new ClienteAplicacao();
             clienteAplicacao.ClienteId = cliente.Id;

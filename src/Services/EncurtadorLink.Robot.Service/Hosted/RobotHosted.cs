@@ -35,7 +35,7 @@ namespace EncurtadorLink.Robot.Service.Hosted
                     if (ex is TaskCanceledException)
                         return;
 
-                    throw;
+                    //TODO Registrar log
                 }
                 finally
                 {

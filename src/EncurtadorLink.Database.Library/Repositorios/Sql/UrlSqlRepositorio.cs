@@ -31,14 +31,18 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql
             return (total, urls);
         }
 
-        public async Task ApagarUrlAsync(Guid clienteId, Guid urlId)
+        public async Task<UrlSql> ApagarUrlAsync(Guid clienteId, Guid urlId)
         {
             var query = from u in _dbContexto.UrlSql 
                         where u.Id == urlId && 
                               u.ClienteId == clienteId 
-                        select u; 
+                        select u;
+
+            var urlSql = await query.FirstOrDefaultAsync();
 
             await ExcluirAsync(query);
+
+            return urlSql!;
         }
     }
 }

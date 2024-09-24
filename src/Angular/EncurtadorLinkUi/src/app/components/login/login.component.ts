@@ -89,11 +89,6 @@ export class LoginComponent implements OnInit {
         const tokenPayLoad = this.authService.decodedToken();
         this.userStoreService.setNomeForStore(tokenPayLoad.firstname);
         this.userStoreService.setRoleForStore(tokenPayLoad.role);
-        this.toast.success({
-          detail: 'Sucesso',
-          summary: 'Você está conectado.',
-          duration: 5000,
-        });
         window.open("home/?status=loggedin","_self")
       },
       error: (err) => {
@@ -115,7 +110,11 @@ export class LoginComponent implements OnInit {
             this.loggedIn = true;
           },
           (error) => {
-            console.error('Error fetching user profile:', error);
+            this.toast.error({
+              detail: 'Erro',
+              summary: 'Falha ao Logar pelo google.',
+              duration: 5000,
+            });
           }
         ).then(
           (response) => {

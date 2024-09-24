@@ -107,7 +107,7 @@ namespace EncurtadorLink.UseCases.Library.Services
                     ReSenha = senha
                 };
 
-                var sucesso = await clienteService.CadastrarAsync(clienteModel);
+                var sucesso = await clienteService.CadastrarAsync(clienteModel, true);
 
                 identityUser = _signInManager.UserManager.Users.FirstOrDefault(x => x.NormalizedEmail == model.Email.ToUpper());
             }

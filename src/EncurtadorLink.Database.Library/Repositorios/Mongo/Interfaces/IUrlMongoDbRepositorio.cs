@@ -6,5 +6,6 @@ namespace EncurtadorLink.Database.Library.Repositorios.Mongo.Interfaces
     {
         Task AdicionarAsync(UrlMongoDb urlMongo);
         Task<UrlMongoDb> ConsultarPorCodigoAsync(string codigo);
+        Task ApagarAsync(string codigo);
     }
 }
