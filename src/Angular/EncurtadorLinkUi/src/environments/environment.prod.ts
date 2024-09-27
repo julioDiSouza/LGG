@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   apiServer: 'https://l4u.in',
-  cryptoKey: 'prod_b&9408@30aX'
+  cryptoKey: 'dev_db&9408@30aX',
+  tempTokenKey: 'dev_ub&&9t5@_lL0'
 };

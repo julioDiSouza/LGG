@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EncurtadorLink.Database.Library.UnidadeTrabalho;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using EncurtadorLink.Shared.Library.Services.Interfaces;
-using EncurtadorLink.Shared.Library.Services;
 
 #region ..:: Configuracoes ::..
 
@@ -23,7 +21,7 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 #else
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5000);
+    options.ListenAnyIP(1000);
 });
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -122,7 +120,7 @@ app.UseAuthorization();
 #endregion ..:: Fim - Configuracoes ::..
 
 // Rotas
-app.RecuperaUrl("/");
+app.RecuperaUrl("l/");
 app.EncurtaUrl("api", builder.Configuration);
 app.Login("api", builder.Configuration);
 app.Token("api/token");

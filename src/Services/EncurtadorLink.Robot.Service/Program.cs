@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Robot.Service.Hosted;
 using EncurtadorLink.Robot.Service.Extensao;
 using EncurtadorLink.Robot.Service.Services;
 using EncurtadorLink.Shared.Library.Services;
+using EncurtadorLink.UseCases.Library.Services;
 using Microsoft.Extensions.DependencyInjection;
+using EncurtadorLink.Database.Library.Contextos;
+using EncurtadorLink.Database.Library.UnidadeTrabalho;
 using EncurtadorLink.Robot.Service.Services.Interfaces;
 using EncurtadorLink.Shared.Library.Services.Interfaces;
-using EncurtadorLink.Database.Library.Contextos;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
-using EncurtadorLink.UseCases.Library.Services;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
-using EncurtadorLink.Database.Library.UnidadeTrabalho;
-using Microsoft.EntityFrameworkCore;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureHostConfiguration(config => 

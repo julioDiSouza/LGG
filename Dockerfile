@@ -1,29 +1,30 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Acesse https://aka.ms/customizecontainer para saber como personalizar seu contêiner de depuração e como o Visual Studio usa este Dockerfile para criar suas imagens para uma depuração mais rápida.
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+# Esta fase é usada durante a execução no VS no modo rápido (Padrão para a configuração de Depuração)
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Esta fase é usada para compilar o projeto de serviço
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/EncurtadorLink/EncurtadorLink.csproj", "src/EncurtadorLink/"]
-COPY ["src/EncurtadorLink.Database.Library/EncurtadorLink.Database.Library.csproj", "src/EncurtadorLink.Database.Library/"]
-COPY ["src/EncurtadorLink.Entities.Library/EncurtadorLink.Entities.Library.csproj", "src/EncurtadorLink.Entities.Library/"]
+COPY ["src/Services/EncurtadorLink.Robot.Service/EncurtadorLink.Robot.Service.csproj", "src/Services/EncurtadorLink.Robot.Service/"]
 COPY ["src/EncurtadorLink.Shared.Library/EncurtadorLink.Shared.Library.csproj", "src/EncurtadorLink.Shared.Library/"]
+COPY ["src/EncurtadorLink.Entities.Library/EncurtadorLink.Entities.Library.csproj", "src/EncurtadorLink.Entities.Library/"]
 COPY ["src/EncurtadorLink.UseCases.Library/EncurtadorLink.UseCases.Library.csproj", "src/EncurtadorLink.UseCases.Library/"]
-RUN dotnet restore "./src/EncurtadorLink/./EncurtadorLink.csproj"
+COPY ["src/EncurtadorLink.Database.Library/EncurtadorLink.Database.Library.csproj", "src/EncurtadorLink.Database.Library/"]
+RUN dotnet restore "./src/Services/EncurtadorLink.Robot.Service/EncurtadorLink.Robot.Service.csproj"
 COPY . .
-WORKDIR "/src/src/EncurtadorLink"
-RUN dotnet build "./EncurtadorLink.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/Services/EncurtadorLink.Robot.Service"
+RUN dotnet build "./EncurtadorLink.Robot.Service.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+# Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./EncurtadorLink.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./EncurtadorLink.Robot.Service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+# Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EncurtadorLink.dll"]
+ENTRYPOINT ["dotnet", "EncurtadorLink.Robot.Service.dll"]

@@ -7,9 +7,10 @@ usuário: root
 pass: root@Apex1
 
 *** Servidor *** 
+jps-maq1.vps-kinghost.net
 site: https://painel.kinghost.com.br
 email: juliodisouza@gmail.com
-senha: Glowmix1@
+senha: Glowmix1@ --Julia
 xxx
 IP: 177.153.58.19
 login vps: root
@@ -40,6 +41,10 @@ password: docker@apex1
 STATUS
 docker ps
 
+** gmail ***
+site.l4u@gmail.com
+@ApexLegends@
+
 INSPECIONAR
 docker inspect <id>
 
@@ -65,7 +70,6 @@ PUSH
 docker push encurtadorlinkacr.azurecr.io/recuperalink:latest
 docker push encurtadorlinkacr.azurecr.io/gateway:latest
 
-
 Postgress
 url:
 db-proservices.postgres.uhserver.com
@@ -79,12 +83,94 @@ oaps
 password:
 ps@2024
 
-{"id":"7492991154130247","name":"Julio Pss","email":"julioprofissionals@yahoo.com.br"}
-
 https://global.cainiao.com/newDetail.htm?mailNoList=NM322024007BR
 
 Oaps@2024
 
 
+docker buildx build --platform linux/amd64 -t encurtador:latest .
+docker run -d -p 4200:4200 encurtador:latest
+
+--
+npm run build --configuration=production
+docker build -t demo-nodejs .
+docker run -d -p 8080:80 demo-nodejs 
+
+
+
+antigo:
+http://jps-maq1.vps-kinghost.net
+http://jps-maq1.vps-kinghost.net/swagger/index.html
+http://jps-maq1.vps-kinghost.net/api/teste/ping
+
+
+--DEPLOY ANGULAR
+build
+docker build -t juliodidocker/encurtadorlink:angular .
+push
+docker push juliodidocker/encurtadorlink:angular
+pull
+docker pull juliodidocker/encurtadorlink:angular
+network
+docker network create network-encurtador
+run
+docker run -d -p 80:8080 juliodidocker/encurtadorlink:angular
+run com network
+docker run -d -p 80:8080 --network network-encurtador juliodidocker/encurtadorlink:angular
+
+--DEPLOY API
+build
+docker build -t juliodidocker/encurtadorlink:api .
+push
+docker push juliodidocker/encurtadorlink:api
+pull
+docker pull juliodidocker/encurtadorlink:api
+network
+docker network create network-encurtador
+run
+docker run -d -p 1000:1000 juliodidocker/encurtadorlink:api
+run com network
+docker run -d -p 1000:1000 --network network-encurtador juliodidocker/encurtadorlink:api
+run com name
+docker run -d --name container-api --network network-encurtador juliodidocker/encurtadorlink:api
+
+--linux
+systemctl restart docker
+systemctl status nginx
+systemctl start nginx
+systemctl enable nginx 
+ufw status
+ufw enable
+ufw app list
+ufw allow 'Nginx HTTP'
+ufw allow 'OpenSSH'
+ufw status
+systemctl restart nginx 
+nginx -t
+ufw allow proto tcp to 0.0.0.0/0 port 22
+ufw reload
+
+
+https://developers.facebook.com/apps/1136092060971989/use_cases/customize/settings/?product_route=fb-login
+https://console.cloud.google.com/apis/credentials?hl=pt-br&project=encurtador-link-sign-in
+
+
+--TESTES
+http://jps-maq1.vps-kinghost.net:8010/l/qQ9iG
+http://localhost:8010/l/qQ9iG
+https://www.linksforyou.com.br/l/qQ9iG
+https://l4u.in/l/qQ9iG
+
+CERTIFICADO
+--nginx plugin
+sudo apt install certbot python3-certbot-nginx
+--web ports
+sudo ufw status verbose
+--Obtain SSL certificate
+sudo certbot --nginx -d your_domain.com -d www.your_domain.com
+--check status certbot
+sudo systemctl status certbot.timer
+--Renewal
+sudo certbot renew --dry-run
 
 

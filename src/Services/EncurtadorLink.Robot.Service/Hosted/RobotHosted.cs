@@ -25,6 +25,8 @@ namespace EncurtadorLink.Robot.Service.Hosted
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
+                        Console.WriteLine($"Executando.");
+
                         var filaEmailService = scope.ServiceProvider.GetRequiredService<IFilaEmailService>();
 
                         await filaEmailService.ProcessarFilaAsync();
@@ -35,7 +37,7 @@ namespace EncurtadorLink.Robot.Service.Hosted
                     if (ex is TaskCanceledException)
                         return;
 
-                    //TODO Registrar log
+                    Console.WriteLine($"Erro: {ex.Message}");
                 }
                 finally
                 {
