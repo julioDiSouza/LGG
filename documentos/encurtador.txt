@@ -174,3 +174,29 @@ sudo systemctl status certbot.timer
 sudo certbot renew --dry-run
 
 
+http://localhost:4200/reset?code=3zr%2boItkFfVdtTaQwv5euBqM5OrXGYhLbXQ7WBaWL7mwOhKbnTy%2fD2gbAZvPVfBEdjXhVSdstlJJU9DlTKQ3R4QBNYXRzpmzrB1c1rZCWTQJ7vdEq1d%2bm1ptkR3ezUke%2fsANUB6VSNxbjI9n5Hu31A%3d%3d
+
+https://faq.uolhost.uol.com.br/content/como-configurar-as-entradas-dns-do-meu-dominio-ao-e-mail-profissional-premium
+
+e-mail uolhost
+E-mail: sistema@linksforyou.com.br
+Senha: #Ppq*_16qhlfGI
+URL de acesso: https://pro.suite.uol
+
+sendgrid
+Nin@2010Nin@2010
+recover
+CJ4V34SWAYLXCEFWSBTC5W7A
+l4u_api_key
+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
+
+
+
+https://developers.facebook.com/apps/1136092060971989/use_cases/customize/settings/?product_route=fb-login
+
+https://console.cloud.google.com/apis/credentials?hl=pt-br&project=encurtador-link-sign-in
+
+
+https://l4u.in/login
+
+http://jps-maq1.vps-kinghost.net/
