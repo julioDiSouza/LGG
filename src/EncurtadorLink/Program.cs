@@ -19,21 +19,20 @@ var builder = WebApplication.CreateBuilder(args);
 #if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
 #else
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(1000);
+    options.ListenAnyIP(5555);
 });
-
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
 #endif
 
 var strConexaoMysql = builder.Configuration.GetConnectionString("DataBaseMysql");
 
-builder.Services.AddDbContext<MysqlContext>(options => 
-options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
+builder.Services.AddDbContext<MysqlContext2>(options =>
+options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)),
+ServiceLifetime.Scoped);
 
-builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<MysqlContext2>();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(MongoDbContext));
@@ -42,7 +41,7 @@ builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IUsuarioService), typeof(UsuarioService));
 builder.Services.AddScoped(typeof(IClienteService), typeof(ClienteService));
 builder.Services.AddScoped(typeof(IUrlMongoDbService), typeof(UrlMongoDbService));
-builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho));
+builder.Services.AddScoped(typeof(IUnidadeTrabalho), typeof(UnidadeTrabalho2));
 builder.Services.AddScoped(typeof(IIEmailService), typeof(EmailService));
 builder.Services.AddSingleton<IUrlMongoDbLazyService, UrlMongoDbLazyService>();
 builder.Services.AddEndpointsApiExplorer();
@@ -128,6 +127,8 @@ app.Usuario("api/usuario", builder.Configuration);
 app.Cliente("api/cliente", builder.Configuration);
 app.Teste("api/teste");
 app.ExcecaoGlobal("/erro");
+app.ExcecaoGlobal("l/erro");
+app.ExcecaoGlobal("api/erro");
 
 app.Run();
 

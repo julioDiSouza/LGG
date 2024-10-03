@@ -20,7 +20,7 @@ $@"
 color:white;border-radius:20px;display:block;margin:0 auto;width:50%;text-align:center;text-decoration:none"">Atualizar Senha</a>
 <br>
 <p>
-Esta opção estará disponível apenas por <b>15 minutos</b>.
+Esta opção estará disponível apenas por <b>24 horas</b>.
 </p>
 <p>
 Considerações, 

@@ -13,6 +13,7 @@ using EncurtadorLink.Robot.Service.Services.Interfaces;
 using EncurtadorLink.Shared.Library.Services.Interfaces;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 using EncurtadorLink.Database.Library.UnidadeTrabalho.Interface;
+using MongoDB.Driver.Core.Configuration;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureHostConfiguration(config => 
@@ -34,13 +35,14 @@ var host = Host.CreateDefaultBuilder(args)
         var strConexaoMysql = ctx.Configuration.GetConnectionString("DataBaseMysql");
 
         services.AddDbContext<MysqlContext>(options =>
-        options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)));
+        options.UseMySql(strConexaoMysql, ServerVersion.AutoDetect(strConexaoMysql)),
+        ServiceLifetime.Scoped);
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddSingleton<IProvedorTokenAutenticacao, ProvedorTokenAutenticacao>();
         services.AddHttpClient<IMonitoramento, Monitoramento>().AddPolicyHandler(services.ConfiguracaoTokenPolicy());
         services.AddScoped<IFilaEmailService, FilaEmailService>();
-        services.AddScoped<IUnidadeTrabalho, UnidadeTrabalho>();
+        services.AddScoped<IUnidadeTrabalho, UnidadeTrabalho2>();
         services.AddScoped<IIEmailService, EmailService>();
         services.AddScoped(typeof(MongoDbContext));
 

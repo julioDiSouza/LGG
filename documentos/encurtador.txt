@@ -129,10 +129,12 @@ network
 docker network create network-encurtador
 run
 docker run -d -p 1000:1000 juliodidocker/encurtadorlink:api
+docker run -d juliodidocker/encurtadorlink:robot
 run com network
 docker run -d -p 1000:1000 --network network-encurtador juliodidocker/encurtadorlink:api
 run com name
 docker run -d --name container-api --network network-encurtador juliodidocker/encurtadorlink:api
+
 
 --linux
 systemctl restart docker
@@ -200,3 +202,9 @@ https://console.cloud.google.com/apis/credentials?hl=pt-br&project=encurtador-li
 https://l4u.in/login
 
 http://jps-maq1.vps-kinghost.net/
+
+juliodisouza@gmail.com
+
+https://dash.cloudflare.com/sign-up
+juliodisouza@gmail
+Nin@

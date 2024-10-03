@@ -22,11 +22,18 @@ namespace EncurtadorLink.Rotas
                 HttpContext httpContext 
                 ) => 
             {
-                var exceptionHandlerPathFeature = httpContext.Features.Get<IExceptionHandlerPathFeature>();
-                if (exceptionHandlerPathFeature?.Error is not null)
-                    logger.LogError($"Erro: {exceptionHandlerPathFeature!.Error.Message}.");
+                try
+                {
+                    var exceptionHandlerPathFeature = httpContext.Features.Get<IExceptionHandlerPathFeature>();
+                    if (exceptionHandlerPathFeature?.Error is not null)
+                        logger.LogError($"Erro: {exceptionHandlerPathFeature!.Error.Message}.");
 
-                return Results.Problem(_mensagemErroGenerico);
+                    return Results.Problem(_mensagemErroGenerico);
+                }
+                catch (Exception)
+                {
+                    return Results.Problem(_mensagemErroGenerico);
+                }
             });
         }
     }

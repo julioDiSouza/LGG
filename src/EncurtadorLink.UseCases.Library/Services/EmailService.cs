@@ -1,6 +1,6 @@
-﻿using MimeKit;
+﻿using SendGrid;
 using AutoMapper;
-using MailKit.Net.Smtp;
+using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using EncurtadorLink.Entities.Library.Sql;
 using EncurtadorLink.Shared.Library.Models;
@@ -37,12 +37,42 @@ namespace EncurtadorLink.UseCases.Library.Services
             var pendencias = await ObterPendenciasAsync();
 
             foreach (var pendencia in pendencias)
-                await EnviarFilaEmailAsync(pendencia);
+                await EnviarFilaEmailTwilioAsync(pendencia);
         }
 
         private async Task<List<FilaEmail>> ObterPendenciasAsync()
         {
             return await _udt.FilaEmailRepositorio.ObterPendenciasAsync();
+        }
+
+        private async Task EnviarFilaEmailTwilioAsync(FilaEmail filaEmail)
+        {
+            try
+            {
+                filaEmail.DataEnvio = Criptografador.BrazilDateTime();
+                var twilio = new TwilioSendEmail();
+                var assunto = filaEmail.Tipo == (int)FilaEmailEnum.Confirmacao ?
+                    "l4u: Confirmar Cadastro." :
+                    "l4u: Atualizar Senha.";
+
+                var conteudo = filaEmail.Tipo == (int)FilaEmailEnum.Confirmacao ?
+                    EmailBody.EmailConfirmStringBody(_configuration["EnderecoUI"]!, filaEmail.Email, filaEmail.ConfirmationToken!) :
+                    EmailBody.EmailResetStringBody(_configuration["EnderecoUI"]!, filaEmail.Email, filaEmail.ResetPasswordToken!);
+
+                var emailModel = new EmailModel(
+                    to: filaEmail.Email,
+                    subject: assunto,
+                    content: conteudo
+                );
+            
+                await twilio.SendEmailAsync(emailModel, _configuration);
+                await _udt.FilaEmailRepositorio.RegistrarEnvioAsync(filaEmail);
+                Console.WriteLine($"Email enviado.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Falha ao enviar email: {ex.Message}");
+            }
         }
 
         private async Task EnviarFilaEmailAsync(FilaEmail filaEmail)
@@ -62,39 +92,26 @@ namespace EncurtadorLink.UseCases.Library.Services
                 content: conteudo
             );
 
-            SendEmail(emailModel);
+            await SendEmailAsync(emailModel);
             await _udt.FilaEmailRepositorio.RegistrarEnvioAsync(filaEmail);
         }
 
-        private void SendEmail(EmailModel emailModel)
+        private async Task SendEmailAsync(EmailModel emailModel)
         {
-            var emailMessage = new MimeMessage();
-            var from = _configuration["EnvioEmail:De"]!;
-            emailMessage.From.Add(new MailboxAddress("l4u", from));
-            emailMessage.To.Add(new MailboxAddress(emailModel.To, emailModel.To));
-            emailMessage.Subject = emailModel.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
-                Text = string.Format(emailModel.Content)
-            };
+            var client = new SendGridClient(_configuration["EnvioEmail:Senha"]!);
+            var from = new EmailAddress(_configuration["EnvioEmail:De"]!, "Links For You");
+            var to = new EmailAddress(emailModel.To);
+            var msg = MailHelper.CreateSingleEmail(from, to, emailModel.Subject, null, emailModel.Content);
 
-            using (var client = new SmtpClient())
+            try
             {
-                try
-                {
-                    client.Connect(_configuration["EnvioEmail:SmtpServer"]!, int.Parse(_configuration["EnvioEmail:Porta"]!), true);
-                    client.Authenticate(_configuration["EnvioEmail:Usuario"]!, _configuration["EnvioEmail:Senha"]!);
-                    client.Send(emailMessage);
-                }
-                catch (Exception ex)
-                {
-                    //TODO Registrar log
-                }
-                finally
-                {
-                    client.Disconnect(true);
-                    client.Dispose();
-                }
+                var response = await client.SendEmailAsync(msg);
+                Console.WriteLine($"Email enviado.");
+                Console.WriteLine(response.Body.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Falha ao enviar email: {ex.Message}");
             }
         }
     }

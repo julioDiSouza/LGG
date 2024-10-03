@@ -9,7 +9,7 @@ namespace EncurtadorLink.Extensoes
         {
             using var scope = app.Services.CreateScope();
 
-            var dbContext = scope.ServiceProvider.GetRequiredService<MysqlContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<MysqlContext2>();
 
             //dbContext.Database.Migrate();
         }

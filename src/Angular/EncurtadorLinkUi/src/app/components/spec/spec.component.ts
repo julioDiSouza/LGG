@@ -12,4 +12,8 @@ export class SpecComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  abrirImagem(imageUrl: string): void {
+    window.open(imageUrl, '_blank');
+  }
+
 }

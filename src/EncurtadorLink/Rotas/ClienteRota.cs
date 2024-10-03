@@ -44,8 +44,8 @@ namespace EncurtadorLink.Rotas
             {
                 var resultado = await validacao.ValidateAsync(clienteModel);
 
-                    if (!resultado.IsValid)
-                        return Results.ValidationProblem(resultado.ToDictionary());
+                if (!resultado.IsValid)
+                    return Results.ValidationProblem(resultado.ToDictionary());
 
                 var sucesso = await clienteService.CadastroViaWebAsync(clienteModel);
 

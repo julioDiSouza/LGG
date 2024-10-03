@@ -57,7 +57,7 @@ namespace EncurtadorLink.Rotas
                     return Results.Ok(new MensagemRetornoModel(404, "Email não cadastrado."));
 
                 var emailToken = Criptografador.RandomToken();
-                var dataExpiracao = Criptografador.BrazilDateTime().AddMinutes(15);
+                var dataExpiracao = Criptografador.BrazilDateTime().AddDays(1);
 
                 usuario.ResetPasswordToken = emailToken;
                 usuario.ResetPasswordDataExpiracao = dataExpiracao;
