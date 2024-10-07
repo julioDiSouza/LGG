@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
+    <div class="col col-lg-10">
+        <nav class="navbar navbar-expand-lg navbar-light ">
+            <div class="container-fluid">
+                <a class="navbar-brand" routerLink="/home">Início</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" style="font-size: 12pt;" *ngIf="logado">
+                            <span routerLink="/my" class="pointer">
+                                Meus links
+                            </span>
+                        </a>
+                        <a class="nav-link" style="font-size: 12pt;">
+                            <span class="pointer" routerLink="/about">
+                                Sobre
+                            </span>
+                        </a>
+                        <a class="nav-link" style="font-size: 12pt;">
+                            <span *ngIf="!logado" routerLink="/login" class="pointer">Entrar</span>
+                            <span *ngIf="logado" (click)="logOut()" class="pointer">Sair</span>
+                        </a>
+                        <a class="nav-link" style="font-size: 12pt;" *ngIf="logado">
+                            <span class="badge rounded-pill text-bg-success" style="padding-top: 6px;">
+                                &nbsp; Olá {{nome}} &nbsp;
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                &nbsp;
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="col col-1 col-sm-1 col-md-1 col-lg-1"></div>
+</div>

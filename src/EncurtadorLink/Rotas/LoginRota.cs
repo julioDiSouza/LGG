@@ -1,6 +1,10 @@
-﻿using FluentValidation;
+﻿using Newtonsoft.Json;
+using FluentValidation;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using EncurtadorLink.Shared.Library.Models;
+using EncurtadorLink.Shared.Library.Classes;
 using EncurtadorLink.UseCases.Library.Services.Interfaces;
 
 namespace EncurtadorLink.Rotas
@@ -8,10 +12,15 @@ namespace EncurtadorLink.Rotas
     public static class LoginRota
     {
         private static string _rota = string.Empty;
-        public static void Login(this WebApplication app, string rota)
+        private static IConfiguration _configuration;
+
+        public static void Login(this WebApplication app, string rota, IConfiguration configuration)
         {
             _rota = rota;
+            _configuration = configuration;
             app.LoginAsync();
+            app.LoginGoogleAsync();
+            app.LoginFacebook();
             app.LogoutAsync();
         }
 
@@ -29,9 +38,59 @@ namespace EncurtadorLink.Rotas
                 if (!resultado.IsValid)
                     return Results.ValidationProblem(resultado.ToDictionary());
 
-                var ip = httpContext.Connection.RemoteIpAddress?.ToString()!;
+                var (token, sucesso) = await tokenService.ObterTokenLoginAsync(requisicao);
 
-                var (token, sucesso) = await tokenService.ObterTokenLoginAsync(requisicao, ip);
+                if (!sucesso)
+                    return Results.BadRequest(token);
+
+                return Results.Ok(token);
+            });
+        }
+
+        public static void LoginGoogleAsync(this WebApplication app)
+        {
+            app.MapPost(_rota + "/login-google", [AllowAnonymous] async (
+                [FromBody] string credential, 
+                ITokenService tokenService,
+                IClienteService clienteService 
+                ) =>
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string> { _configuration["GoogleClientId"]!.ToString() }
+                };
+
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+
+                var model = new LoginModelSso
+                {
+                    Nome = payload.Name,
+                    Email = payload.Email,
+                    Senha = Guid.NewGuid().ToString()
+                };
+
+                var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
+
+                if (!sucesso)
+                    return Results.BadRequest(token);
+
+                return Results.Ok(token);
+            });
+        }
+
+        public static void LoginFacebook(this WebApplication app)
+        {
+            app.MapPost(_rota + "/login-facebook", [AllowAnonymous] async (
+                [FromBody] string credential,
+                ITokenService tokenService,
+                IClienteService clienteService
+                ) =>
+            {
+                credential = Criptografador.DecryptString(credential, _configuration["CryptoKey"]!);
+                var model = JsonConvert.DeserializeObject<LoginModelSso>(credential);
+                model.Senha = Guid.NewGuid().ToString();
+
+                var (token, sucesso) = await tokenService.ObterTokenSsoAsync(model, clienteService);
 
                 if (!sucesso)
                     return Results.BadRequest(token);

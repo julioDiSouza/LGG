@@ -5,6 +5,8 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
     public interface IClienteService
     {
         Task<List<ClienteModel>?> ListarClientesAsync();
-        Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar);
+        Task<bool> CadastroViaWebAsync(ClienteModelCriar clienteCriar);
+        Task<bool> ValidarClienteAsync(ClienteModelCodigo cliente);
+        Task<bool> CadastrarAsync(ClienteModelCriar clienteCriar, bool emailConfirmed = false);
     }
 }

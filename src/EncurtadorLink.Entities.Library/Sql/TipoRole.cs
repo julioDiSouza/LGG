@@ -2,10 +2,10 @@
 
 namespace EncurtadorLink.Entities.Library.Sql
 {
-    public class Role
+    public class TipoRole
     {
         [Required]
-        public string TipoRole { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
 
         public virtual ICollection<ApplicationUser> Usuarios { get; set; }
         public virtual ICollection<ClienteAplicacao> Aplicacoes { get; set; }

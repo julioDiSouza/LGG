@@ -44,6 +44,26 @@ namespace EncurtadorLink.UseCases.Library.Services
             return urlSqlModel;
         }
 
+        public async Task<ResultadoPaginadoModel<UrlSqlModelGrid>> ObterUrlsPaginadasAsync(Guid clienteId, int pagina, int quantidade)
+        {
+            var (total, urls) = await _udt.UrlSqlRepositorio.ObterUrlsPaginadasAsync(clienteId, pagina, quantidade);
+
+            var resultado = new ResultadoPaginadoModel<UrlSqlModelGrid>();
+            resultado.Colecao = _mapper.Map<List<UrlSqlModelGrid>>(urls);
+            resultado.Pagina = pagina;
+            resultado.Quantidade = quantidade;
+            resultado.Total = total;
+
+            return resultado;
+        }
+
+        public async Task ApagarUrlAsync(Guid clienteId, Guid urlId)
+        {
+            var urlSql = await _udt.UrlSqlRepositorio.ApagarUrlAsync(clienteId, urlId);
+
+            await _udt.UrlMongoDbRepositorio.ApagarAsync(urlSql.Codigo);
+        }
+
         #region ..:: Privados ::..
 
         private async Task<string> ObterCodigoUnicoAsync()

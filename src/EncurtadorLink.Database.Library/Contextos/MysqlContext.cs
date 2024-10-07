@@ -14,8 +14,9 @@ namespace EncurtadorLink.Database.Library.Contextos
         public DbSet<UrlSql> UrlSql { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<ClienteAplicacao> ClienteAplicacao { get; set; }
+        public DbSet<FilaEmail> FilaEmail { get; set; }
 
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -36,6 +37,7 @@ namespace EncurtadorLink.Database.Library.Contextos
             modelBuilder.Entity<UrlSql>(builder =>
             {
                 builder.HasKey(x => x.Id);
+                builder.HasIndex(x => x.ClienteId);
                 builder.Property(x => x.Codigo).HasMaxLength(10);
                 builder.HasIndex(x => x.Codigo).IsUnique();
                 builder.HasIndex(x => x.IP);
@@ -45,10 +47,9 @@ namespace EncurtadorLink.Database.Library.Contextos
             modelBuilder.Entity<Cliente>(builder =>
             {
                 builder.HasKey(c => c.Id);
-                builder.Property(c => c.Nome).HasMaxLength(50);
+                builder.Property(c => c.NomeCompleto).HasMaxLength(50);
                 builder.Property(c => c.Email).HasMaxLength(50);
                 builder.HasIndex(u => u.Email).IsUnique();
-                builder.Property(c => c.Documento).HasMaxLength(14);
             });
 
             modelBuilder.Entity<ClienteAplicacao>(builder =>
@@ -56,12 +57,21 @@ namespace EncurtadorLink.Database.Library.Contextos
                 builder.HasKey(ca => ca.ClienteId);
                 builder.HasOne(ca => ca.Cliente).WithMany(c => c.Aplicacoes).HasForeignKey(c => c.ClienteId);
                 builder.Property(c => c.Nome).HasMaxLength(50);
-                builder.HasOne(c => c.Role).WithMany(r => r.Aplicacoes).HasForeignKey(c => c.TipoRole);
             });
 
-            modelBuilder.Entity<Role>(builder =>
+            modelBuilder.Entity<FilaEmail>(builder =>
             {
-                builder.HasKey(r => r.TipoRole);
+                builder.HasKey(c => c.Id);
+                builder.HasOne(ca => ca.Cliente).WithMany(c => c.FilaEmails).HasForeignKey(c => c.ClienteId);
+                builder.Property(c => c.Email).HasMaxLength(50);
+                builder.HasIndex(x => x.Email);
+            });
+
+            modelBuilder.Entity<ApplicationUser>(builder =>
+            {
+                builder.HasIndex(a => a.Email).IsUnique();
+                builder.HasIndex(a => a.NormalizedEmail).IsUnique();
+                builder.HasIndex(a => a.ResetPasswordToken);
             });
         }
     }

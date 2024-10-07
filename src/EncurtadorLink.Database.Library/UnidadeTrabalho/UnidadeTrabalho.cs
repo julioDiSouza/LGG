@@ -15,7 +15,9 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho
         private IUrlMongoDbRepositorio _urlMongoDbRepositorio;
         
         private IClienteRepositorio _clienteRepositorio;
+        private IClienteAplicacaoRepositorio _clienteAplicacaoRepositorio;
         private IUrlSqlRepositorio _urlSqlRepositorio;
+        private IFilaEmailRepositorio _filaEmailRepositorio;
 
         public UnidadeTrabalho(MongoDbContext mongoContexto, MysqlContext mysqlContexto)
         {
@@ -29,7 +31,13 @@ namespace EncurtadorLink.Database.Library.UnidadeTrabalho
         public IClienteRepositorio ClienteRepositorio =>
             _clienteRepositorio ?? new ClienteRepositorio(_mysqlContexto);
 
+        public IClienteAplicacaoRepositorio ClienteAplicacaoRepositorio =>
+            _clienteAplicacaoRepositorio ?? new ClienteAplicacaoRepositorio(_mysqlContexto);
+
         public IUrlSqlRepositorio UrlSqlRepositorio => 
             _urlSqlRepositorio ?? new UrlSqlRepositorio(_mysqlContexto);
+
+        public IFilaEmailRepositorio FilaEmailRepositorio =>
+            _filaEmailRepositorio ?? new FilaEmailRepositorio(_mysqlContexto);
     }
 }
