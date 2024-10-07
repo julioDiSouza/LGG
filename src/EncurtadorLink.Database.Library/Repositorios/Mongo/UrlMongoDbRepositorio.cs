@@ -27,6 +27,14 @@ namespace EncurtadorLink.Database.Library.Repositorios.Mongo
             return await _colecao.Find(filtro).Project<UrlMongoDb>(Projecao).FirstOrDefaultAsync();
         }
 
+        public async Task ApagarAsync(string codigo)
+        {
+            var filtro = Builders<UrlMongoDb>.Filter.Eq(x => x.Codigo, codigo) &
+                         Builders<UrlMongoDb>.Filter.Eq(x => x.Ativo, true);
+
+            await _colecao.DeleteOneAsync(filtro);
+        }
+
         private static ProjectionDefinition<UrlMongoDb> Projecao =>
             Builders<UrlMongoDb>.Projection
             .Include(x => x.Id)

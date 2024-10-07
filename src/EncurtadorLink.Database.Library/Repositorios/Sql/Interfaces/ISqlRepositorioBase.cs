@@ -7,6 +7,7 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql.Interfaces
         Task AdicionarAsync(T obj);
         Task AtualizarAsync(T obj);
         Task ExcluirAsync(T obj);
+        Task ExcluirAsync(IQueryable<T> query);
         Task<T?> BuscarPorIdAsync(int id);
         Task<List<T>> ListarAsync();
         Task<bool> AnyAsync(Expression<Func<T, bool>> query);

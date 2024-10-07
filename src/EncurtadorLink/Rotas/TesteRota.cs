@@ -1,5 +1,5 @@
-﻿using EncurtadorLink.Shared.Library.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using EncurtadorLink.Shared.Library.Models;
 
 namespace EncurtadorLink.Rotas
 {
@@ -11,6 +11,7 @@ namespace EncurtadorLink.Rotas
             _rota= rota;
             app.Ping();
             app.Autenticacao();
+            app.AutenticacaoAdmin();
         }
 
         public static void Ping(this WebApplication app)
@@ -24,6 +25,13 @@ namespace EncurtadorLink.Rotas
         {
             app.MapGet(_rota + "/autenticacao", [Authorize] () => {
                 return Results.Ok(new MensagemRetornoModel(200, "Autenticado."));
+            });
+        }
+
+        public static void AutenticacaoAdmin(this WebApplication app)
+        {
+            app.MapGet(_rota + "/autenticacao-admin", [Authorize(Roles = "Admin")] () => {
+                return Results.Ok(new MensagemRetornoModel(200, "Autenticado. Olá administrador."));
             });
         }
     }

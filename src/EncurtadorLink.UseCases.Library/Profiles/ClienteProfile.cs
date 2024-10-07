@@ -10,7 +10,6 @@ namespace EncurtadorLink.UseCases.Library.Profiles
         public ClienteProfile()
         {
             CreateMap<ClienteModelCriar, Cliente>()
-                .ForMember(d => d.Nome, m => m.MapFrom(s => s.RazaoSocial))
                 .ReverseMap();
 
             CreateMap<ClienteModelCriar, ApplicationUser>()

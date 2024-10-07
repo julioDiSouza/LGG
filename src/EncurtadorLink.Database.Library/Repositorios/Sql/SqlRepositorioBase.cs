@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using EncurtadorLink.Database.Library.Contextos;
 using EncurtadorLink.Database.Library.Repositorios.Sql.Interfaces;
+using System.Runtime.CompilerServices;
 
 namespace EncurtadorLink.Database.Library.Repositorios.Sql
 {
@@ -36,6 +37,15 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql
         public async Task ExcluirAsync(T obj)
         {
             _dbContexto.Set<T>().Remove(obj);
+            await _dbContexto.SaveChangesAsync();
+        }
+
+        public async Task ExcluirAsync(IQueryable<T> query)
+        {
+            var entities = query.ToList();
+
+            _dbContexto.Set<T>().RemoveRange(entities);
+
             await _dbContexto.SaveChangesAsync();
         }
 

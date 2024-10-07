@@ -4,8 +4,10 @@ namespace EncurtadorLink.UseCases.Library.Services.Interfaces
 {
     public interface ITokenService
     {
-        public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao, string ip);
-        Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao, string ip);
+        public (ITokenModel, bool) ObterTokenAplicacao(TokenModelRequisicao requisicao);
+        Task<(ITokenModel, bool)> ObterTokenLoginAsync(LoginModelRequisicao requisicao);
+        Task<(ITokenModel, bool)> ObterTokenSsoAsync(LoginModelSso model, IClienteService clienteService);
+        Task<(ITokenModel, bool)> ObterRefreshTokenAsync(TokenRefreshModelRequisicao requisicao);
         Task LogoutAsync();
     }
 }

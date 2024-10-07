@@ -10,6 +10,8 @@ namespace EncurtadorLink.UseCases.Library.Profiles
         {
             CreateMap<UrlSql, UrlSqlModel>()
                 .ReverseMap();
+            CreateMap<UrlSql, UrlSqlModelGrid>()
+                .ReverseMap();
         }
     }
 }

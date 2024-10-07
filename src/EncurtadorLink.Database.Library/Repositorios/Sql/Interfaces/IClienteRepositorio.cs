@@ -4,7 +4,7 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql.Interfaces
 {
     public interface IClienteRepositorio : ISqlRepositorioBase<Cliente>
     {
-        Cliente? ConsultarClientePorIdAsync(string clienteId);
+        Cliente? ConsultarClientePorId(string clienteId);
         Task<List<Cliente>> ListarClientesAsync();
     }
 }

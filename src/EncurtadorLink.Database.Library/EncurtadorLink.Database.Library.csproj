@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositorios\Sql\Interfaces\NovaPasta\**" />
+    <EmbeddedResource Remove="Repositorios\Sql\Interfaces\NovaPasta\**" />
+    <None Remove="Repositorios\Sql\Interfaces\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.15">

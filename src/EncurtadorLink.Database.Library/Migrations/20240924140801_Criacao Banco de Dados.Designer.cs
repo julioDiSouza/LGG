@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EncurtadorLink.Database.Library.Migrations
 {
     [DbContext(typeof(MysqlContext))]
-    [Migration("20240306041047_Criacao DB")]
-    partial class CriacaoDB
+    [Migration("20240924140801_Criacao Banco de Dados")]
+    partial class CriacaoBancodeDados
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,22 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("RefreshTokenDataExpiracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ResetPasswordDataExpiracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("varchar(95)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -91,12 +107,18 @@ namespace EncurtadorLink.Database.Library.Migrations
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
+                        .IsUnique()
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("ResetPasswordToken");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -113,20 +135,12 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Documento")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)");
-
-                    b.Property<int>("DocumentoTipo")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("NomeCompleto")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
@@ -158,18 +172,63 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ClienteId");
 
                     b.ToTable("ClienteAplicacao");
                 });
 
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.FilaEmail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConfirmationToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DataEnvio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataInclusao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("ResetPasswordDataExpiracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("Email");
+
+                    b.ToTable("FilaEmail");
+                });
+
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.UrlSql", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("ClienteId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Codigo")
@@ -193,6 +252,8 @@ namespace EncurtadorLink.Database.Library.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
 
                     b.HasIndex("Codigo")
                         .IsUnique();
@@ -358,6 +419,24 @@ namespace EncurtadorLink.Database.Library.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.FilaEmail", b =>
+                {
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Cliente", "Cliente")
+                        .WithMany("FilaEmails")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.UrlSql", b =>
+                {
+                    b.HasOne("EncurtadorLink.Entities.Library.Sql.Cliente", null)
+                        .WithMany("Urls")
+                        .HasForeignKey("ClienteId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -412,6 +491,10 @@ namespace EncurtadorLink.Database.Library.Migrations
             modelBuilder.Entity("EncurtadorLink.Entities.Library.Sql.Cliente", b =>
                 {
                     b.Navigation("Aplicacoes");
+
+                    b.Navigation("FilaEmails");
+
+                    b.Navigation("Urls");
                 });
 #pragma warning restore 612, 618
         }

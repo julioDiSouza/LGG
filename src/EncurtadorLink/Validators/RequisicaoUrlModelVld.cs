@@ -9,7 +9,7 @@ namespace EncurtadorLink.Validators
         {
             RuleFor(x => x.UrlLonga)
             .NotEmpty().WithMessage("UrlLonga é obrigatório")
-            .Must(x => x?.Length <= 1000).WithMessage("UrlLonga deve conter menos que 1000 caracteres");
+            .Must(x => x?.Length <= 2000).WithMessage("UrlLonga deve conter menos que 2000 caracteres");
         }
     }
 }

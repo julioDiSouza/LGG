@@ -14,7 +14,7 @@ namespace EncurtadorLink.Database.Library.Repositorios.Sql
             _dbContexto = dbContexto;
         }
 
-        public Cliente? ConsultarClientePorIdAsync(string clienteId)
+        public Cliente? ConsultarClientePorId(string clienteId)
         {
             return _dbContexto.Cliente
                 .Include(c => c.Aplicacoes)

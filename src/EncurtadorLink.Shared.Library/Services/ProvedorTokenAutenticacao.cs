@@ -27,7 +27,7 @@ namespace EncurtadorLink.Shared.Library.Services
 
             if (response != null) 
             {
-                response.RequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenModel.AccessToken);
+                response.RequestMessage!.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenModel.AccessToken);
             }
         }
 
