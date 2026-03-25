@@ -1,0 +1,31 @@
+Pocs Projeto LGG Backend
+[OK] - Api
+[OK] - Worker
+[OK] - RabbitMq
+[OK] - Usuario
+[OK] - Email
+[] - SendGrid
+[OK] - Canal
+[] - VideoPublicacao
+[] - RanqueMes
+[] - CampeonatoMes
+[] - RanqueHistoricoMes
+[] - RanqueAno
+[] - CampeonatoAno
+[] - CampeonatoHistoricoAno
+[] - PremioMes
+[] - CampeaoMes
+[] - CampeaoAno
+[] - CampeaoHistorico
+
+Pocs Projeto LGG Frontend
+Estruturar...
+
+
+
+
+
+
+
+
+

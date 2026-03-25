@@ -1,0 +1,134 @@
+using System.Text;
+using FluentValidation;
+using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using LGG.Infraestrutura.Library.Email;
+using LGG.Aplicacao.Library.Validadores;
+using LGG.Infraestrutura.Library.RabbitMq;
+using LGG.Infraestrutura.Library.Database;
+using LGG.Aplicacao.Library.Interfaces.IEmail;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // sempre obrigatório
+  //.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true) // opcional
+    .AddEnvironmentVariables(); // ainda pode sobrescrever via variáveis de ambiente
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IUnidTrabalho, UnidTrabalho>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+#region Configuracao JWT
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
+
+#endregion Fim - Configuracao JWT
+
+#region Swagger
+
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "LGG Api", Version = "v1" });
+
+    // Configuração do esquema de segurança
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "LGG Api"
+    });
+
+    // Exige o token nos endpoints protegidos
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+#endregion Fim - Swagger
+
+#region MediatR
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(AtualizarUsuarioCommand).Assembly);
+});
+
+#endregion Fim - MediatR
+
+#region Validadores (FluentValidation)
+
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCadastroDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioAtualizarDtoValidador>();
+
+#endregion Fim - Validadores (FluentValidation)
+
+#region RabbitMq
+
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+builder.Services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
+builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
+
+#endregion Fim - RabbitMq
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+

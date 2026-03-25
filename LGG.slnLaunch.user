@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Novo Perfil",
+    "Projects": [
+      {
+        "Path": "src\\LGG.Api\\LGG.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\LGG.Email.Worker\\LGG.Email.Worker.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

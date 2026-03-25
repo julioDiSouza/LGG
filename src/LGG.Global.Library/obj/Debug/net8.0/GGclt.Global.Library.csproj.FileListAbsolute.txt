@@ -1,0 +1,11 @@
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\bin\Debug\net8.0\GGclt.Global.Library.deps.json
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\bin\Debug\net8.0\GGclt.Global.Library.dll
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\bin\Debug\net8.0\GGclt.Global.Library.pdb
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.AssemblyInfoInputs.cache
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.AssemblyInfo.cs
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.csproj.CoreCompileInputs.cache
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.dll
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\refint\GGclt.Global.Library.dll
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\GGclt.Global.Library.pdb
+C:\Users\julio\source\repos\GGclt\src\GGclt.Global.Library\obj\Debug\net8.0\ref\GGclt.Global.Library.dll

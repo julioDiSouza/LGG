@@ -1,0 +1,56 @@
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+</head>
+<style>
+.destaque {
+  position: relative;
+  display: inline-block;
+  z-index: 0;
+  font-weight: 850;
+}
+
+.destaque::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 5%;
+  width: 100%;
+  height: 60%;
+  background-color: #7506f7;
+  z-index: -1;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+<body style='margin:0; font-family: Arial, Helvetica, sans-serif; background-color: #131313'>
+<div style="width:400px; height: 115px; margin: 0 auto;background-color: #131313;">
+<div class="center" style="width: 400px; margin: 0 auto; height: 100px">
+<img src="logo_lgg.png" width="auto" height="80px" alt="logo_lgg" style="padding-left: 50px;">
+</div>
+<div style='width:400px; height: auto; margin: 0 auto; padding:30px; background-color: #262626; color: white; border-radius: 7px;'>
+<div>
+<h1 style="color: #44f5fe">Atualizar Senha</h1>
+<hr>
+<p>Você recebeu este e-mail porque solicitou a atualização de senha na <span class="destaque"><i>LIGA GAMER.</i></span></p>
+<p>Pressione o botão abaixo para definir sua nova senha:</p>
+<a href='{endereco}/reset?code={emailToken}' target='_blank' style='background:#44f5fe;padding:10px;border:none; 
+color:black;border-radius:20px;display:block;margin:0 auto;width:50%;text-align:center;text-decoration:none'><strong>Atualizar Senha</strong></a>
+<br>
+<p>
+Esta opção estará disponível pelas próximas <b>2 horas.</b>
+</p>
+<p>
+Considerações, 
+</p>
+<p>
+<i>Time <span class="destaque">LGG.</span></i>
+</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "nome": "Julio Patricio",
+  "email": "julio@gmail.com",
+  "sexo": 1,
+  "dataNascimento": "1986-08-15",
+  "tipo": 0,
+  "status": 0,
+  "senha": "Aeee", 
+  "resenha": "Aeee" 
+}
+
