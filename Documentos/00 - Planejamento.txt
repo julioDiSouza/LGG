@@ -20,7 +20,9 @@ Pocs Projeto LGG Backend
 
 Pocs Projeto LGG Frontend
 Estruturar...
-Possivelmente em Angular
+Possivelmente em Angular 
+
+Pocs Projeto LGG .AAB (antigo APK)
 
 
 
