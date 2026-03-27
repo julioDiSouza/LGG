@@ -5,9 +5,11 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios.ICanal
 {
     public interface ICanalRepositorio
     {
+        Task<Canal> ObterPorIdAsync(Guid canalId);
         Task<Canal> AdicionarAsync(Canal canal);
         Task<bool> CodigoLiberadoAsync(string codigo);
         Task AtualizarStatusAsync(Guid usuarioId, CanalStatusEnum status);
+        Task AtualizarInformacoesAsync(Guid usuarioId, string canalId, string nome, string titulo, string urlPersonalizada, string urlImagem);
         Task RemoverDefinitivoPorIdAsync(Guid id);
     }
 }

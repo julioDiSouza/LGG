@@ -2,8 +2,8 @@
 using Dapper;
 using System.Data;
 using LGG.Dominio.Library.Entidades;
-using LGG.Dominio.Library.Interfaces.IRepositorios.ICanal;
 using LGG.Global.Library.Enumeradores;
+using LGG.Dominio.Library.Interfaces.IRepositorios.ICanal;
 
 namespace LGG.Infraestrutura.Library.Repositorios.Canal_
 {
@@ -15,7 +15,38 @@ namespace LGG.Infraestrutura.Library.Repositorios.Canal_
         {
             _stringConexao = stringConexao;
         }
-        
+
+        public async Task<Canal> ObterPorIdAsync(Guid canalId)
+        {
+            using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
+            {
+                const string sql = @"SELECT id, 
+                                            usuario_id AS UsuarioId, 
+                                            canal_id AS CanalId, 
+                                            codigo, 
+                                            nome, 
+                                            url_personalizada AS UrlPersonalizada, 
+                                            url_imagem AS UrlImagem, 
+                                            status, 
+                                            data_cadastro AS DataCadastro, 
+                                            titulo 
+                                    FROM    canais 
+                                    WHERE   id      =  @Id ";
+
+                var canal = await conexao.QueryFirstOrDefaultAsync<Canal>(
+                    sql,
+                    param: new
+                    {
+                        Id = canalId,
+                        Status = CanalStatusEnum.Excluido
+                    },
+                    commandType: CommandType.Text
+                );
+
+                return canal;
+            }
+        }
+
         public async Task<Canal> AdicionarAsync(Canal canal)
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
@@ -87,6 +118,37 @@ namespace LGG.Infraestrutura.Library.Repositorios.Canal_
                     {
                         status,
                         usuarioId
+                    },
+                    commandType: CommandType.Text
+                );
+            }
+        }
+
+        public async Task AtualizarInformacoesAsync(Guid usuarioId, string canalId, string nome, string titulo,
+            string urlPersonalizada, string urlImagem)
+        {
+            using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
+            {
+                const string sql = @"UPDATE canais 
+                                     SET    nome                = @nome, 
+                                            canal_id            = @canalId, 
+                                            titulo              = @titulo, 
+                                            url_personalizada   = @urlPersonalizada, 
+                                            url_imagem          = @urlImagem 
+                                     WHERE  usuario_id  = @usuarioId 
+                                     AND    status      = @status ";
+
+                await conexao.ExecuteAsync(
+                    sql,
+                    new
+                    {
+                        canalId,
+                        nome,
+                        titulo,
+                        urlPersonalizada,
+                        urlImagem,
+                        usuarioId,
+                        status = CanalStatusEnum.Ativo
                     },
                     commandType: CommandType.Text
                 );

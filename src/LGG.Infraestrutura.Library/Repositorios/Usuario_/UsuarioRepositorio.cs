@@ -153,29 +153,52 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"SELECT id, 
-                                            nome, 
-                                            email,
-                                            data_nascimento AS DataNascimento,
-                                            sexo,
-                                            tipo,
-                                            data_cadastro AS DataCadastro,
-                                            status, 
-                                            data_status AS DataStatus, 
-                                            refresh_token AS RefreshToken,
-                                            refresh_token_data_expiracao AS RefreshTokenDataExpiracao,
-                                            reset_password_token AS ResetPasswordToken,
-                                            reset_password_data_expiracao AS ResetPasswordDataExpiracao 
-                                    FROM    usuarios 
-                                    WHERE   email = @email";
+                const string sql = @"
+            SELECT  
+                u.id,
+                u.nome,
+                u.email,
+                u.data_nascimento AS DataNascimento,
+                u.sexo,
+                u.tipo,
+                u.data_cadastro AS DataCadastro,
+                u.status,
+                u.data_status AS DataStatus,
+                u.refresh_token AS RefreshToken,
+                u.refresh_token_data_expiracao AS RefreshTokenDataExpiracao,
+                u.reset_password_token AS ResetPasswordToken,
+                u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
+                c.id,
+                c.usuario_id AS UsuarioId,
+                c.canal_id AS CanalId,
+                c.codigo,
+                c.nome,
+                c.url_personalizada AS UrlPersonalizada,
+                c.url_imagem AS UrlImagem,
+                c.status,
+                c.data_cadastro AS DataCadastro 
+            FROM 
+                usuarios u 
+            LEFT JOIN 
+                canais c ON c.usuario_id = u.id 
+            WHERE 
+                u.email = @Email ";
 
-                var usuario = await conexao.QueryFirstOrDefaultAsync<Usuario>(
+                var usuario = await conexao.QueryAsync<Usuario, Canal, Usuario>(
                     sql,
-                    param: new { Email = email },
-                    commandType: CommandType.Text
+                    (u, c) =>
+                    {
+                        u.Canal = c;
+                        return u;
+                    },
+                    param: new
+                    {
+                        Email = email
+                    },
+                    splitOn: "Id"
                 );
 
-                return usuario;
+                return usuario.FirstOrDefault();
             }
         }
 
@@ -183,30 +206,53 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"SELECT id, 
-                                            nome, 
-                                            email,
-                                            data_nascimento AS DataNascimento,
-                                            sexo,
-                                            tipo,
-                                            data_cadastro AS DataCadastro,
-                                            status, 
-                                            data_status AS DataStatus, 
-                                            refresh_token AS RefreshToken,
-                                            refresh_token_data_expiracao AS RefreshTokenDataExpiracao,
-                                            reset_password_token AS ResetPasswordToken,
-                                            reset_password_data_expiracao AS ResetPasswordDataExpiracao, 
-                                            senha 
-                                    FROM    usuarios 
-                                    WHERE   email = @email";
+                const string sql = @"
+            SELECT  
+                u.id,
+                u.nome,
+                u.email,
+                u.data_nascimento AS DataNascimento,
+                u.sexo,
+                u.tipo,
+                u.data_cadastro AS DataCadastro,
+                u.status,
+                u.data_status AS DataStatus,
+                u.refresh_token AS RefreshToken,
+                u.refresh_token_data_expiracao AS RefreshTokenDataExpiracao,
+                u.reset_password_token AS ResetPasswordToken,
+                u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
+                u.senha,
+                c.id,
+                c.usuario_id AS UsuarioId,
+                c.canal_id AS CanalId,
+                c.codigo,
+                c.nome,
+                c.url_personalizada AS UrlPersonalizada,
+                c.url_imagem AS UrlImagem,
+                c.status,
+                c.data_cadastro AS DataCadastro 
+            FROM 
+                usuarios u 
+            LEFT JOIN 
+                canais c ON c.usuario_id = u.id 
+            WHERE 
+                u.email = @Email ";
 
-                var usuario = await conexao.QueryFirstOrDefaultAsync<Usuario>(
+                var usuario = await conexao.QueryAsync<Usuario, Canal, Usuario>(
                     sql,
-                    param: new { Email = email },
-                    commandType: CommandType.Text
+                    (u, c) =>
+                    {
+                        u.Canal = c;
+                        return u;
+                    },
+                    param: new
+                    {
+                        Email = email
+                    },
+                    splitOn: "Id"
                 );
 
-                return usuario;
+                return usuario.FirstOrDefault();
             }
         }
 
@@ -214,32 +260,67 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"SELECT id, 
-                                            nome, 
-                                            email, 
-                                            data_nascimento AS DataNascimento, 
-                                            sexo, 
-                                            tipo, 
-                                            data_cadastro AS DataCadastro, 
-                                            status, 
-                                            data_status AS DataStatus, 
-                                            refresh_token AS RefreshToken, 
-                                            refresh_token_data_expiracao AS RefreshTokenDataExpiracao, 
-                                            reset_password_token AS ResetPasswordToken, 
-                                            reset_password_data_expiracao AS ResetPasswordDataExpiracao 
-                                    FROM    usuarios 
-                                    WHERE   status <> @status";
+                const string sql = @"
+            SELECT  
+                u.id,
+                u.nome,
+                u.email,
+                u.data_nascimento AS DataNascimento,
+                u.sexo,
+                u.tipo,
+                u.data_cadastro AS DataCadastro,
+                u.status,
+                u.data_status AS DataStatus,
+                u.refresh_token AS RefreshToken,
+                u.refresh_token_data_expiracao AS RefreshTokenDataExpiracao,
+                u.reset_password_token AS ResetPasswordToken,
+                u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
+                c.id,
+                c.usuario_id AS UsuarioId,
+                c.canal_id AS CanalId,
+                c.codigo,
+                c.nome,
+                c.url_personalizada AS UrlPersonalizada,
+                c.url_imagem AS UrlImagem,
+                c.status,
+                c.data_cadastro AS DataCadastro 
+            FROM 
+                usuarios u 
+            LEFT JOIN 
+                canais c ON c.usuario_id = u.id 
+            WHERE 
+                u.status <> @Status ";
 
-                var usuarios = await conexao.QueryAsync<Usuario>(
+                var usuariosDictionary = new Dictionary<Guid, Usuario>();
+
+                var usuarios = await conexao.QueryAsync<Usuario, Canal, Usuario>(
                     sql,
+                    (u, c) =>
+                    {
+                        if (!usuariosDictionary.ContainsKey(u.Id))
+                        {
+                            usuariosDictionary[u.Id] = u;
+                        }
+                        else
+                        {
+                            u = usuariosDictionary[u.Id];
+                        }
+
+                        if (c != null)
+                        {
+                            u.Canal = c;
+                        }
+
+                        return u;
+                    },
                     param: new
                     {
-                        status = UsuarioStatusEnum.Excluido
+                        Status = UsuarioStatusEnum.Excluido
                     },
-                    commandType: CommandType.Text
+                    splitOn: "Id"
                 );
 
-                return usuarios.ToList();
+                return usuariosDictionary.Values.ToList();
             }
         }
 

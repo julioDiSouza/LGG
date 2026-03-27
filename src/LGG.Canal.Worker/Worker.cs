@@ -1,8 +1,9 @@
 using LGG.Aplicacao.Library.Dtos;
-using LGG.Global.Library.Extensoes;
-using LGG.Global.Library.Enumeradores;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
+using LGG.Aplicacao.Library.Dtos.Youtube;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
+using LGG.Global.Library.Enumeradores;
+using LGG.Global.Library.Extensoes;
 
 namespace LGG.Canal.Worker
 {
@@ -62,6 +63,8 @@ namespace LGG.Canal.Worker
                     .ObterCanalPorNomeAsync(msgCanal.Nome);
 
                 if (canaisPorNome!.Items != null && canaisPorNome!.Items!.Any())
+                {
+                    ItemChannelDto itemCanal = null;
                     foreach (var item in canaisPorNome!.Items!)
                     {
                         var canalPorId = await _youTubeService
@@ -77,15 +80,25 @@ namespace LGG.Canal.Worker
                                     var estatisticas = itemId.Statistics!;
                                     if (Convert.ToInt32(estatisticas.SubscriberCount) > _limiteInscritos)
                                         canalStatus = CanalStatusEnum.BloqueadoPorQuantidadeInscritos;
+                                    else
+                                        itemCanal = itemId;
 
                                     break;
                                 }
                             }
 
-                        if (canalStatus == CanalStatusEnum.Ativo || 
-                            canalStatus == CanalStatusEnum.BloqueadoPorQuantidadeInscritos)
+                        if (canalStatus == CanalStatusEnum.Ativo)
+                        {
+                            await _youTubeService.AtualizarInformacoesAsync(msgCanal.UsuarioId, itemCanal!.Id, msgCanal.Nome.RemoverArroba(),
+                                itemCanal!.Snippet!.Title, itemCanal!.Snippet!.CustomUrl.RemoverArroba(), itemCanal!.Snippet!.Thumbnails!.Default!.Url);
+
+                            break;
+                        }
+
+                        if (canalStatus == CanalStatusEnum.BloqueadoPorQuantidadeInscritos)
                             break;
                     }
+                }
                                 
                 if (!string.IsNullOrEmpty(usuarioId))
                 {

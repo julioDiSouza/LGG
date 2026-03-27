@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "src\\LGG.Email.Worker\\LGG.Email.Worker.csproj",
+        "Path": "src\\LGG.Canal.Worker\\LGG.Canal.Worker.csproj",
         "Action": "Start"
       }
     ]
