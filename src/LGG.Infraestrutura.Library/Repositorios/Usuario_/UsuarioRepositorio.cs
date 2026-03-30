@@ -57,43 +57,6 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
             }
         }
 
-        /*
-        public async Task<Usuario> ObterPorIdAsync(Guid id)
-        {
-            using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
-            {
-                const string sql = @"SELECT id, 
-                                            nome, 
-                                            email, 
-                                            data_nascimento AS DataNascimento, 
-                                            sexo, 
-                                            tipo, 
-                                            data_cadastro AS DataCadastro, 
-                                            status, 
-                                            data_status AS DataStatus, 
-                                            refresh_token AS RefreshToken, 
-                                            refresh_token_data_expiracao AS RefreshTokenDataExpiracao, 
-                                            reset_password_token AS ResetPasswordToken, 
-                                            reset_password_data_expiracao AS ResetPasswordDataExpiracao 
-                                    FROM    usuarios 
-                                    WHERE   id      =  @Id 
-                                    AND     status  <> @Status ";
-
-                var usuario = await conexao.QueryFirstOrDefaultAsync<Usuario>(
-                    sql,
-                    param: new 
-                    { 
-                        Id = id, 
-                        Status = UsuarioStatusEnum.Excluido
-                    },
-                    commandType: CommandType.Text
-                );
-
-                return usuario;
-            }
-        }
-        */
-
         public async Task<Usuario> ObterPorIdAsync(Guid id)
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
@@ -121,7 +84,8 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 c.url_personalizada AS UrlPersonalizada,
                 c.url_imagem AS UrlImagem,
                 c.status,
-                c.data_cadastro AS DataCadastro 
+                c.data_cadastro AS DataCadastro, 
+                c.titulo 
             FROM 
                 usuarios u 
             LEFT JOIN 
@@ -176,7 +140,8 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 c.url_personalizada AS UrlPersonalizada,
                 c.url_imagem AS UrlImagem,
                 c.status,
-                c.data_cadastro AS DataCadastro 
+                c.data_cadastro AS DataCadastro, 
+                c.titulo 
             FROM 
                 usuarios u 
             LEFT JOIN 
@@ -230,7 +195,8 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 c.url_personalizada AS UrlPersonalizada,
                 c.url_imagem AS UrlImagem,
                 c.status,
-                c.data_cadastro AS DataCadastro 
+                c.data_cadastro AS DataCadastro, 
+                c.titulo 
             FROM 
                 usuarios u 
             LEFT JOIN 
@@ -283,7 +249,8 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 c.url_personalizada AS UrlPersonalizada,
                 c.url_imagem AS UrlImagem,
                 c.status,
-                c.data_cadastro AS DataCadastro 
+                c.data_cadastro AS DataCadastro, 
+                c.titulo 
             FROM 
                 usuarios u 
             LEFT JOIN 
