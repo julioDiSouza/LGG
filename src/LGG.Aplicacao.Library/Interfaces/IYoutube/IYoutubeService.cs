@@ -8,5 +8,6 @@ namespace LGG.Aplicacao.Library.Interfaces.IYoutube
         Task<SearchListResponseDto?> ObterCanalPorNomeAsync(string nome);
         Task<ChannelListResponseDto?> ObterCanalPorIdAsync(string id);
         Task AtualizarStatusAsync(string usuarioId, CanalStatusEnum status);
+        Task AtualizarInformacoesAsync(string usuarioId, string canalId, string nome, string titulo, string urlPersonalizada, string urlImagem);
     }
 }

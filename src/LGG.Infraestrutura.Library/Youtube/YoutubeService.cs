@@ -1,11 +1,10 @@
-﻿using LGG.Aplicacao.Library.Dtos.Youtube;
-using LGG.Aplicacao.Library.Interfaces.IHttp;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
-using LGG.Dominio.Library.Interfaces.IDatabase;
+﻿using LGG.Global.Library.Extensoes;
 using LGG.Global.Library.Enumeradores;
-using LGG.Global.Library.Extensoes;
-using MediatR;
 using Microsoft.Extensions.Configuration;
+using LGG.Aplicacao.Library.Dtos.Youtube;
+using LGG.Aplicacao.Library.Interfaces.IHttp;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
 
 namespace LGG.Infraestrutura.Library.Youtube
 {
@@ -28,7 +27,7 @@ namespace LGG.Infraestrutura.Library.Youtube
 
         public async Task<SearchListResponseDto?> ObterCanalPorNomeAsync(string nome)
         {
-            var url = $"{_apiUrl}search?part=snippet&q={nome.AjustarNome()}&type=channel&key={_apiKey}";
+            var url = $"{_apiUrl}search?part=snippet&q={nome.RemoverArroba()}&type=channel&key={_apiKey}";
 
             var resultado = await _httpService.GetAsync<SearchListResponseDto>(url);
 
@@ -47,6 +46,13 @@ namespace LGG.Infraestrutura.Library.Youtube
         public async Task AtualizarStatusAsync(string usuarioId, CanalStatusEnum status)
         {
             await _ut.CanalRepositorio.AtualizarStatusAsync(new Guid(usuarioId), status);
+        }
+
+        public async Task AtualizarInformacoesAsync(string usuarioId, string canalId, string nome, 
+            string titulo, string urlPersonalizada, string urlImagem)
+        {
+            await _ut.CanalRepositorio
+                .AtualizarInformacoesAsync(new Guid(usuarioId), canalId, nome, titulo, urlPersonalizada, urlImagem);
         }
     }
 }
