@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\GGclt.Api.props" />
-</Project>
