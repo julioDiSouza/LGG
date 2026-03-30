@@ -14,7 +14,7 @@ namespace LGG.Aplicacao.Library.Dtos.Youtube
         public string Id { get; set; } = string.Empty;
 
         [JsonPropertyName("snippet")]
-        public SnippetDto? Snippet { get; set; }
+        public SnippetChannelDto? Snippet { get; set; }
         
         [JsonPropertyName("contentDetails")]
         public ContentDetailsDto? ContentDetails { get; set; }

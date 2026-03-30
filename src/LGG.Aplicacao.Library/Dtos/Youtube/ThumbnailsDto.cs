@@ -12,5 +12,11 @@ namespace LGG.Aplicacao.Library.Dtos.Youtube
 
         [JsonPropertyName("high")]
         public ThumbnailsImageDto? High { get; set; }
+
+        [JsonPropertyName("standard")]
+        public ThumbnailsImageDto? Standard { get; set; }
+
+        [JsonPropertyName("maxres")]
+        public ThumbnailsImageDto? Maxres { get; set; }
     }
 }
