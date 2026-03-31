@@ -16,7 +16,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Canal_
             _stringConexao = stringConexao;
         }
 
-        public async Task<Canal> ObterPorIdAsync(Guid canalId)
+        public async Task<Canal?> ObterPorIdAsync(Guid id)
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
@@ -31,13 +31,46 @@ namespace LGG.Infraestrutura.Library.Repositorios.Canal_
                                             data_cadastro AS DataCadastro, 
                                             titulo 
                                     FROM    canais 
-                                    WHERE   id      =  @Id ";
+                                    WHERE   id      =  @Id 
+                                    AND     status  <> @Status ";
 
                 var canal = await conexao.QueryFirstOrDefaultAsync<Canal>(
                     sql,
                     param: new
                     {
-                        Id = canalId,
+                        Id = id,
+                        Status = CanalStatusEnum.Excluido
+                    },
+                    commandType: CommandType.Text
+                );
+
+                return canal;
+            }
+        }
+
+        public async Task<Canal?> ObterPorCanalIdAsync(string canalId)
+        {
+            using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
+            {
+                const string sql = @"SELECT id, 
+                                            usuario_id AS UsuarioId, 
+                                            canal_id AS CanalId, 
+                                            codigo, 
+                                            nome, 
+                                            url_personalizada AS UrlPersonalizada, 
+                                            url_imagem AS UrlImagem, 
+                                            status, 
+                                            data_cadastro AS DataCadastro, 
+                                            titulo 
+                                    FROM    canais 
+                                    WHERE   canal_id =  @CanalId 
+                                    AND     status   <> @Status ";
+
+                var canal = await conexao.QueryFirstOrDefaultAsync<Canal>(
+                    sql,
+                    param: new
+                    {
+                        CanalId = canalId,
                         Status = CanalStatusEnum.Excluido
                     },
                     commandType: CommandType.Text
