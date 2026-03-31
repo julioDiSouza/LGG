@@ -2,7 +2,7 @@
 
 namespace LGG.Aplicacao.Library.Dtos.Youtube
 {
-    public class SnippetDto
+    public class SnippetChannelDto
     {
         [JsonPropertyName("publishedAt")]
         public DateTime PublishedAt { get; set; }

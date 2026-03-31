@@ -32,13 +32,13 @@ namespace LGG.Aplicacao.Library.Mediator.Canais.Handlers
                 usuario.Status != UsuarioStatusEnum.Ativo)
                 return false;
 
-            var filaCanal = MontaFilaCanal(request, usuario.Canal.Codigo);
-            await _publisher.PublishAsync(_filaValidarCanal, filaCanal);
+            var msgCanal = MontaMsgCanal(request, usuario.Canal.Codigo);
+            await _publisher.PublishAsync(_filaValidarCanal, msgCanal);
 
             return true;
         }
 
-        private CanalValidacaoDtoMsg MontaFilaCanal(ValidarCanalCommand request, string codigo)
+        private CanalValidacaoDtoMsg MontaMsgCanal(ValidarCanalCommand request, string codigo)
         {
             return new CanalValidacaoDtoMsg(_filaKey)
             {
