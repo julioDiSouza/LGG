@@ -21,6 +21,8 @@ namespace LGG.Global.Library.Enumeradores
         EmailIndisponivelValidacao = 4003,
         [Description("Parâmetro id é obrigatório.")]
         ParametroIdObrigatorio = 4004,
+        [Description("Campeonato mensal já cadastrado para este mês e ano.")]
+        CampeonatoMensalJaCadastrado = 4005,
         [Description("Não Autorizado.")]
         NaoAutorizado = 4401,
         [Description("Não Encontrado.")]

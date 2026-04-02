@@ -4,6 +4,8 @@ using LGG.Infraestrutura.Library.Repositorios.Canal_;
 using LGG.Infraestrutura.Library.Repositorios.Usuario_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.ICanal;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario;
+using LGG.Infraestrutura.Library.Repositorios.CampeonatoMensal_;
+using LGG.Dominio.Library.Interfaces.IRepositorios.ICampeonatoMensal;
 
 namespace LGG.Infraestrutura.Library.Database
 {
@@ -11,6 +13,7 @@ namespace LGG.Infraestrutura.Library.Database
     {
         private IUsuarioRepositorio? _usuarioRepositorio;
         private ICanalRepositorio? _canalRepositorio;
+        private ICampeonatoMensalRepositorio? _campeonatoMensalRepositorio;
 
         private readonly string _dapperString;
 
@@ -21,5 +24,6 @@ namespace LGG.Infraestrutura.Library.Database
 
         public IUsuarioRepositorio UsuarioRepositorio => _usuarioRepositorio ??= new UsuarioRepositorio(_dapperString);
         public ICanalRepositorio CanalRepositorio => _canalRepositorio ??= new CanalRepositorio(_dapperString);
+        public ICampeonatoMensalRepositorio CampeonatoMensalRepositorio => _campeonatoMensalRepositorio ??= new CampeonatoMensalRepositorio(_dapperString);
     }
 }

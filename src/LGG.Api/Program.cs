@@ -11,13 +11,14 @@ using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // sempre obrigatório
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // sempre obrigatï¿½rio
   //.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true) // opcional
-    .AddEnvironmentVariables(); // ainda pode sobrescrever via variáveis de ambiente
+    .AddEnvironmentVariables(); // ainda pode sobrescrever via variï¿½veis de ambiente
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -60,7 +61,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "LGG Api", Version = "v1" });
 
-    // Configuração do esquema de segurança
+    // Configuraï¿½ï¿½o do esquema de seguranï¿½a
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -96,6 +97,7 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(AtualizarUsuarioCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(CadastrarCampeonatoMensalCommand).Assembly);
 });
 
 #endregion Fim - MediatR
@@ -104,6 +106,8 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCadastroDtoValidador>();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioAtualizarDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalCadastroDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalAtualizarDtoValidador>();
 
 #endregion Fim - Validadores (FluentValidation)
 
