@@ -30,7 +30,7 @@ namespace LGG.Aplicacao.Library.Mediator.Usuarios.Handlers
             if (usuario != null)
             {
                 var usuarioExistente = new UsuarioCadastroRetornoDto();
-                usuarioExistente.Erro = new Erro(MsgSistemaEnum.EmailJaCadastrado);
+                usuarioExistente.Erro = new Erro(SistemaEnum.EmailJaCadastrado);
 
                 return usuarioExistente;
             }

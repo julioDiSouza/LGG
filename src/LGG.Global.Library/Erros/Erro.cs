@@ -5,13 +5,13 @@ namespace LGG.Global.Library.Erros
 {
     public class Erro
     {
-        public Erro(MsgSistemaEnum erroEnum)
+        public Erro(SistemaEnum erroEnum)
         {
             Codigo = erroEnum;
             Mensagem = erroEnum.ObterDescricao();
         }
 
-        public MsgSistemaEnum Codigo { get; set; }
+        public SistemaEnum Codigo { get; set; }
         public string Mensagem { get; set; } = string.Empty;
     }
 }

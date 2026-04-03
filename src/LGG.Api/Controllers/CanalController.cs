@@ -32,9 +32,9 @@ namespace LGG.Api.Controllers
             var solicitado = await _mediator.Send(canal.ComandoValidar());
 
             if (solicitado)
-                return Ok(MsgSistemaEnum.SolicitacaoEnviadaSucesso.ObterDescricao());
+                return Ok(SistemaEnum.SolicitacaoEnviadaSucesso.ObterDescricao());
 
-            return NotFound(MsgSistemaEnum.NaoEncontrado.ObterDescricao());
+            return NotFound(SistemaEnum.NaoEncontrado.ObterDescricao());
         }
     }
 }

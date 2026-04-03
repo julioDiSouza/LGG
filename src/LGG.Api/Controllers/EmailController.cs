@@ -29,7 +29,7 @@ namespace LGG.Api.Controllers
             try
             {
                 if (string.IsNullOrEmpty(Request.Query["key"]))
-                    return NotFound(MsgSistemaEnum.NaoEncontrado.ObterDescricao());
+                    return NotFound(SistemaEnum.NaoEncontrado.ObterDescricao());
 
                 var (keyValida, emailConfirmacao) = _emailService.ValidarKey(Request.Query["key"].ToString());
 
@@ -41,11 +41,11 @@ namespace LGG.Api.Controllers
                         return Ok(token);
                 }
 
-                return NotFound(MsgSistemaEnum.NaoEncontrado.ObterDescricao());
+                return NotFound(SistemaEnum.NaoEncontrado.ObterDescricao());
             }
             catch (Exception) 
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, MsgSistemaEnum.ErroInterno.ObterDescricao());
+                return StatusCode(StatusCodes.Status500InternalServerError, SistemaEnum.ErroInterno.ObterDescricao());
             }
         }
     }

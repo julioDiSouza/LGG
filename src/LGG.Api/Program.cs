@@ -10,6 +10,7 @@ using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
 using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Commands;
 
@@ -108,6 +109,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCadastroDtoValidador
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioAtualizarDtoValidador>();
 builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalCadastroDtoValidador>();
 builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalAtualizarDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<VideoCadastroDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<VideoAtualizarDtoValidador>();
 
 #endregion Fim - Validadores (FluentValidation)
 

@@ -10,10 +10,10 @@ namespace LGG.Api.Controllers
     public class TesteController : ControllerBase
     {
         [HttpGet("teste_publico")]
-        public IActionResult Public() => Ok(MsgSistemaEnum.ApiFuncionando.ObterDescricao());
+        public IActionResult Public() => Ok(SistemaEnum.ApiFuncionando.ObterDescricao());
 
         [Authorize]
         [HttpGet("teste_authorized")]
-        public IActionResult Protected() => Ok(MsgSistemaEnum.ApiFuncionando.ObterDescricao());
+        public IActionResult Protected() => Ok(SistemaEnum.ApiFuncionando.ObterDescricao());
     }
 }

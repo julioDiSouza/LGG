@@ -4,4 +4,6 @@
 - Ignorar já feito: Tabela baseada na classe CampeonatoMensal no projeto LGG.Dominio.Library.
 - Ignorar já feito: Crie a estrutura do Repositório para a classe CampeonatoMensal no mesmo padrão baseado no Repositório CanalRepositorio.cs.
 - Ignorar já feito: Crie fluxo completo a partir do controller CampeonatoMensalController baseado na estrutura do UsuarioController, crie tudo que for necessário, qualquer dúvida me pergunte.
-- Adicione no controller CampeonatoMensalController a consulta: ConsultarVigenteAsync() obtendo os registros da base respeitando a estrutura geral da controller.
+- Ignorar já feito: Adicione no controller CampeonatoMensalController a consulta: ConsultarVigenteAsync() obtendo os registros da base respeitando a estrutura geral da controller.
+- Ignorar já feito: Faça a mesma estrutura do controller VideoController até a persistência no VideoRepositorio.
+- Ignorar já feito: Crie o script da tabela videos.

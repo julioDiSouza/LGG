@@ -6,10 +6,11 @@ using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
 using LGG.Aplicacao.Library.Mediator.Canais.Queries;
 using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Queries;
+using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Queries;
 
 namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
 {
-    public class PublicarVideoHandler : IRequestHandler<PublicarVideoCommand, bool>
+    public class PublicarVideoHandler : IRequestHandler<PublicarVideoCommand, SistemaEnum>
     {
         private readonly IMediator _mediator;
         private readonly IRabbitMqPublisher _publisher;
@@ -24,25 +25,30 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             _filaPublicarVideo = configuration["RabbitMqFilas:PublicarVideo"]!.ToString();
         }
 
-        public async Task<bool> Handle(PublicarVideoCommand request, CancellationToken cancellationToken)
+        public async Task<SistemaEnum> Handle(PublicarVideoCommand request, CancellationToken cancellationToken)
         {
             var usuario = await _mediator.Send(new ObterUsuarioQuery { Id = request.UsuarioId });
 
             if (usuario == null ||
                 usuario.Canal == null ||
                 usuario.Status != UsuarioStatusEnum.Ativo)
-                return false;
+                return SistemaEnum.UsuarioInvalido;
 
             var canal = await _mediator.Send(new ObterCanalQuery { CanalId = usuario.Canal.CanalId });
 
             if (canal == null ||
                 canal.Status != CanalStatusEnum.Ativo)
-                return false;
+                return SistemaEnum.CanalInvalido;
+
+            var campeonatoVigente = await _mediator.Send(new ObterCampeonatoVigenteQuery());
+            if (campeonatoVigente == null ||
+                campeonatoVigente.Status != CampeonatoMensalStatusEnum.Aberto)
+                return SistemaEnum.CampeonatoIndisponivel;
 
             var msgVideo = MontaMsgVideo(request);
             await _publisher.PublishAsync(_filaPublicarVideo, msgVideo);
 
-            return true;
+            return SistemaEnum.SolicitacaoEnviadaSucesso;
         }
 
         private VideoPublicacaoDtoMsg MontaMsgVideo(PublicarVideoCommand request)

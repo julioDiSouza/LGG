@@ -24,7 +24,7 @@ namespace LGG.Aplicacao.Library.Mediator.CampeonaMensal.Handlers
             if (campeonatoExistente != null)
             {
                 var retornoErro = new CampeonatoMensalCadastroRetornoDto();
-                retornoErro.Erro = new Erro(MsgSistemaEnum.CampeonatoMensalJaCadastrado);
+                retornoErro.Erro = new Erro(SistemaEnum.CampeonatoMensalJaCadastrado);
 
                 return retornoErro;
             }

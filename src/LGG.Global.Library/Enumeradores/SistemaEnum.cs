@@ -2,7 +2,7 @@
 
 namespace LGG.Global.Library.Enumeradores
 {
-    public enum MsgSistemaEnum
+    public enum SistemaEnum
     {
         #region Sucesso
 
@@ -23,6 +23,15 @@ namespace LGG.Global.Library.Enumeradores
         ParametroIdObrigatorio = 4004,
         [Description("Campeonato mensal já cadastrado para este mês e ano.")]
         CampeonatoMensalJaCadastrado = 4005,
+        [Description("Usuário inválido, por favor regularize seu usuário.")]
+        UsuarioInvalido = 4006,
+        [Description("Canal inválido, por favor regularize seu canal.")]
+        CanalInvalido = 4007,
+        [Description("Campeonato indisponível, por favor aguarde o início de um novo campeonato.")]
+        CampeonatoIndisponivel = 4008,
+        [Description("Já existe vídeo publicado, apague o vídeo no campeonato atual para publicar um novo.")]
+        VideoJaExistePublicado = 4009,
+
         [Description("Não Autorizado.")]
         NaoAutorizado = 4401,
         [Description("Não Encontrado.")]
