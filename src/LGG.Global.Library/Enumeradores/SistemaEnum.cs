@@ -8,8 +8,8 @@ namespace LGG.Global.Library.Enumeradores
 
         [Description("Api funcionando.")]
         ApiFuncionando = 2001,
-        [Description("Solicitação enviada com sucesso.")]
-        SolicitacaoEnviadaSucesso = 2200,
+        [Description("Solicitação processada com sucesso.")]
+        SolicitacaoProcessadaSucesso = 2200,
 
         #endregion Fim - Sucesso
 

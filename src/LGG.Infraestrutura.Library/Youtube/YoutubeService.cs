@@ -1,5 +1,4 @@
 ﻿using LGG.Global.Library.Extensoes;
-using LGG.Global.Library.Enumeradores;
 using Microsoft.Extensions.Configuration;
 using LGG.Aplicacao.Library.Dtos.Youtube;
 using LGG.Aplicacao.Library.Interfaces.IHttp;
@@ -43,16 +42,13 @@ namespace LGG.Infraestrutura.Library.Youtube
             return resultado;
         }
 
-        public async Task AtualizarStatusAsync(string usuarioId, CanalStatusEnum status)
+        public async Task<VideoListResponseDto?> ObterVideosPorIdAsync(string id)
         {
-            await _ut.CanalRepositorio.AtualizarStatusAsync(new Guid(usuarioId), status);
-        }
+            var url = $"{_apiUrl}videos?part=snippet&id={id}&key={_apiKey}";
 
-        public async Task AtualizarInformacoesAsync(string usuarioId, string canalId, string nome, 
-            string titulo, string urlPersonalizada, string urlImagem)
-        {
-            await _ut.CanalRepositorio
-                .AtualizarInformacoesAsync(new Guid(usuarioId), canalId, nome, titulo, urlPersonalizada, urlImagem);
+            var resultado = await _httpService.GetAsync<VideoListResponseDto>(url);
+
+            return resultado;
         }
     }
 }

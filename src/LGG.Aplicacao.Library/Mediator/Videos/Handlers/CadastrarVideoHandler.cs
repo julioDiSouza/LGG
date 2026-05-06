@@ -21,13 +21,7 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
         {
             try
             {
-                var video = new Video().Cadastrar(
-                    request.Titulo,
-                    request.Descricao,
-                    request.Url,
-                    Guid.NewGuid().ToString(),
-                    request.CanalId
-                );
+                var video = new Video();
 
                 //await _videoRepositorio.AdicionarAsync(video);
 
@@ -36,7 +30,6 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
                     Id = video.Id,
                     Titulo = video.Titulo,
                     Url = video.Url,
-                    CanalId = video.CanalId
                 };
             }
             catch (Exception ex)

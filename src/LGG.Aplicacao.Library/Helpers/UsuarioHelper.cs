@@ -63,21 +63,7 @@ namespace LGG.Aplicacao.Library.Helpers
             dto.DataNascimento = usuario.DataNascimento;
             dto.Tipo = usuario.Tipo;
             dto.Status = usuario.Status;
-
-            if (usuario.Canal is null)
-                return dto;
-
-            dto.Canal = new CanalDto();
-            dto.Canal.Id = usuario.Canal.Id.ToString();
-            dto.Canal.UsuarioId = usuario.Id.ToString();
-            dto.Canal.CanalId = usuario.Canal.CanalId;
-            dto.Canal.Codigo = usuario.Canal.Codigo;
-            dto.Canal.Nome = usuario.Canal.Nome;
-            dto.Canal.Titulo = usuario.Canal.Titulo;
-            dto.Canal.UrlPersonalizada = usuario.Canal.UrlPersonalizada;
-            dto.Canal.UrlImagem = usuario.Canal.UrlImagem;
-            dto.Canal.Status = usuario.Canal.Status;
-            dto.Canal.DataCadastro = usuario.Canal.DataCadastro;
+            dto.CodigoVideo = usuario.CodigoVideo;
 
             return dto;
         }

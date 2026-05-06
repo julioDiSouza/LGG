@@ -1,8 +1,11 @@
 ﻿using FluentValidation.Results;
 using LGG.Aplicacao.Library.Dtos;
+using LGG.Dominio.Library.Entidades;
+using LGG.Global.Library.Enumeradores;
 using LGG.Aplicacao.Library.Validadores;
-using LGG.Aplicacao.Library.Mediator.Videos.Commands;
+using LGG.Aplicacao.Library.Dtos.Youtube;
 using LGG.Aplicacao.Library.Mediator.Videos.Queries;
+using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 
 namespace LGG.Aplicacao.Library.Helpers
 {
@@ -47,5 +50,26 @@ namespace LGG.Aplicacao.Library.Helpers
 
         public static ObterVideoQuery QueryObter(long id)
             => new ObterVideoQuery { Id = id };
+
+        public static Video ConverterParaVideo(this VideoListResponseDto videoListResponseDto)
+        {
+            if (videoListResponseDto == null || videoListResponseDto.Items == null || 
+                videoListResponseDto.Items.Count == 0 || videoListResponseDto.Items.FirstOrDefault()!.Snippet == null)
+                return new Video();
+
+            var item = videoListResponseDto.Items.FirstOrDefault();
+            var snippet = videoListResponseDto.Items.FirstOrDefault()!.Snippet;
+
+            var video = new Video();
+            video.VideoId = item.Id;
+            video.Titulo = snippet.Title;
+            video.Descricao = snippet.Description;
+            video.UrlImagem = snippet.Thumbnails?.Default?.Url ?? string.Empty;
+            video.DataPublicacao = snippet.PublishedAt;
+            video.DataCadastro = DateTime.Now;
+            video.Status = VideoStatusEnum.Ativo;
+
+            return video;
+        }
     }
 }

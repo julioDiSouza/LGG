@@ -87,14 +87,6 @@ namespace LGG.Canal.Worker
                                 }
                             }
 
-                        if (canalStatus == CanalStatusEnum.Ativo)
-                        {
-                            await _youTubeService.AtualizarInformacoesAsync(msgCanal.UsuarioId, itemCanal!.Id, msgCanal.Nome.RemoverArroba(),
-                                itemCanal!.Snippet!.Title, itemCanal!.Snippet!.CustomUrl.RemoverArroba(), itemCanal!.Snippet!.Thumbnails!.Default!.Url);
-
-                            break;
-                        }
-
                         if (canalStatus == CanalStatusEnum.BloqueadoPorQuantidadeInscritos)
                             break;
                     }
@@ -102,7 +94,7 @@ namespace LGG.Canal.Worker
                                 
                 if (!string.IsNullOrEmpty(usuarioId))
                 {
-                    await _youTubeService.AtualizarStatusAsync(usuarioId, canalStatus);
+                    //await _youTubeService.AtualizarStatusAsync(usuarioId, canalStatus);
 
                     return MsgResultadoEnum.Ack;
                 }

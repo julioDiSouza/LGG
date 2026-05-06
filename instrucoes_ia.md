@@ -7,3 +7,7 @@
 - Ignorar já feito: Adicione no controller CampeonatoMensalController a consulta: ConsultarVigenteAsync() obtendo os registros da base respeitando a estrutura geral da controller.
 - Ignorar já feito: Faça a mesma estrutura do controller VideoController até a persistência no VideoRepositorio.
 - Ignorar já feito: Crie o script da tabela videos.
+- Ignorar já feito: Remover a entidade Canal das querys do repositório UsuarioRepositorio.cs.
+- Ignorar já feito: Propagar codigo_video e @CodigoVideo para as demais querys do repositório UsuarioRepositorio.cs.
+- Ignorar já feito: Implementar no método public static string ObterVideoId(this string url) da classe YoutubeExtensao, uma implementação que retorne o querystring de v em caso de https://www.youtube.com/watch?v=efQTv26gd_0&t=39s, também para o caso de https://www.youtube.com/watch?v=6ql2PemWLbg&t=16s e o valor NfaqL5RVqog em caso de vídeos shorts como https://www.youtube.com/shorts/NfaqL5RVqog
+- Implementar no método public static string ObterVideoId(this string url) da classe YoutubeExtensao para os demais posíveis links de videos do youtube.

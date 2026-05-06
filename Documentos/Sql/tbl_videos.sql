@@ -1,22 +1,17 @@
--- Documentação: Tabela de vídeos
--- Data: 2026-04-03
-
-CREATE TABLE IF NOT EXISTS videos (
-    id BIGSERIAL PRIMARY KEY,
-    canal_id UUID NOT NULL,
-    usuario_id UUID NULL,
-    campeonato_mensal_id INTEGER NULL,
-    video_ciclo_id BIGINT NULL,
-    titulo VARCHAR(255) NOT NULL,
-    descricao TEXT NULL,
-    url VARCHAR(255) NOT NULL,
-    video_id VARCHAR(255) NOT NULL,
-    qtd_view BIGINT NOT NULL DEFAULT 0,
-    qtd_like BIGINT NOT NULL DEFAULT 0,
-    url_imagem VARCHAR(255) NULL,
-    data_publicacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    ativo BOOLEAN NOT NULL DEFAULT TRUE
+CREATE TABLE banco.videos (
+	id bigserial NOT NULL,
+	usuario_id uuid NULL,
+	campeonato_mensal_id int4 NULL,
+	video_ciclo_id int8 NULL,
+	titulo varchar(255) NOT NULL,
+	descricao text NULL,
+	url varchar(255) NOT NULL,
+	video_id varchar(255) NOT NULL,
+	qtd_view int8 DEFAULT 0 NOT NULL,
+	qtd_like int8 DEFAULT 0 NOT NULL,
+	url_imagem varchar(255) NULL,
+	data_publicacao timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	data_cadastro timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	status int2 NULL,
+	CONSTRAINT videos_pkey PRIMARY KEY (id)
 );
-
-

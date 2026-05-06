@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using LGG.Aplicacao.Library.Dtos;
+using LGG.Global.Library.Extensoes;
+using LGG.Aplicacao.Library.Helpers;
 using LGG.Global.Library.Enumeradores;
-using Microsoft.Extensions.Configuration;
-using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
-using LGG.Aplicacao.Library.Mediator.Canais.Queries;
+using LGG.Aplicacao.Library.Dtos.Youtube;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
 using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Queries;
 using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Queries;
@@ -13,51 +15,61 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
     public class PublicarVideoHandler : IRequestHandler<PublicarVideoCommand, SistemaEnum>
     {
         private readonly IMediator _mediator;
-        private readonly IRabbitMqPublisher _publisher;
-        private readonly string _filaKey;
-        private readonly string _filaPublicarVideo;
+        private readonly IYoutubeService _ytService;
+        private readonly IUnidTrabalho _ut;
 
-        public PublicarVideoHandler(IConfiguration configuration, IMediator mediator, IRabbitMqPublisher publisher)
+        public PublicarVideoHandler(IMediator mediator, IYoutubeService ytService, IUnidTrabalho ut)
         {
             _mediator = mediator;
-            _publisher = publisher;
-            _filaKey = configuration["Criptografia:Fila:ChaveFila"]!.ToString();
-            _filaPublicarVideo = configuration["RabbitMqFilas:PublicarVideo"]!.ToString();
+            _ytService = ytService;
+            _ut = ut;
         }
 
         public async Task<SistemaEnum> Handle(PublicarVideoCommand request, CancellationToken cancellationToken)
         {
             var usuario = await _mediator.Send(new ObterUsuarioQuery { Id = request.UsuarioId });
 
-            if (usuario == null ||
-                usuario.Canal == null ||
-                usuario.Status != UsuarioStatusEnum.Ativo)
+            if (usuario == null || usuario.Status != UsuarioStatusEnum.Ativo)
                 return SistemaEnum.UsuarioInvalido;
 
-            var canal = await _mediator.Send(new ObterCanalQuery { CanalId = usuario.Canal.CanalId });
-
-            if (canal == null ||
-                canal.Status != CanalStatusEnum.Ativo)
-                return SistemaEnum.CanalInvalido;
-
-            var campeonatoVigente = await _mediator.Send(new ObterCampeonatoVigenteQuery());
+            CampeonatoMensalConsultaDto campeonatoVigente = await _mediator.Send(new ObterCampeonatoVigenteQuery());
             if (campeonatoVigente == null ||
                 campeonatoVigente.Status != CampeonatoMensalStatusEnum.Aberto)
                 return SistemaEnum.CampeonatoIndisponivel;
 
-            var msgVideo = MontaMsgVideo(request);
-            await _publisher.PublishAsync(_filaPublicarVideo, msgVideo);
+            var videoId = request.Link.ObterVideoId();
+            var videoResponse =  await _ytService.ObterVideosPorIdAsync(videoId);
+            var videoValido = VideoValido(videoResponse, usuario.CodigoVideo);
 
-            return SistemaEnum.SolicitacaoEnviadaSucesso;
+            if (!videoValido)
+                return SistemaEnum.NaoEncontrado;
+
+            var video = videoResponse!.ConverterParaVideo();
+            video.UsuarioId = new Guid(request.UsuarioId);
+            video.CampeonatoMensalId = campeonatoVigente.Id;
+            video.VideoCicloId = 0;
+            video.Url = request.Link;
+
+
+            video = await _ut.VideoRepositorio.AdicionarAsync(video);
+
+            return SistemaEnum.SolicitacaoProcessadaSucesso;
         }
 
-        private VideoPublicacaoDtoMsg MontaMsgVideo(PublicarVideoCommand request)
+        private bool VideoValido(VideoListResponseDto? video, string codigoVideo)
         {
-            return new VideoPublicacaoDtoMsg(_filaKey)
-            {
-                UsuarioId = request.UsuarioId,
-                Link = request.Link
-            };
+            var valido = false;
+
+            if (video == null || video.Items == null || video.Items.Count == 0)
+                return valido;
+
+            var codigoParaBuscar = $"[LGG:{codigoVideo}]";
+            valido = video.Items.Any(item => 
+                item.Snippet != null && 
+                !string.IsNullOrEmpty(item.Snippet.Description) &&
+                item.Snippet.Description.Contains(codigoParaBuscar));
+
+            return valido;
         }
     }
 }

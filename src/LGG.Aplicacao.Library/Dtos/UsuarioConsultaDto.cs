@@ -11,7 +11,6 @@ namespace LGG.Aplicacao.Library.Dtos
         public DateTime DataNascimento { get; set; }
         public UsuarioTipoEnum Tipo { get; set; }
         public UsuarioStatusEnum Status { get; set; }
-
-        public CanalDto Canal { get; set; }
+        public string CodigoVideo { get; set; } = string.Empty;
     }
 }

@@ -32,7 +32,7 @@ namespace LGG.Api.Controllers
 
             var resposta = await _mediator.Send(video.ComandoPublicar());
 
-            if (resposta == SistemaEnum.SolicitacaoEnviadaSucesso)
+            if (resposta == SistemaEnum.SolicitacaoProcessadaSucesso)
                 return Ok(resposta.ObterObjetoCodigoDescricao());
 
             return NotFound(resposta.ObterObjetoCodigoDescricao());

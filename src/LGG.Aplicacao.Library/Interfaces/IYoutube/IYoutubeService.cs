@@ -1,5 +1,4 @@
-﻿using LGG.Global.Library.Enumeradores;
-using LGG.Aplicacao.Library.Dtos.Youtube;
+﻿using LGG.Aplicacao.Library.Dtos.Youtube;
 
 namespace LGG.Aplicacao.Library.Interfaces.IYoutube
 {
@@ -7,7 +6,6 @@ namespace LGG.Aplicacao.Library.Interfaces.IYoutube
     {
         Task<SearchListResponseDto?> ObterCanalPorNomeAsync(string nome);
         Task<ChannelListResponseDto?> ObterCanalPorIdAsync(string id);
-        Task AtualizarStatusAsync(string usuarioId, CanalStatusEnum status);
-        Task AtualizarInformacoesAsync(string usuarioId, string canalId, string nome, string titulo, string urlPersonalizada, string urlImagem);
+        Task<VideoListResponseDto?> ObterVideosPorIdAsync(string id);
     }
 }

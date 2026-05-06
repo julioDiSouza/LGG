@@ -1,8 +1,8 @@
 using Dapper;
-using LGG.Dominio.Library.Entidades;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
 using Npgsql;
-using Microsoft.Extensions.Configuration;
+using LGG.Dominio.Library.Entidades;
+using LGG.Global.Library.Enumeradores;
+using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
 
 namespace LGG.Infraestrutura.Library.Repositorios.Video_
 {
@@ -18,8 +18,8 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<Video> AdicionarAsync(Video video)
         {
             const string sql = @"
-                INSERT INTO videos (titulo, descricao, url, video_id, qtd_view, qtd_like, url_imagem, canal_id, data_publicacao, data_criacao, ativo)
-                VALUES (@Titulo, @Descricao, @Url, @VideoId, @QtdView, @QtdLike, @UrlImagem, @CanalId, @DataPublicacao, @DataCriacao, @Ativo)
+                INSERT INTO videos (usuario_id, campeonato_mensal_id, video_ciclo_id, titulo, descricao, url, video_id, qtd_view, qtd_like, url_imagem, data_publicacao, data_cadastro, status)
+                VALUES (@UsuarioId, @CampeonatoMensalId, @VideoCicloId, @Titulo, @Descricao, @Url, @VideoId, @QtdView, @QtdLike, @UrlImagem, @DataPublicacao, @DataCadastro, @Status)
                 RETURNING id;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -33,9 +33,10 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<Video> ObterPorIdAsync(long id)
         {
             const string sql = @"
-                SELECT id, titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
-                       qtd_like as QtdLike, url_imagem as UrlImagem, canal_id as CanalId, 
-                       data_publicacao as DataPublicacao, data_criacao as DataCriacao, ativo
+                SELECT id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                       titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                       qtd_like as QtdLike, url_imagem as UrlImagem,
+                       data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
                 FROM videos
                 WHERE id = @Id;";
 
@@ -48,11 +49,12 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<List<Video>> ObterPorCanalIdAsync(Guid canalId)
         {
             const string sql = @"
-                SELECT id, titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
-                       qtd_like as QtdLike, url_imagem as UrlImagem, canal_id as CanalId, 
-                       data_publicacao as DataPublicacao, data_criacao as DataCriacao, ativo
+                SELECT id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                       titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                       qtd_like as QtdLike, url_imagem as UrlImagem,
+                       data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
                 FROM videos
-                WHERE canal_id = @CanalId AND ativo = true
+                WHERE usuario_id = @CanalId
                 ORDER BY data_publicacao DESC;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -65,11 +67,11 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<List<Video>> ObterTodosAsync()
         {
             const string sql = @"
-                SELECT id, titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
-                       qtd_like as QtdLike, url_imagem as UrlImagem, canal_id as CanalId, 
-                       data_publicacao as DataPublicacao, data_criacao as DataCriacao, ativo
+                SELECT id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                       titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                       qtd_like as QtdLike, url_imagem as UrlImagem,
+                       data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
                 FROM videos
-                WHERE ativo = true
                 ORDER BY data_publicacao DESC;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -85,9 +87,10 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                 UPDATE videos
                 SET titulo = @Titulo, descricao = @Descricao, url = @Url
                 WHERE id = @Id
-                RETURNING id, titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
-                          qtd_like as QtdLike, url_imagem as UrlImagem, canal_id as CanalId, 
-                          data_publicacao as DataPublicacao, data_criacao as DataCriacao, ativo;";
+                RETURNING id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                          titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                          qtd_like as QtdLike, url_imagem as UrlImagem,
+                          data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -99,15 +102,16 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         {
             const string sql = @"
                 UPDATE videos
-                SET ativo = false
+                SET status = @Status
                 WHERE id = @Id
-                RETURNING id, titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
-                          qtd_like as QtdLike, url_imagem as UrlImagem, canal_id as CanalId, 
-                          data_publicacao as DataPublicacao, data_criacao as DataCriacao, ativo;";
+                RETURNING id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                          titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                          qtd_like as QtdLike, url_imagem as UrlImagem,
+                          data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                return await connection.QuerySingleOrDefaultAsync<Video>(sql, new { Id = id });
+                return await connection.QuerySingleOrDefaultAsync<Video>(sql, new { Id = id, Status = VideoStatusEnum.Excluido });
             }
         }
 

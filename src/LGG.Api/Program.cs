@@ -1,18 +1,22 @@
 using System.Text;
 using FluentValidation;
-using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Tokens;
-using LGG.Infraestrutura.Library.Email;
-using LGG.Aplicacao.Library.Validadores;
-using LGG.Infraestrutura.Library.RabbitMq;
-using LGG.Infraestrutura.Library.Database;
 using LGG.Aplicacao.Library.Interfaces.IEmail;
-using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IHttp;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using LGG.Aplicacao.Library.Mediator.Videos.Commands;
-using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
 using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Commands;
+using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+using LGG.Aplicacao.Library.Mediator.Videos.Commands;
+using LGG.Aplicacao.Library.Validadores;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Infraestrutura.Library.Database;
+using LGG.Infraestrutura.Library.Email;
+using LGG.Infraestrutura.Library.Http;
+using LGG.Infraestrutura.Library.RabbitMq;
+using LGG.Infraestrutura.Library.Youtube;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUnidTrabalho, UnidTrabalho>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IYoutubeService, YoutubeService>();
+builder.Services.AddHttpClient<IHttpService, HttpService>();
 
 #region Configuracao JWT
 

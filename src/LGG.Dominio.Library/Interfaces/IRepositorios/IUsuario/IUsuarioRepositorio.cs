@@ -10,6 +10,7 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario
         Task<Usuario?> ObterPorEmailAsync(string email);
         Task<Usuario?> ObterPorEmailSenhaAsync(string email, string senha);
         Task<List<Usuario>> ObterTodosAsync();
+        Task<bool> CodigoLiberadoAsync(string codigo);
         Task<Usuario> AtualizarAsync(Guid id, string nome, UsuarioSexoEnum sexo, DateTime dataNascimento);
         Task<Usuario> AtualizarStatusAsync(Guid id, UsuarioStatusEnum status);
         Task<Usuario?> ApagarPorIdAsync(Guid id);
