@@ -35,7 +35,7 @@ namespace LGG.Api.Controllers
             var retorno = await _mediator.Send(usuario.ConverterComandoCadastrar());
 
             if (retorno is null)
-                return StatusCode(500, MsgSistemaEnum.UsuarioFalhaCadastro.ObterDescricao());
+                return StatusCode(500, SistemaEnum.UsuarioFalhaCadastro.ObterDescricao());
 
             if (retorno?.Erro != null)
                 return Conflict(retorno.Erro.Mensagem);
@@ -76,7 +76,7 @@ namespace LGG.Api.Controllers
         public async Task<IActionResult> ApagarAsync([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))
-                return BadRequest(MsgSistemaEnum.ParametroIdObrigatorio.ObterDescricao());
+                return BadRequest(SistemaEnum.ParametroIdObrigatorio.ObterDescricao());
 
             await _mediator.Send(new ApagarUsuarioCommand { UsuarioId = id });
 

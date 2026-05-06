@@ -1,28 +1,36 @@
 using System.Text;
 using FluentValidation;
-using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Tokens;
-using LGG.Infraestrutura.Library.Email;
-using LGG.Aplicacao.Library.Validadores;
-using LGG.Infraestrutura.Library.RabbitMq;
-using LGG.Infraestrutura.Library.Database;
 using LGG.Aplicacao.Library.Interfaces.IEmail;
-using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IHttp;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
+using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Commands;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+using LGG.Aplicacao.Library.Mediator.Videos.Commands;
+using LGG.Aplicacao.Library.Validadores;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Infraestrutura.Library.Database;
+using LGG.Infraestrutura.Library.Email;
+using LGG.Infraestrutura.Library.Http;
+using LGG.Infraestrutura.Library.RabbitMq;
+using LGG.Infraestrutura.Library.Youtube;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // sempre obrigatório
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // sempre obrigatï¿½rio
   //.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true) // opcional
-    .AddEnvironmentVariables(); // ainda pode sobrescrever via variáveis de ambiente
+    .AddEnvironmentVariables(); // ainda pode sobrescrever via variï¿½veis de ambiente
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUnidTrabalho, UnidTrabalho>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IYoutubeService, YoutubeService>();
+builder.Services.AddHttpClient<IHttpService, HttpService>();
 
 #region Configuracao JWT
 
@@ -60,7 +68,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "LGG Api", Version = "v1" });
 
-    // Configuração do esquema de segurança
+    // Configuraï¿½ï¿½o do esquema de seguranï¿½a
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -96,6 +104,7 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(AtualizarUsuarioCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(CadastrarCampeonatoMensalCommand).Assembly);
 });
 
 #endregion Fim - MediatR
@@ -104,6 +113,10 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCadastroDtoValidador>();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioAtualizarDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalCadastroDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<CampeonatoMensalAtualizarDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<VideoCadastroDtoValidador>();
+builder.Services.AddValidatorsFromAssemblyContaining<VideoAtualizarDtoValidador>();
 
 #endregion Fim - Validadores (FluentValidation)
 

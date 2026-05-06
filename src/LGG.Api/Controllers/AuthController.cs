@@ -31,7 +31,7 @@ namespace LGG.Api.Controllers
             if (retorno != null)
                 return Ok(retorno);
 
-            return NotFound(MsgSistemaEnum.NaoEncontrado.ObterDescricao());
+            return NotFound(SistemaEnum.NaoEncontrado.ObterDescricao());
         }
     }
 }

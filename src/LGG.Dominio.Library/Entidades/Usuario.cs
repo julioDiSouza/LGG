@@ -18,13 +18,12 @@ namespace LGG.Dominio.Library.Entidades
         public DateTime RefreshTokenDataExpiracao { get; set; }
         public string ResetPasswordToken { get; set; } = string.Empty;
         public DateTime ResetPasswordDataExpiracao { get; set; }
-
-        public Canal Canal { get; set; }
+        public string CodigoVideo { get; set; } = string.Empty;
 
         public Usuario() { }
 
         public Usuario Cadastrar(string nome, string email, UsuarioSexoEnum sexo, DateTime dataNascimento, 
-            UsuarioTipoEnum tipo, UsuarioStatusEnum status, string senha)
+            UsuarioTipoEnum tipo, UsuarioStatusEnum status, string senha, string codigoVideo)
         {
             Id = Guid.NewGuid();
             Nome = nome;
@@ -34,6 +33,7 @@ namespace LGG.Dominio.Library.Entidades
             Tipo = tipo;
             Status = status;
             Senha = BCrypt.Net.BCrypt.HashPassword(senha);
+            CodigoVideo = codigoVideo;
 
             return this;
         }

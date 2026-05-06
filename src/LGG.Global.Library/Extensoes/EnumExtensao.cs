@@ -13,5 +13,13 @@ namespace LGG.Global.Library.Extensoes
 
             return attribute?.Description ?? value.ToString();
         }
+
+        public static object ObterObjetoCodigoDescricao(this Enum value)
+        {
+            var codigo = Convert.ToInt32(value);
+            var descricao = value.ObterDescricao();
+
+            return new { Codigo = codigo, Descricao = descricao };
+        }
     }
 }
