@@ -46,7 +46,13 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
             }
         }
 
-        public async Task<List<Video>> ObterPorCanalIdAsync(Guid canalId)
+        /// <summary>
+        /// Obtém um vídeo pelo Id do usuário e Id do campeonato mensal
+        /// </summary>
+        /// <param name="usuarioId">Id do usuário</param>
+        /// <param name="id">Id do campeonato mensal</param>
+        /// <returns>Vídeo encontrado ou null</returns>
+        public async Task<Video?> ObterPorUsuarioIdCampIdAsync(string usuarioId, int id)
         {
             const string sql = @"
                 SELECT id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
@@ -54,13 +60,19 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                        qtd_like as QtdLike, url_imagem as UrlImagem,
                        data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
                 FROM videos
-                WHERE usuario_id = @CanalId
-                ORDER BY data_publicacao DESC;";
+                WHERE usuario_id = @UsuarioId 
+                  AND campeonato_mensal_id = @CampeonatoMensalId
+                LIMIT 1;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                var videos = await connection.QueryAsync<Video>(sql, new { CanalId = canalId });
-                return videos.ToList();
+                return await connection.QuerySingleOrDefaultAsync<Video>(
+                    sql, 
+                    new 
+                    { 
+                        UsuarioId = Guid.Parse(usuarioId), 
+                        CampeonatoMensalId = id 
+                    });
             }
         }
 
