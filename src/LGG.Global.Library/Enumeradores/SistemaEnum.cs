@@ -30,12 +30,12 @@ namespace LGG.Global.Library.Enumeradores
         [Description("Campeonato indisponível, por favor aguarde o início de um novo campeonato.")]
         CampeonatoIndisponivel = 4008,
         [Description("Já existe vídeo publicado, apague o vídeo no campeonato atual para publicar um novo.")]
-        VideoJaExistePublicado = 4009,
+        VideoJaPublicado = 4009,
 
         [Description("Não Autorizado.")]
-        NaoAutorizado = 4401,
+        NaoAutorizado = 401,
         [Description("Não Encontrado.")]
-        NaoEncontrado = 4404,
+        NaoEncontrado = 404,
 
         #endregion Fim - Validações
 

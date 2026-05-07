@@ -27,11 +27,12 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
 
         public async Task<SistemaEnum> Handle(PublicarVideoCommand request, CancellationToken cancellationToken)
         {
+            // Verificar se o usuário existe e está ativo
             var usuario = await _mediator.Send(new ObterUsuarioQuery { Id = request.UsuarioId });
-
             if (usuario == null || usuario.Status != UsuarioStatusEnum.Ativo)
                 return SistemaEnum.UsuarioInvalido;
 
+            // Verificar se há um campeonato mensal vigente e aberto
             CampeonatoMensalConsultaDto campeonatoVigente = await _mediator.Send(new ObterCampeonatoVigenteQuery());
             if (campeonatoVigente == null ||
                 campeonatoVigente.Status != CampeonatoMensalStatusEnum.Aberto)
@@ -40,17 +41,20 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             var videoId = request.Link.ObterVideoId();
             var videoResponse =  await _ytService.ObterVideosPorIdAsync(videoId);
             var videoValido = VideoValido(videoResponse, usuario.CodigoVideo);
-
             if (!videoValido)
                 return SistemaEnum.NaoEncontrado;
 
+            // Verificar se o usuário já publicou um vídeo para o campeonato vigente
+            var videoExistente = await _ut.VideoRepositorio.ObterPorUsuarioIdCampIdAsync(usuario.Id.ToString(), campeonatoVigente.Id);
+            if (videoExistente != null)
+                return SistemaEnum.VideoJaPublicado;
+
+            // Gravar o vídeo no banco de dados
             var video = videoResponse!.ConverterParaVideo();
             video.UsuarioId = new Guid(request.UsuarioId);
             video.CampeonatoMensalId = campeonatoVigente.Id;
             video.VideoCicloId = 0;
             video.Url = request.Link;
-
-
             video = await _ut.VideoRepositorio.AdicionarAsync(video);
 
             return SistemaEnum.SolicitacaoProcessadaSucesso;
