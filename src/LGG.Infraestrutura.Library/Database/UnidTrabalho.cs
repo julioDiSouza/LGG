@@ -2,8 +2,10 @@
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Infraestrutura.Library.Repositorios.Video_;
 using LGG.Infraestrutura.Library.Repositorios.Usuario_;
+using LGG.Infraestrutura.Library.Repositorios.VideoCiclo_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario;
+using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo;
 using LGG.Infraestrutura.Library.Repositorios.CampeonatoMensal_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.ICampeonatoMensal;
 
@@ -14,6 +16,7 @@ namespace LGG.Infraestrutura.Library.Database
         private IUsuarioRepositorio? _usuarioRepositorio;
         private ICampeonatoMensalRepositorio? _campeonatoMensalRepositorio;
         private IVideoRepositorio? _videoRepositorio;
+        private IVideoCicloRepositorio? _videoCicloRepositorio;
 
         private readonly string _dapperString;
 
@@ -25,5 +28,6 @@ namespace LGG.Infraestrutura.Library.Database
         public IUsuarioRepositorio UsuarioRepositorio => _usuarioRepositorio ??= new UsuarioRepositorio(_dapperString);
         public ICampeonatoMensalRepositorio CampeonatoMensalRepositorio => _campeonatoMensalRepositorio ??= new CampeonatoMensalRepositorio(_dapperString);
         public IVideoRepositorio VideoRepositorio => _videoRepositorio ??= new VideoRepositorio(_dapperString);
+        public IVideoCicloRepositorio VideoCicloRepositorio => _videoCicloRepositorio ??= new VideoCicloRepositorio(_dapperString);
     }
 }
