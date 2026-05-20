@@ -1,8 +1,9 @@
-﻿using Dapper;
-using Npgsql;
-using System.Data;
+﻿using System.Data;
+using Dapper;
 using LGG.Dominio.Library.Entidades;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo;
+using LGG.Global.Library.Enumeradores;
+using Npgsql;
 
 namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
 {
@@ -24,7 +25,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
                                             data_cadastro AS DataCadastro, 
                                             status, 
                                             data_status AS DataStatus 
-                                     from   video_ciclos 
+                                     from   videos_ciclo 
                                      order  by id desc 
                                      limit  1; ";
 
@@ -39,7 +40,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
 
         public async Task AdicionarAsync(VideoCiclo videoCiclo)
         {
-            const string sql = @"INSERT INTO video_ciclos 
+            const string sql = @"INSERT INTO videos_ciclo 
                                 (
                                     campeonato_mensal_id, 
                                     data_cadastro, 
@@ -59,5 +60,30 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
                 await connection.ExecuteAsync(sql, videoCiclo);
             }
         }
+
+        public async Task AtualizarStatusAsync(long videoCicloId, int campeonatoMensalId, VideoCicloStatusEnum status)
+        {
+            using (IDbConnection conexao = new NpgsqlConnection(_connectionString))
+            {
+                const string sql = @"UPDATE videos_ciclo 
+                                     SET    status = @Status, 
+                                            data_status = NOW() 
+                                     WHERE  id = @Id 
+                                     AND    campeonato_mensal_id = @CampeonatoMensalId"; 
+
+                await conexao.ExecuteAsync(
+                    sql,
+                    param: 
+                    new 
+                    { 
+                        Id = videoCicloId,
+                        CampeonatoMensalId = campeonatoMensalId,
+                        Status = (int)status 
+                    },
+                    commandType: CommandType.Text
+                );
+            }
+        }
     }
 }
+                    

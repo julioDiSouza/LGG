@@ -1,4 +1,5 @@
 ﻿using LGG.Dominio.Library.Entidades;
+using LGG.Global.Library.Enumeradores;
 
 namespace LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo
 {
@@ -6,5 +7,6 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo
     {
         Task<VideoCiclo?> ObterUltimoVideoCicloAsync();
         Task AdicionarAsync(VideoCiclo videoCiclo);
+        Task AtualizarStatusAsync(long videoCicloId, int campeonatoMensalId, VideoCicloStatusEnum status);
     }
 }

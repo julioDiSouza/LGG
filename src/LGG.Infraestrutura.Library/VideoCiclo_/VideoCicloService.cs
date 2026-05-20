@@ -17,15 +17,11 @@ namespace LGG.Infraestrutura.Library.VideoCiclo_
             _logger = logger;
         }
 
-        public async Task IniciarCicloAsync()
-        {
-            var campeonatoMensal = await _ut.CampeonatoMensalRepositorio.ObterVigenteAsync();
-            if(campeonatoMensal == null)
-            {
-                _logger.LogInformation("#=> Nenhum campeonato mensal vigente encontrado. O ciclo de vídeo não será iniciado.");
-                return;
-            }
+        public async Task<CampeonatoMensal?> ObterCampeonatoVigenteAsync() 
+            => await _ut.CampeonatoMensalRepositorio.ObterVigenteAsync();
 
+        public async Task IniciarCicloAsync(CampeonatoMensal campeonatoMensal)
+        {
             var ultimoCiclo = await _ut.VideoCicloRepositorio.ObterUltimoVideoCicloAsync();
 
             if(ultimoCiclo == null || ultimoCiclo.Status == VideoCicloStatusEnum.Concluido)
@@ -38,14 +34,52 @@ namespace LGG.Infraestrutura.Library.VideoCiclo_
                 videoCiclo.DataStatus = dataAtual;
 
                 await _ut.VideoCicloRepositorio.AdicionarAsync(videoCiclo);
-
-                _logger.LogInformation("#=> Ciclo de vídeo iniciado com sucesso.");
-            }
-            else
-            {
-                _logger.LogInformation("#=> Um ciclo de vídeo já está em andamento. O novo ciclo não será iniciado.");
             }
         }
 
+        public async Task PopularBaldeAsync()
+        {
+            var ultimoCiclo = await _ut.VideoCicloRepositorio.ObterUltimoVideoCicloAsync();
+
+            if (ultimoCiclo != null && ultimoCiclo.Status == VideoCicloStatusEnum.ProcessandoBalde)
+            {
+                var ids = await _ut.VideoBaldeRepositorio.ObterVideosIdNoBaldeAsync(ultimoCiclo.Id);
+                var videosFaltantes = await _ut.VideoRepositorio.ObterFaltantesPorIdsAsync(ids);
+
+                if (videosFaltantes.Any())
+                {
+                    var dataHora = DateTime.Now;
+
+                    var videosBalde = videosFaltantes.Select(video => new VideoBalde
+                    {
+                        VideoCicloId = ultimoCiclo.Id,
+                        UsuarioId = video.UsuarioId,
+                        VideoId = video.Id,
+                        VideoIdYt = video.VideoId,
+                        DataCadastro = dataHora
+                    }).ToList();
+
+                    await _ut.VideoBaldeRepositorio.AdicionarAsync(videosBalde);
+                }
+                else
+                {
+                    await _ut.VideoCicloRepositorio.AtualizarStatusAsync(
+                        ultimoCiclo.Id, 
+                        ultimoCiclo.CampeonatoMensalId, 
+                        VideoCicloStatusEnum.ProcessandoMetricas
+                        );
+                }
+            }
+        }
+
+        public async Task ProcessarTopDezAsync()
+        {
+            var ultimoCiclo = await _ut.VideoCicloRepositorio.ObterUltimoVideoCicloAsync();
+
+            if (ultimoCiclo != null && ultimoCiclo.Status == VideoCicloStatusEnum.ProcessandoMetricas)
+            {
+                _logger.LogInformation("##=> TODO Top 10.");
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios.IVideo
     {
         Task<Video> AdicionarAsync(Video video);
         Task<Video> ObterPorIdAsync(long id);
+        Task<IEnumerable<Video>> ObterFaltantesPorIdsAsync(IEnumerable<long> ids);
         Task<List<Video>> ObterTodosAsync();
         Task<Video?> ObterPorUsuarioIdCampIdAsync(string usuarioId, int id);
         Task<Video> AtualizarAsync(long id, string titulo, string descricao, string url);
