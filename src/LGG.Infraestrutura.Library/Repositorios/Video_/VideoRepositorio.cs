@@ -46,6 +46,22 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
             }
         }
 
+        public async Task<IEnumerable<Video>> ObterFaltantesPorIdsAsync(IEnumerable<long> ids)
+        {
+            const string sql = @"
+                SELECT id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
+                       titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
+                       qtd_like as QtdLike, url_imagem as UrlImagem,
+                       data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
+                FROM videos
+                WHERE id <> ALL(@Ids);";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                return await connection.QueryAsync<Video>(sql, new { Ids = ids });
+            }
+        }
+
         /// <summary>
         /// Obtém um vídeo pelo Id do usuário e Id do campeonato mensal
         /// </summary>

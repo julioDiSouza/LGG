@@ -21,17 +21,23 @@ namespace LGG.VideoCiclo.Worker
             {
                 try
                 {
-                    _logger.LogInformation($"#=> Iniciando em: {DateTime.Now}.");
+                    _logger.LogInformation($"##=> Iniciando em: {DateTime.Now}.");
 
-                    await _videoCicloService.IniciarCicloAsync();
-                }
+					var campeonatoMensal = await _videoCicloService.ObterCampeonatoVigenteAsync();
+                    if (campeonatoMensal != null)
+                    {
+						await _videoCicloService.IniciarCicloAsync(campeonatoMensal);
+						await _videoCicloService.PopularBaldeAsync();
+						await _videoCicloService.ProcessarTopDezAsync();
+					}
+				}
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
                 }
                 finally
                 {
-                    _logger.LogInformation($"#=> Finalizando em: {DateTime.Now}.");
+                    _logger.LogInformation($"##=> Finalizando em: {DateTime.Now}.");
                     await Task.Delay(_intervaloExecucaoSegundos, stoppingToken);
                 }
             }
