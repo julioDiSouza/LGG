@@ -77,5 +77,38 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoBalde_
                 await cmd.ExecuteNonQueryAsync();
             }
         }
+
+        public async Task<IEnumerable<VideoBalde>> ObterVideosBaldeAsync(long cicloId)
+        {
+            using (IDbConnection conexao = new NpgsqlConnection(_connectionString))
+            {
+                const string sql = @"UPDATE videos_balde
+                                     SET data_inicio_processamento = NOW()
+                                     WHERE id IN (
+                                        SELECT id
+                                        FROM videos_balde
+                                        WHERE video_ciclo_id = @CicloId 
+                                        AND data_inicio_processamento IS NULL
+                                        LIMIT 50
+                                     )
+                                     RETURNING id, 
+                                               video_ciclo_id AS VideoCicloId, 
+                                               usuario_id AS UsuarioId, 
+                                               video_id AS VideoId, 
+                                               video_id_yt AS VideoIdYt, 
+                                               data_cadastro AS DataCadastro,
+                                               data_inicio_processamento AS DataInicioProcessamento;";
+                var videosBalde = await conexao.QueryAsync<VideoBalde>(
+                    sql,
+                    new
+                    {
+                        CicloId = cicloId
+                    },
+                    commandType: CommandType.Text
+                );
+
+                return videosBalde;
+            }
+        }
     }
 }

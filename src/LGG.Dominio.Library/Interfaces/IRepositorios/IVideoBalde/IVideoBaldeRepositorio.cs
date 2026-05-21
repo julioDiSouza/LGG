@@ -6,5 +6,6 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios.IVideoBalde
     {
         Task<IEnumerable<long>> ObterVideosIdNoBaldeAsync(long cicloId);
         Task AdicionarAsync(List<VideoBalde> videosBalde);
+        Task<IEnumerable<VideoBalde>> ObterVideosBaldeAsync(long cicloId);
     }
 }

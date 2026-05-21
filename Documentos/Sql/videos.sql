@@ -1,4 +1,10 @@
-CREATE TABLE banco.videos (
+-- dbggclt.videos definição
+
+-- Drop table
+
+-- DROP TABLE dbggclt.videos;
+
+CREATE TABLE dbggclt.videos (
 	id bigserial NOT NULL,
 	usuario_id uuid NULL,
 	campeonato_mensal_id int4 NULL,
