@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LGG.Email.Worker", "src\LGG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LGG.VideoCiclo.Worker", "src\LGG.VideoCiclo.Worker\LGG.VideoCiclo.Worker.csproj", "{6DE13F61-1D52-4B8A-9111-994A4DBCDCF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LGG.VideoMetricas.Worker", "src\LGG.VideoMetricas.Worker\LGG.VideoMetricas.Worker.csproj", "{50F0A506-D463-49D0-BF84-5C73FD921EDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{6DE13F61-1D52-4B8A-9111-994A4DBCDCF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DE13F61-1D52-4B8A-9111-994A4DBCDCF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DE13F61-1D52-4B8A-9111-994A4DBCDCF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F0A506-D463-49D0-BF84-5C73FD921EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F0A506-D463-49D0-BF84-5C73FD921EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F0A506-D463-49D0-BF84-5C73FD921EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F0A506-D463-49D0-BF84-5C73FD921EDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{9E198DD5-8BDE-475F-AFCC-EFD4E9F6DF5C} = {0A8B2C1A-3401-4788-B1FA-C2382C1464EB}
 		{530F2B74-D2EA-47A7-8EB0-4C860AB55623} = {0A8B2C1A-3401-4788-B1FA-C2382C1464EB}
 		{6DE13F61-1D52-4B8A-9111-994A4DBCDCF7} = {0A8B2C1A-3401-4788-B1FA-C2382C1464EB}
+		{50F0A506-D463-49D0-BF84-5C73FD921EDA} = {0A8B2C1A-3401-4788-B1FA-C2382C1464EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7EE13CAB-55D4-4529-A48F-5E75980B515D}

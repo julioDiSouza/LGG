@@ -1,4 +1,10 @@
-CREATE TABLE banco.usuarios (
+-- dbggclt.usuarios definição
+
+-- Drop table
+
+-- DROP TABLE dbggclt.usuarios;
+
+CREATE TABLE dbggclt.usuarios (
 	id uuid NOT NULL,
 	nome varchar(255) NOT NULL,
 	email varchar(255) NOT NULL,
