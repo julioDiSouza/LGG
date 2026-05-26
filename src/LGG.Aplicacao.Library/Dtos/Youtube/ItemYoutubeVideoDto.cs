@@ -15,5 +15,8 @@ namespace LGG.Aplicacao.Library.Dtos.Youtube
 
         [JsonPropertyName("snippet")]
         public SnippetVideoDto? Snippet { get; set; }
+
+        [JsonPropertyName("statistics")]
+        public StatisticsDto? Statistics { get; set; }
     }
 }

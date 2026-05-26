@@ -44,7 +44,7 @@ namespace LGG.Infraestrutura.Library.Youtube
 
         public async Task<VideoListResponseDto?> ObterVideosPorIdAsync(string id)
         {
-            var url = $"{_apiUrl}videos?part=snippet&id={id}&key={_apiKey}";
+            var url = $"{_apiUrl}videos?part=snippet,statistics&id={id}&key={_apiKey}";
 
             var resultado = await _httpService.GetAsync<VideoListResponseDto>(url);
 

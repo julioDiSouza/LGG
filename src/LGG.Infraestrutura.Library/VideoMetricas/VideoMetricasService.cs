@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LGG.Aplicacao.Library.Interfaces.IVideoMetricas;
+﻿using Microsoft.Extensions.Logging;
 using LGG.Dominio.Library.Entidades;
-using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Global.Library.Enumeradores;
-using LGG.Infraestrutura.Library.VideoCiclo_;
-using Microsoft.Extensions.Logging;
+using LGG.Dominio.Library.Interfaces.IDatabase;
+using LGG.Aplicacao.Library.Interfaces.IVideoMetricas;
 
 namespace LGG.Infraestrutura.Library.VideoMetricas
 {
@@ -35,5 +29,8 @@ namespace LGG.Infraestrutura.Library.VideoMetricas
 
             return await _ut.VideoBaldeRepositorio.ObterVideosBaldeAsync(ultimoCiclo.Id);
         }
+
+        public async Task AdicionarVideoEstatisticaAsync(VideoEstatistica videoEstatistica)
+            => await _ut.VideoEstatisticaRepositorio.AdicionarAsync(videoEstatistica);
     }
 }

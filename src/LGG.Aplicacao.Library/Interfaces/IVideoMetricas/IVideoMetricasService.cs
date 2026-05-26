@@ -6,5 +6,6 @@ namespace LGG.Aplicacao.Library.Interfaces.IVideoMetricas
     {
         Task<CampeonatoMensal?> ObterCampeonatoVigenteAsync();
         Task<IEnumerable<VideoBalde?>> ObterVideosBaldeAsync();
+        Task AdicionarVideoEstatisticaAsync(VideoEstatistica videoEstatistica);
     }
 }

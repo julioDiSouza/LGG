@@ -1,3 +1,5 @@
+using LGG.Aplicacao.Library.Helpers;
+using LGG.Aplicacao.Library.Interfaces.IYoutube;
 using LGG.Aplicacao.Library.Interfaces.IVideoMetricas;
 
 namespace LGG.VideoMetricas.Worker
@@ -6,12 +8,14 @@ namespace LGG.VideoMetricas.Worker
     {
         private readonly ILogger<Worker> _logger;
         private readonly IVideoMetricasService _videoMetricasService;
+        private readonly IYoutubeService _youtubeService;
         private readonly int _intervaloExecucaoSegundos;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IVideoMetricasService videoMetricasService)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IVideoMetricasService videoMetricasService, IYoutubeService youtubeService)
         {
             _logger = logger;
             _videoMetricasService = videoMetricasService;
+            _youtubeService = youtubeService;
             _intervaloExecucaoSegundos = configuration.GetValue<int>("IntervaloExecucaoSegundos", 30) * 1000;
         }
 
@@ -27,8 +31,18 @@ namespace LGG.VideoMetricas.Worker
                     if (campeonatoMensal != null)
                     {
                         var videosBalde = await _videoMetricasService.ObterVideosBaldeAsync();
+                        foreach (var videoBalde in videosBalde)
+                        {
+                            var videoResponseDto = await _youtubeService.ObterVideosPorIdAsync(videoBalde!.VideoIdYt);
+                            if (videoResponseDto!.Items!.Any())
+                            {
+                                var videoEstatistiva = videoResponseDto.ConverterParaVideoEstatistica();
+                                videoEstatistiva.VideoId = videoBalde.VideoId;
+                                videoEstatistiva.VideoCicloId = videoBalde.VideoCicloId;
 
-
+                                await _videoMetricasService.AdicionarVideoEstatisticaAsync(videoEstatistiva);
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)

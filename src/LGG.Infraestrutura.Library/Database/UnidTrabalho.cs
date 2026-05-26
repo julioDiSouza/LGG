@@ -4,12 +4,14 @@ using LGG.Infraestrutura.Library.Repositorios.Video_;
 using LGG.Infraestrutura.Library.Repositorios.Usuario_;
 using LGG.Infraestrutura.Library.Repositorios.VideoCiclo_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
+using LGG.Infraestrutura.Library.Repositorios.VideoBalde_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario;
+using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoBalde;
 using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo;
+using LGG.Infraestrutura.Library.Repositorios.VideoEstatistica_;
 using LGG.Infraestrutura.Library.Repositorios.CampeonatoMensal_;
 using LGG.Dominio.Library.Interfaces.IRepositorios.ICampeonatoMensal;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoBalde;
-using LGG.Infraestrutura.Library.Repositorios.VideoBalde_;
+using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoEstatistica;
 
 namespace LGG.Infraestrutura.Library.Database
 {
@@ -20,6 +22,7 @@ namespace LGG.Infraestrutura.Library.Database
         private IVideoRepositorio? _videoRepositorio;
         private IVideoCicloRepositorio? _videoCicloRepositorio;
         private IVideoBaldeRepositorio? _videoBaldeRepositorio;
+        private IVideoEstatisticaRepositorio? _videoEstatisticaRepositorio;
 
         private readonly string _dapperString;
 
@@ -33,5 +36,6 @@ namespace LGG.Infraestrutura.Library.Database
         public IVideoRepositorio VideoRepositorio => _videoRepositorio ??= new VideoRepositorio(_dapperString);
         public IVideoCicloRepositorio VideoCicloRepositorio => _videoCicloRepositorio ??= new VideoCicloRepositorio(_dapperString);
         public IVideoBaldeRepositorio VideoBaldeRepositorio => _videoBaldeRepositorio ??= new VideoBaldeRepositorio(_dapperString);
+        public IVideoEstatisticaRepositorio VideoEstatisticaRepositorio => _videoEstatisticaRepositorio ??= new VideoEstatisticaRepositorio(_dapperString);
     }
 }
