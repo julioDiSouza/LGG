@@ -7,6 +7,15 @@ namespace LGG.Aplicacao.Library.Dtos.Youtube
         [JsonPropertyName("viewCount")]
         public string ViewCount { get; set; } = string.Empty;
 
+        [JsonPropertyName("likeCount")]
+        public string LikeCount { get; set; } = string.Empty;
+
+        [JsonPropertyName("favoriteCount")]
+        public string FavoriteCount { get; set; } = string.Empty;
+
+        [JsonPropertyName("commentCount")]
+        public string CommentCount { get; set; } = string.Empty;
+
         [JsonPropertyName("subscriberCount")]
         public string SubscriberCount { get; set; } = string.Empty;
 

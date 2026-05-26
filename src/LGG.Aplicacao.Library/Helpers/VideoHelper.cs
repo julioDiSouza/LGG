@@ -71,5 +71,22 @@ namespace LGG.Aplicacao.Library.Helpers
 
             return video;
         }
+
+        public static VideoEstatistica ConverterParaVideoEstatistica(this VideoListResponseDto videoListResponseDto)
+        {
+            if (videoListResponseDto == null || videoListResponseDto.Items == null ||
+                videoListResponseDto.Items.Count == 0 || videoListResponseDto.Items.FirstOrDefault()!.Snippet == null)
+                return new VideoEstatistica();
+
+            var item = videoListResponseDto.Items.FirstOrDefault();
+            var statistic = videoListResponseDto.Items.FirstOrDefault()!.Statistics;
+
+            var videoEstatistica = new VideoEstatistica();
+            videoEstatistica.QtdView = Convert.ToInt16(statistic!.ViewCount);
+            videoEstatistica.QtdLike = Convert.ToInt16(statistic!.LikeCount);
+            videoEstatistica.DataCadastro = DateTime.Now;
+
+            return videoEstatistica;
+        }
     }
 }
