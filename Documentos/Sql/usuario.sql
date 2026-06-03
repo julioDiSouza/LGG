@@ -1,10 +1,4 @@
--- dbggclt.usuarios definição
-
--- Drop table
-
--- DROP TABLE dbggclt.usuarios;
-
-CREATE TABLE dbggclt.usuarios (
+CREATE TABLE dbggclt.usuario (
 	id uuid NOT NULL,
 	nome varchar(255) NOT NULL,
 	email varchar(255) NOT NULL,
@@ -20,6 +14,6 @@ CREATE TABLE dbggclt.usuarios (
 	reset_password_token varchar(255) NULL,
 	reset_password_data_expiracao timestamp NULL,
 	codigo_video varchar(6) NOT NULL,
-	CONSTRAINT usuarios_email_key UNIQUE (email),
-	CONSTRAINT usuarios_pkey PRIMARY KEY (id)
+	CONSTRAINT usuario_email_key UNIQUE (email),
+	CONSTRAINT usuario_pkey PRIMARY KEY (id)
 );

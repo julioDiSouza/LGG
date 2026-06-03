@@ -20,7 +20,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoBalde_
             using (IDbConnection conexao = new NpgsqlConnection(_connectionString))
             {
                 const string sql = @"select video_id 
-                                     from   videos_balde 
+                                     from   video_balde 
                                      where  video_ciclo_id = @CicloId ";
 
                 var ids = await conexao.QueryAsync<long>( 
@@ -56,7 +56,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoBalde_
             }
 
             var valuesString = string.Join(", ", values);
-            var sql = $@"INSERT INTO videos_balde 
+            var sql = $@"INSERT INTO video_balde 
                         (
                             video_ciclo_id, 
                             usuario_id, 
@@ -82,11 +82,11 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoBalde_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_connectionString))
             {
-                const string sql = @"UPDATE videos_balde
+                const string sql = @"UPDATE video_balde
                                      SET data_inicio_processamento = NOW()
                                      WHERE id IN (
                                         SELECT id
-                                        FROM videos_balde
+                                        FROM video_balde
                                         WHERE video_ciclo_id = @CicloId 
                                         AND data_inicio_processamento IS NULL
                                         LIMIT 50

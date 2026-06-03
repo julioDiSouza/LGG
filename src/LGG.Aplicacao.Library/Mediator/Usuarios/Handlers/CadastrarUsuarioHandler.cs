@@ -45,7 +45,7 @@ namespace LGG.Aplicacao.Library.Mediator.Usuarios.Handlers
                     );
 
                 await _ut.UsuarioRepositorio.AdicionarAsync(usuario);
-                await _emailService.CriarFilaCadastroAsync(usuario.Id.ToString(), usuario.Email);
+                //await _emailService.CriarFilaCadastroAsync(usuario.Id.ToString(), usuario.Email);
 
                 var usuarioDto = new UsuarioCadastroRetornoDto();
                 usuarioDto.UsuarioId = usuario.Id.ToString();

@@ -25,7 +25,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
                                             data_cadastro AS DataCadastro, 
                                             status, 
                                             data_status AS DataStatus 
-                                     from   videos_ciclo 
+                                     from   video_ciclo 
                                      order  by id desc 
                                      limit  1; ";
 
@@ -40,7 +40,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
 
         public async Task AdicionarAsync(VideoCiclo videoCiclo)
         {
-            const string sql = @"INSERT INTO videos_ciclo 
+            const string sql = @"INSERT INTO video_ciclo 
                                 (
                                     campeonato_mensal_id, 
                                     data_cadastro, 
@@ -65,7 +65,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoCiclo_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_connectionString))
             {
-                const string sql = @"UPDATE videos_ciclo 
+                const string sql = @"UPDATE video_ciclo 
                                      SET    status = @Status, 
                                             data_status = NOW() 
                                      WHERE  id = @Id 

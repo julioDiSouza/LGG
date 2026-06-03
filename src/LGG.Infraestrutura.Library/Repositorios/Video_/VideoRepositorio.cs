@@ -18,7 +18,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<Video> AdicionarAsync(Video video)
         {
             const string sql = @"
-                INSERT INTO videos (usuario_id, campeonato_mensal_id, video_ciclo_id, titulo, descricao, url, video_id, qtd_view, qtd_like, url_imagem, data_publicacao, data_cadastro, status)
+                INSERT INTO video (usuario_id, campeonato_mensal_id, video_ciclo_id, titulo, descricao, url, video_id, qtd_view, qtd_like, url_imagem, data_publicacao, data_cadastro, status)
                 VALUES (@UsuarioId, @CampeonatoMensalId, @VideoCicloId, @Titulo, @Descricao, @Url, @VideoId, @QtdView, @QtdLike, @UrlImagem, @DataPublicacao, @DataCadastro, @Status)
                 RETURNING id;";
 
@@ -37,7 +37,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                        titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
                        qtd_like as QtdLike, url_imagem as UrlImagem,
                        data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
-                FROM videos
+                FROM video
                 WHERE id = @Id;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -53,7 +53,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                        titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
                        qtd_like as QtdLike, url_imagem as UrlImagem,
                        data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
-                FROM videos
+                FROM video
                 WHERE id <> ALL(@Ids);";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -75,7 +75,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                        titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
                        qtd_like as QtdLike, url_imagem as UrlImagem,
                        data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
-                FROM videos
+                FROM video
                 WHERE usuario_id = @UsuarioId 
                   AND campeonato_mensal_id = @CampeonatoMensalId
                 LIMIT 1;";
@@ -99,7 +99,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
                        titulo, descricao, url, video_id as VideoId, qtd_view as QtdView, 
                        qtd_like as QtdLike, url_imagem as UrlImagem,
                        data_publicacao as DataPublicacao, data_cadastro as DataCadastro, status
-                FROM videos
+                FROM video
                 ORDER BY data_publicacao DESC;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -112,7 +112,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<Video> AtualizarAsync(long id, string titulo, string descricao, string url)
         {
             const string sql = @"
-                UPDATE videos
+                UPDATE video
                 SET titulo = @Titulo, descricao = @Descricao, url = @Url
                 WHERE id = @Id
                 RETURNING id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
@@ -129,7 +129,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
         public async Task<Video> ApagarPorIdAsync(long id)
         {
             const string sql = @"
-                UPDATE videos
+                UPDATE video
                 SET status = @Status
                 WHERE id = @Id
                 RETURNING id, usuario_id as UsuarioId, campeonato_mensal_id as CampeonatoMensalId, video_ciclo_id as VideoCicloId,
@@ -145,7 +145,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Video_
 
         public async Task RemoverDefinitivoPorIdAsync(long id)
         {
-            const string sql = @"DELETE FROM videos WHERE id = @Id;";
+            const string sql = @"DELETE FROM video WHERE id = @Id;";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
