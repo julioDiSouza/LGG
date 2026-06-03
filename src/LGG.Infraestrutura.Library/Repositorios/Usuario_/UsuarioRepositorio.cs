@@ -20,7 +20,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"INSERT INTO usuarios 
+                const string sql = @"INSERT INTO usuario 
                                 (
                                     id,
                                     nome, 
@@ -80,7 +80,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
                 u.codigo_video AS CodigoVideo
             FROM 
-                usuarios u 
+                usuario u 
             WHERE 
                 u.id = @Id ";
 
@@ -118,7 +118,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
                 u.codigo_video AS CodigoVideo
             FROM 
-                usuarios u 
+                usuario u 
             WHERE 
                 u.email = @Email ";
 
@@ -157,7 +157,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 u.senha,
                 u.codigo_video AS CodigoVideo
             FROM 
-                usuarios u 
+                usuario u 
             WHERE 
                 u.email = @Email ";
 
@@ -195,7 +195,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
                 u.reset_password_data_expiracao AS ResetPasswordDataExpiracao,
                 u.codigo_video AS CodigoVideo
             FROM 
-                usuarios u 
+                usuario u 
             WHERE 
                 u.status <> @Status ";
 
@@ -217,7 +217,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
                 const string sql = @"SELECT codigo_video 
-                                    FROM    usuarios 
+                                    FROM    usuario 
                                     WHERE   codigo_video = @codigo";
 
                 var usuario = await conexao.QueryFirstOrDefaultAsync<Usuario>(
@@ -234,7 +234,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"UPDATE usuarios 
+                const string sql = @"UPDATE usuario 
                                      SET    nome  = @Nome, 
                                             sexo  = @Sexo, 
                                             data_nascimento = @DataNascimento 
@@ -271,7 +271,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
         {
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
-                const string sql = @"UPDATE usuarios 
+                const string sql = @"UPDATE usuario 
                                      SET    status      = @status, 
                                             data_status = NOW() 
                                      WHERE  id    = @Id 
@@ -304,7 +304,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
                 const bool ativo = false;
-                const string sql = @"UPDATE usuarios 
+                const string sql = @"UPDATE usuario 
                                      SET    status   = @Status, 
                                             data_status = NOW() 
                                      WHERE  id      = @Id 
@@ -337,7 +337,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.Usuario_
             using (IDbConnection conexao = new NpgsqlConnection(_stringConexao))
             {
                 const string sql = @"DELETE 
-                                     FROM   usuarios 
+                                     FROM   usuario 
                                      WHERE  id = @Id ";
 
                 await conexao.ExecuteAsync(

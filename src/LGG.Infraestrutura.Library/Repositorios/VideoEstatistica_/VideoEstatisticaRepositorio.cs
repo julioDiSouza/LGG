@@ -17,7 +17,7 @@ namespace LGG.Infraestrutura.Library.Repositorios.VideoEstatistica_
         public async Task<VideoEstatistica> AdicionarAsync(VideoEstatistica video)
         {
             const string sql = @"
-                INSERT INTO video_estatisticas (
+                INSERT INTO video_estatistica (
                     video_ciclo_id, 
                     video_id, 
                     qtd_view, 

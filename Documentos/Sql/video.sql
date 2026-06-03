@@ -1,10 +1,4 @@
--- dbggclt.videos definição
-
--- Drop table
-
--- DROP TABLE dbggclt.videos;
-
-CREATE TABLE dbggclt.videos (
+CREATE TABLE dbggclt.video (
 	id bigserial NOT NULL,
 	usuario_id uuid NULL,
 	campeonato_mensal_id int4 NULL,
@@ -19,5 +13,5 @@ CREATE TABLE dbggclt.videos (
 	data_publicacao timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	data_cadastro timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	status int2 NULL,
-	CONSTRAINT videos_pkey PRIMARY KEY (id)
+	CONSTRAINT video_pkey PRIMARY KEY (id)
 );
