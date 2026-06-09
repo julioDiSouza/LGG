@@ -4,9 +4,9 @@ using LGG.Aplicacao.Library.Dtos;
 using LGG.Dominio.Library.Entidades;
 using LGG.Global.Library.Enumeradores;
 using Microsoft.Extensions.Configuration;
-using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Commands;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.Aplicacao.Library.Mediator.Usuarios.Handlers
 {

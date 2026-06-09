@@ -1,8 +1,8 @@
 using LGG.Email.Worker;
 using LGG.Infraestrutura.Library.RabbitMq;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
-using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Infraestrutura.Library.Email;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 var builder = Host.CreateApplicationBuilder(args);
 

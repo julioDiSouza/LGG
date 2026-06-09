@@ -1,9 +1,4 @@
-﻿using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo;
-using LGG.Dominio.Library.Interfaces.IRepositorios.ICampeonatoMensal;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoBalde;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoEstatistica;
+﻿using LGG.Dominio.Library.Interfaces.IRepositorios;
 
 namespace LGG.Dominio.Library.Interfaces.IDatabase
 {

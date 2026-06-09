@@ -5,10 +5,10 @@ using LGG.Aplicacao.Library.Helpers;
 using LGG.Global.Library.Enumeradores;
 using LGG.Aplicacao.Library.Dtos.Youtube;
 using LGG.Dominio.Library.Interfaces.IDatabase;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
 using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Queries;
 using LGG.Aplicacao.Library.Mediator.CampeonaMensal.Queries;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
 {

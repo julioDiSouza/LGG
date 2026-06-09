@@ -1,8 +1,8 @@
 using LGG.VideoCiclo.Worker;
 using LGG.Infraestrutura.Library.Database;
-using LGG.Infraestrutura.Library.VideoCiclo_;
 using LGG.Dominio.Library.Interfaces.IDatabase;
-using LGG.Aplicacao.Library.Interfaces.IVideoCiclo;
+using LGG.Infraestrutura.Library.Services;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 var builder = Host.CreateApplicationBuilder(args);
 

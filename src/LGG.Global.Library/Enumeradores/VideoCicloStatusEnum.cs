@@ -8,6 +8,8 @@ namespace LGG.Global.Library.Enumeradores
         ProcessandoBalde,
         [Description("Processando Métricas")]
         ProcessandoMetricas,
+        [Description("Processando Top 10")]
+        ProcessandoTopDez,
         [Description("Concluído")]
         Concluido
     }

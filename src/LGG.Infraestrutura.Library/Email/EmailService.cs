@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using LGG.Global.Library.Enumeradores;
 using LGG.Aplicacao.Library.Criptografia;
 using Microsoft.Extensions.Configuration;
-using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.Infraestrutura.Library.Email
 {

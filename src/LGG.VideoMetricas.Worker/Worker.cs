@@ -1,6 +1,5 @@
 using LGG.Aplicacao.Library.Helpers;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
-using LGG.Aplicacao.Library.Interfaces.IVideoMetricas;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.VideoMetricas.Worker
 {

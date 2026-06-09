@@ -1,12 +1,10 @@
 using LGG.Canal.Worker;
-using LGG.Infraestrutura.Library.Http;
-using LGG.Infraestrutura.Library.Youtube;
 using LGG.Infraestrutura.Library.Database;
 using LGG.Infraestrutura.Library.RabbitMq;
-using LGG.Aplicacao.Library.Interfaces.IHttp;
 using LGG.Dominio.Library.Interfaces.IDatabase;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
+using LGG.Infraestrutura.Library.Services;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 var builder = Host.CreateApplicationBuilder(args);
 
