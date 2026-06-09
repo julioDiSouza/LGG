@@ -3,8 +3,8 @@ using LGG.Aplicacao.Library.Dtos;
 using LGG.Global.Library.Extensoes;
 using LGG.Global.Library.Enumeradores;
 using LGG.Infraestrutura.Library.Email;
-using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.Email.Worker
 {

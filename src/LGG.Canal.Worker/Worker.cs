@@ -1,7 +1,7 @@
 using LGG.Aplicacao.Library.Dtos;
 using LGG.Aplicacao.Library.Dtos.Youtube;
 using LGG.Aplicacao.Library.Interfaces.IRabbitMq;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 using LGG.Global.Library.Enumeradores;
 using LGG.Global.Library.Extensoes;
 

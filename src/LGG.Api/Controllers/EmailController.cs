@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using LGG.Global.Library.Extensoes;
 using LGG.Global.Library.Enumeradores;
 using Microsoft.AspNetCore.Authorization;
-using LGG.Aplicacao.Library.Interfaces.IEmail;
 using LGG.Aplicacao.Library.Mediator.Usuarios.Queries;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.Api.Controllers
 {

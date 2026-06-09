@@ -1,17 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using LGG.Infraestrutura.Library.Repositorios;
 using LGG.Dominio.Library.Interfaces.IDatabase;
-using LGG.Infraestrutura.Library.Repositorios.Video_;
-using LGG.Infraestrutura.Library.Repositorios.Usuario_;
-using LGG.Infraestrutura.Library.Repositorios.VideoCiclo_;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
-using LGG.Infraestrutura.Library.Repositorios.VideoBalde_;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IUsuario;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoBalde;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoCiclo;
-using LGG.Infraestrutura.Library.Repositorios.VideoEstatistica_;
-using LGG.Infraestrutura.Library.Repositorios.CampeonatoMensal_;
-using LGG.Dominio.Library.Interfaces.IRepositorios.ICampeonatoMensal;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideoEstatistica;
+using LGG.Dominio.Library.Interfaces.IRepositorios;
 
 namespace LGG.Infraestrutura.Library.Database
 {

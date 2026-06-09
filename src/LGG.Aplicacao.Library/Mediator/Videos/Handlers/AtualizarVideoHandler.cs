@@ -1,7 +1,6 @@
+using MediatR;
 using LGG.Aplicacao.Library.Dtos;
 using LGG.Aplicacao.Library.Mediator.Videos.Commands;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
-using MediatR;
 
 namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
 {

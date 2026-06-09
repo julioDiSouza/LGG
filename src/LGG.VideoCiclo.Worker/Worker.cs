@@ -1,4 +1,4 @@
-using LGG.Aplicacao.Library.Interfaces.IVideoCiclo;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 
 namespace LGG.VideoCiclo.Worker
 {
@@ -28,7 +28,8 @@ namespace LGG.VideoCiclo.Worker
                     {
 						await _videoCicloService.IniciarCicloAsync(campeonatoMensal);
 						await _videoCicloService.PopularBaldeAsync();
-						await _videoCicloService.ProcessarTopDezAsync();
+                        await _videoCicloService.FinalizarMetricasAsync();
+                        await _videoCicloService.ProcessarTopDezAsync();
 					}
 				}
                 catch (Exception ex)

@@ -1,11 +1,7 @@
-using LGG.Aplicacao.Library.Interfaces.IHttp;
-using LGG.Aplicacao.Library.Interfaces.IVideoMetricas;
-using LGG.Aplicacao.Library.Interfaces.IYoutube;
+using LGG.Aplicacao.Library.Interfaces.IServices;
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Infraestrutura.Library.Database;
-using LGG.Infraestrutura.Library.Http;
-using LGG.Infraestrutura.Library.VideoMetricas;
-using LGG.Infraestrutura.Library.Youtube;
+using LGG.Infraestrutura.Library.Services;
 using LGG.VideoMetricas.Worker;
 
 var builder = Host.CreateApplicationBuilder(args);

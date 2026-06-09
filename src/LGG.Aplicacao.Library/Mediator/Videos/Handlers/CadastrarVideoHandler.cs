@@ -1,10 +1,9 @@
-using LGG.Aplicacao.Library.Dtos;
-using LGG.Aplicacao.Library.Mediator.Videos.Commands;
-using LGG.Dominio.Library.Entidades;
-using LGG.Dominio.Library.Interfaces.IRepositorios.IVideo;
-using LGG.Global.Library.Erros;
-using LGG.Global.Library.Enumeradores;
 using MediatR;
+using LGG.Global.Library.Erros;
+using LGG.Aplicacao.Library.Dtos;
+using LGG.Dominio.Library.Entidades;
+using LGG.Global.Library.Enumeradores;
+using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 
 namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
 {
