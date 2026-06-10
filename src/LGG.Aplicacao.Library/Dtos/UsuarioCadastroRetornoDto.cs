@@ -2,7 +2,7 @@
 
 namespace LGG.Aplicacao.Library.Dtos
 {
-    public class UsuarioCadastroRetornoDto : ErroDto
+    public class UsuarioCadastroRetornoDto : MensagemDto
     {
         public string UsuarioId { get; set; } = string.Empty;
         public string Nome { get; set; } = string.Empty;

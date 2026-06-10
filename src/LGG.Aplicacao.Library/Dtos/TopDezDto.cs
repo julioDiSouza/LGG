@@ -1,6 +1,6 @@
 ﻿namespace LGG.Aplicacao.Library.Dtos
 {
-    public class TopDezDto
+    public class TopDezDto : MensagemDto
     {
         public long VideoCicloId { get; set; }
         public int CampeonatoMensalId { get; set; }

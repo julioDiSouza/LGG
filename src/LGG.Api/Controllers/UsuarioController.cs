@@ -37,8 +37,8 @@ namespace LGG.Api.Controllers
             if (retorno is null)
                 return StatusCode(500, SistemaEnum.UsuarioFalhaCadastro.ObterDescricao());
 
-            if (retorno?.Erro != null)
-                return Conflict(retorno.Erro.Mensagem);
+            if (retorno?.Mensagem != null)
+                return Conflict(retorno.Mensagem.Descricao);
 
             return Ok(retorno);
         }

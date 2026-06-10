@@ -57,7 +57,7 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             video.Url = request.Link;
             video = await _ut.VideoRepositorio.AdicionarAsync(video);
 
-            return SistemaEnum.SolicitacaoProcessadaSucesso;
+            return SistemaEnum.ProcessadoSucesso;
         }
 
         private bool VideoValido(VideoListResponseDto? video, string codigoVideo)

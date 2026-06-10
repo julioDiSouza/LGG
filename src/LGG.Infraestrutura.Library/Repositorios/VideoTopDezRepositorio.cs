@@ -15,11 +15,10 @@ namespace LGG.Infraestrutura.Library.Repositorios
         }
 
         /// <summary>
-        /// Obtém os vídeos top 10 de um campeonato mensal específico
+        /// Obtém os vídeos top 10
         /// </summary>
-        /// <param name="campeonatoMensalId">Id do campeonato mensal</param>
-        /// <returns>Lista de vídeos top 10 do campeonato</returns>
-        public async Task<List<VideoTopDez>> ObterPorCampeonatoMensalIdAsync(int campeonatoMensalId, long videoCicloId)
+        /// <returns></returns>
+        public async Task<List<VideoTopDez>> ObterAsync()
         {
             const string sql = @"
                 SELECT  id, 
@@ -35,19 +34,16 @@ namespace LGG.Infraestrutura.Library.Repositorios
                         url_imagem as UrlImagem,
                         data_cadastro as DataCadastro 
                 FROM    video_top_dez 
-                WHERE   campeonato_mensal_id = @CampeonatoMensalId 
-                AND     video_ciclo_id = @VideoCicloId 
-                ORDER BY qtd_like DESC, qtd_view DESC;";
+                WHERE   (campeonato_mensal_id, video_ciclo_id) = (
+                        SELECT  campeonato_mensal_id, video_ciclo_id
+                        FROM    dbggclt.video_top_dez
+                        ORDER   BY campeonato_mensal_id DESC, video_ciclo_id DESC
+                        LIMIT 1
+                        );";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                var videos = await connection.QueryAsync<VideoTopDez>(
-                    sql, 
-                    new 
-                    { 
-                        CampeonatoMensalId = campeonatoMensalId,  
-                        VideoCicloId = videoCicloId
-                    });
+                var videos = await connection.QueryAsync<VideoTopDez>(sql);
 
                 return videos.ToList();
             }

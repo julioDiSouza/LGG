@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using LGG.Global.Library.Erros;
+using LGG.Global.Library.Mensagem;
 using LGG.Aplicacao.Library.Dtos;
 using LGG.Dominio.Library.Entidades;
 using LGG.Global.Library.Enumeradores;
@@ -32,7 +32,7 @@ namespace LGG.Aplicacao.Library.Mediator.Usuarios.Handlers
             if (usuario != null)
             {
                 var usuarioExistente = new UsuarioCadastroRetornoDto();
-                    usuarioExistente.Erro = new Erro(SistemaEnum.EmailJaCadastrado);
+                    usuarioExistente.Mensagem = new Mensagem(SistemaEnum.EmailJaCadastrado);
 
                 return usuarioExistente;
             }

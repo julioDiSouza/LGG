@@ -4,7 +4,7 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios
 {
     public interface IVideoTopDezRepositorio
     {
-        Task<List<VideoTopDez>> ObterPorCampeonatoMensalIdAsync(int campeonatoMensalId, long videoCicloId);
+        Task<List<VideoTopDez>> ObterAsync();
         Task AdicionarAsync(VideoTopDez videoTopDez);
     }
 }
