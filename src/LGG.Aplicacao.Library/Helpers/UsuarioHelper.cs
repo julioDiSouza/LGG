@@ -63,7 +63,7 @@ namespace LGG.Aplicacao.Library.Helpers
             dto.DataNascimento = usuario.DataNascimento;
             dto.Tipo = usuario.Tipo;
             dto.Status = usuario.Status;
-            dto.CodigoVideo = usuario.CodigoVideo;
+            dto.CodigoVideo = $"[LGG:{usuario.CodigoVideo}]";
 
             return dto;
         }

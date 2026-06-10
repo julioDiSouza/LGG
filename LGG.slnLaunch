@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "Novo Perfil",
+    "Projects": [
+      {
+        "Path": "src\\LGG.VideoCiclo.Worker\\LGG.VideoCiclo.Worker.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\LGG.VideoMetricas.Worker\\LGG.VideoMetricas.Worker.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\LGG.Api\\LGG.Api.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -20,11 +20,13 @@ namespace LGG.Infraestrutura.Library.Services
         public async Task<CampeonatoMensal?> ObterCampeonatoVigenteAsync() 
             => await _ut.CampeonatoMensalRepositorio.ObterVigenteAsync();
 
-        public async Task IniciarCicloAsync(CampeonatoMensal campeonatoMensal)
+        public async Task IniciarCicloAsync(CampeonatoMensal campeonatoMensal, int intervaloCicloSegundos)
         {
             var ultimoCiclo = await _ut.VideoCicloRepositorio.ObterUltimoVideoCicloAsync();
 
-            if(ultimoCiclo == null || ultimoCiclo.Status == VideoCicloStatusEnum.Concluido)
+            if(ultimoCiclo == null ||
+                (ultimoCiclo.Status == VideoCicloStatusEnum.Concluido && 
+                (DateTime.Now - ultimoCiclo.DataStatus).TotalSeconds >= intervaloCicloSegundos))
             {
                 var videoCiclo = new VideoCiclo();
                 var dataAtual = DateTime.Now;
@@ -96,12 +98,35 @@ namespace LGG.Infraestrutura.Library.Services
 
             if (ultimoCiclo != null && ultimoCiclo.Status == VideoCicloStatusEnum.ProcessandoTopDez)
             {
-                _logger.LogInformation("##=> TODO Top 10.");
                 var videosEstatisticas = await _ut.VideoEstatisticaRepositorio.ObterTopDezAsync(ultimoCiclo.Id);
                 foreach (var videoEstatistica in videosEstatisticas)
                 {
-                    var video = await _ut.VideoRepositorio.ObterPorIdAsync(videoEstatistica.Id);
+                    var video = await _ut.VideoRepositorio.ObterPorIdAsync(videoEstatistica.VideoId);
+                    var usuario = await _ut.UsuarioRepositorio.ObterPorIdAsync(video.UsuarioId);
+
+                    var videoTopDez = new VideoTopDez
+                    {
+                        VideoId = video.Id,
+                        VideoCicloId = ultimoCiclo.Id,
+                        UsuarioId = video.UsuarioId,
+                        UsuarioNome = usuario!.Nome,
+                        CampeonatoMensalId = ultimoCiclo.CampeonatoMensalId,
+                        Titulo = video.Titulo,
+                        Url = video.Url,
+                        QtdView = videoEstatistica.QtdView,
+                        QtdLike = videoEstatistica.QtdLike,
+                        UrlImagem = video.UrlImagem,
+                        DataCadastro = DateTime.Now
+                    };
+
+                    await _ut.VideoTopDezRepositorio.AdicionarAsync(videoTopDez);
                 }
+
+                await _ut.VideoCicloRepositorio.AtualizarStatusAsync(
+                        ultimoCiclo.Id,
+                        ultimoCiclo.CampeonatoMensalId,
+                        VideoCicloStatusEnum.Concluido
+                    );
             }
         }
     }

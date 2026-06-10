@@ -7,12 +7,14 @@ namespace LGG.VideoCiclo.Worker
         private readonly ILogger<Worker> _logger;
         private readonly IVideoCicloService _videoCicloService;
         private readonly int _intervaloExecucaoSegundos;
+        private readonly int _intervaloCicloSegundos;
 
         public Worker(ILogger<Worker> logger, IConfiguration configuration, IVideoCicloService videoCicloService)
         {
             _logger = logger;
             _videoCicloService = videoCicloService;
             _intervaloExecucaoSegundos = configuration.GetValue<int>("IntervaloExecucaoSegundos", 30) * 1000;
+            _intervaloCicloSegundos = configuration.GetValue<int>("IntervaloCicloSegundos", 60);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -26,7 +28,7 @@ namespace LGG.VideoCiclo.Worker
 					var campeonatoMensal = await _videoCicloService.ObterCampeonatoVigenteAsync();
                     if (campeonatoMensal != null)
                     {
-						await _videoCicloService.IniciarCicloAsync(campeonatoMensal);
+						await _videoCicloService.IniciarCicloAsync(campeonatoMensal, _intervaloCicloSegundos);
 						await _videoCicloService.PopularBaldeAsync();
                         await _videoCicloService.FinalizarMetricasAsync();
                         await _videoCicloService.ProcessarTopDezAsync();

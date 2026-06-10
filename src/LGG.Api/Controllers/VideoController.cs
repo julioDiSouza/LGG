@@ -6,6 +6,7 @@ using LGG.Global.Library.Extensoes;
 using LGG.Aplicacao.Library.Helpers;
 using LGG.Global.Library.Enumeradores;
 using Microsoft.AspNetCore.Authorization;
+using LGG.Aplicacao.Library.Mediator.Videos.Queries;
 
 namespace LGG.Api.Controllers
 {
@@ -38,6 +39,15 @@ namespace LGG.Api.Controllers
             return NotFound(resposta.ObterObjetoCodigoDescricao());
         }
 
+        [HttpGet("ConsultarTopDez")]
+        [ProducesResponseType(typeof(List<VideoConsultaDto>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<List<VideoConsultaDto>>> ConsultarTopDezAsync()
+        {
+            var resultado = await _mediator.Send(new ObterTopDezQuery());
+            return Ok(resultado);
+        }
+
+        /* Feitos pela .I.A verificar necessidade 
         [HttpPost("Cadastro")]
         [ProducesResponseType(typeof(VideoCadastroRetornoDto), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ErroDto), (int)HttpStatusCode.BadRequest)]
@@ -71,7 +81,7 @@ namespace LGG.Api.Controllers
         [ProducesResponseType(typeof(List<VideoConsultaDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<List<VideoConsultaDto>>> ConsultarTodosAsync()
         {
-            var resultado = await _mediator.Send(new LGG.Aplicacao.Library.Mediator.Videos.Queries.ObterTodosVideosQuery());
+            var resultado = await _mediator.Send(new ObterTodosVideosQuery());
             return Ok(resultado);
         }
 
@@ -100,5 +110,6 @@ namespace LGG.Api.Controllers
             await _mediator.Send(VideoHelper.ComandoApagar(id));
             return NoContent();
         }
+        */
     }
 }
