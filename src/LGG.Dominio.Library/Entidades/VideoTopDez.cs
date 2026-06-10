@@ -6,6 +6,7 @@
         public long VideoId { get; set; }
         public long VideoCicloId { get; set; }
         public Guid UsuarioId { get; set; }
+        public string UsuarioNome { get; set; } = string.Empty;
         public int CampeonatoMensalId { get; set; }
         public string Titulo { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;

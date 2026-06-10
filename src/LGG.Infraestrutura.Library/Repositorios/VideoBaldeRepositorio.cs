@@ -140,7 +140,7 @@ namespace LGG.Infraestrutura.Library.Repositorios
                     commandType: CommandType.Text
                 );
 
-                return qtdBalde == qtdStats;
+                return (qtdBalde == qtdStats) && (qtdBalde > 0) && (qtdStats > 0);
             }
         }
     }

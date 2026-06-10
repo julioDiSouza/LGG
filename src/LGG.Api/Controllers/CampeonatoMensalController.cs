@@ -43,6 +43,7 @@ namespace LGG.Api.Controllers
             return Ok(retorno);
         }
 
+        /* Feitos por .I.A verificar necessidade
         /// <summary>
         /// Obtém um campeonato mensal pelo ID
         /// </summary>
@@ -122,5 +123,6 @@ namespace LGG.Api.Controllers
 
             return NoContent();
         }
+        */
     }
 }

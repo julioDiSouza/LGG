@@ -10,5 +10,6 @@ namespace LGG.Dominio.Library.Interfaces.IDatabase
         IVideoCicloRepositorio VideoCicloRepositorio { get; }
         IVideoBaldeRepositorio VideoBaldeRepositorio { get; }
         IVideoEstatisticaRepositorio VideoEstatisticaRepositorio { get; }
+        IVideoTopDezRepositorio VideoTopDezRepositorio { get; }
     }
 }
