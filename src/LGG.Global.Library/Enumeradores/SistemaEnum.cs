@@ -6,10 +6,10 @@ namespace LGG.Global.Library.Enumeradores
     {
         #region Sucesso
 
+        [Description("Processado com sucesso.")]
+        ProcessadoSucesso = 200,
         [Description("Api funcionando.")]
-        ApiFuncionando = 2001,
-        [Description("Solicitação processada com sucesso.")]
-        SolicitacaoProcessadaSucesso = 2200,
+        ApiFuncionando = 2000,
 
         #endregion Fim - Sucesso
 
@@ -50,7 +50,7 @@ namespace LGG.Global.Library.Enumeradores
         [Description("Falha ao solicitar validação do canal.")]
         ErroValidarKey = 5003,
         [Description("Erro interno.")]
-        ErroInterno = 5500,
+        ErroInterno = 500,
 
         #endregion Fim - Erros
     }

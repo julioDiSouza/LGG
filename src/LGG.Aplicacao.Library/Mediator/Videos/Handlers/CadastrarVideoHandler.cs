@@ -1,5 +1,5 @@
 using MediatR;
-using LGG.Global.Library.Erros;
+using LGG.Global.Library.Mensagem;
 using LGG.Aplicacao.Library.Dtos;
 using LGG.Dominio.Library.Entidades;
 using LGG.Global.Library.Enumeradores;
@@ -35,7 +35,7 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             {
                 return new VideoCadastroRetornoDto
                 {
-                    Erro = new Erro(SistemaEnum.ErroInterno)
+                    Mensagem = new Mensagem(SistemaEnum.ErroInterno)
                 };
             }
         }

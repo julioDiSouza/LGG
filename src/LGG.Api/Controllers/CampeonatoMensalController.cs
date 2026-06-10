@@ -37,8 +37,8 @@ namespace LGG.Api.Controllers
             if (retorno is null)
                 return StatusCode(500, "Falha ao cadastrar campeonato mensal");
 
-            if (retorno?.Erro != null)
-                return Conflict(retorno.Erro.Mensagem);
+            if (retorno?.Mensagem != null)
+                return Conflict(retorno.Mensagem.Descricao);
 
             return Ok(retorno);
         }

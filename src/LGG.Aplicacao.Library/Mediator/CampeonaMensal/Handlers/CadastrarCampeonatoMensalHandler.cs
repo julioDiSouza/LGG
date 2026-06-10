@@ -1,6 +1,6 @@
 using MediatR;
-using LGG.Global.Library.Erros;
 using LGG.Aplicacao.Library.Dtos;
+using LGG.Global.Library.Mensagem;
 using LGG.Dominio.Library.Entidades;
 using LGG.Global.Library.Enumeradores;
 using LGG.Dominio.Library.Interfaces.IDatabase;
@@ -24,7 +24,7 @@ namespace LGG.Aplicacao.Library.Mediator.CampeonaMensal.Handlers
             if (campeonatoExistente != null)
             {
                 var retornoErro = new CampeonatoMensalCadastroRetornoDto();
-                retornoErro.Erro = new Erro(SistemaEnum.CampeonatoMensalJaCadastrado);
+                retornoErro.Mensagem = new Mensagem(SistemaEnum.CampeonatoMensalJaCadastrado);
 
                 return retornoErro;
             }

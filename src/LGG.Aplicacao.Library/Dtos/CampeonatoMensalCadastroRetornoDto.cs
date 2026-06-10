@@ -2,7 +2,7 @@ using LGG.Global.Library.Enumeradores;
 
 namespace LGG.Aplicacao.Library.Dtos
 {
-    public class CampeonatoMensalCadastroRetornoDto : ErroDto
+    public class CampeonatoMensalCadastroRetornoDto : MensagemDto
     {
         public int Id { get; set; }
         public MesEnum Mes { get; set; }

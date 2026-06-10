@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using LGG.Aplicacao.Library.Dtos;
-using LGG.Dominio.Library.Entidades;
+using LGG.Global.Library.Mensagem;
+using LGG.Global.Library.Enumeradores;
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Aplicacao.Library.Mediator.Videos.Queries;
 
@@ -22,8 +23,7 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             if (campeonatoMensal == null)
                 return new TopDezDto();
 
-            var ultimoCiclo = await _ut.VideoCicloRepositorio.ObterUltimoVideoCicloAsync();
-            var videosTopDez = await ObterTopDezAtualAsync(campeonatoMensal!.Id, ultimoCiclo!.Id);
+            var videosTopDez = await _ut.VideoTopDezRepositorio.ObterAsync();
 
             var topDezDto = new TopDezDto();
             topDezDto.CampeonatoMensalId = campeonatoMensal.Id;
@@ -49,17 +49,9 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
                 posicao++;
             }
 
+            topDezDto.Mensagem = new Mensagem(SistemaEnum.ProcessadoSucesso);
+
             return topDezDto;
-        }
-
-        private async Task<List<VideoTopDez>> ObterTopDezAtualAsync(int campeonatoMensalId, long videoCicloId)
-        {
-            if (videoCicloId <= 0)
-                return new List<VideoTopDez>();
-
-            var videosTopDez = await _ut.VideoTopDezRepositorio.ObterPorCampeonatoMensalIdAsync(campeonatoMensalId, videoCicloId);
-
-            return videosTopDez.Any() ? videosTopDez : await ObterTopDezAtualAsync(campeonatoMensalId, videoCicloId - 1);
         }
     }
 }

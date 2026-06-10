@@ -1,8 +1,6 @@
-using LGG.Global.Library.Erros;
-
 namespace LGG.Aplicacao.Library.Dtos
 {
-    public class VideoCadastroRetornoDto : ErroDto
+    public class VideoCadastroRetornoDto : MensagemDto
     {
         public long Id { get; set; }
         public string Titulo { get; set; }
