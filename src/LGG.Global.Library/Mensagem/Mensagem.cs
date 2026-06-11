@@ -25,7 +25,7 @@ namespace LGG.Global.Library.Mensagem
         {
             switch (msgEnum)
             {
-                case SistemaEnum.ProcessadoSucesso:
+                case SistemaEnum.Sucesso:
                 case SistemaEnum.ApiFuncionando:
                     return true;
                 default:

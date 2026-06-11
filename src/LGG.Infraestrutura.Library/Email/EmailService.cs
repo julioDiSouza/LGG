@@ -59,7 +59,7 @@ namespace LGG.Infraestrutura.Library.Email
                     return (valido, emailConfirmacao);
 
                 if (emailConfirmacao != null && 
-                    emailConfirmacao.Frase == EmailEnum.EmailValidacao.ObterDescricao())
+                    emailConfirmacao.Frase == EmailEnum.Confirmacao.ObterDescricao())
                 {
                     valido = true;       
                 }

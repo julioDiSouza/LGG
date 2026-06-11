@@ -49,7 +49,7 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
                 posicao++;
             }
 
-            topDezDto.Mensagem = new Mensagem(SistemaEnum.ProcessadoSucesso);
+            topDezDto.Mensagem = new Mensagem(SistemaEnum.Sucesso);
 
             return topDezDto;
         }
