@@ -53,7 +53,7 @@ namespace LGG.Email.Worker
                     return MsgResultadoEnum.Discard;
 
                 string url = $"{_lggEndereco}/Email/cadastro_confirmacao";
-                var emailConfirmacao = new EmailConfirmacaoDto(msgEmail.UsuarioId, msgEmail.Email, EmailEnum.EmailValidacao.ObterDescricao());
+                var emailConfirmacao = new EmailConfirmacaoDto(msgEmail.UsuarioId, msgEmail.Email, EmailEnum.Confirmacao.ObterDescricao());
                 string emailKey = _emailService.CriarEmailKey(emailConfirmacao!);
                 string html = EmailConteudo.EmailConteudoCadastro(url, HttpUtility.UrlEncode(emailKey));
 

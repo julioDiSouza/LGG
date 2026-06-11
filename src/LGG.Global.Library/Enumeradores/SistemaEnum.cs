@@ -7,7 +7,7 @@ namespace LGG.Global.Library.Enumeradores
         #region Sucesso
 
         [Description("Processado com sucesso.")]
-        ProcessadoSucesso = 200,
+        Sucesso = 200,
         [Description("Api funcionando.")]
         ApiFuncionando = 2000,
 

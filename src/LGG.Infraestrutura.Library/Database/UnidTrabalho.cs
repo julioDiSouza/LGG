@@ -14,6 +14,7 @@ namespace LGG.Infraestrutura.Library.Database
         private IVideoBaldeRepositorio? _videoBaldeRepositorio;
         private IVideoEstatisticaRepositorio? _videoEstatisticaRepositorio;
         private IVideoTopDezRepositorio? _videoTopDezRepositorio;
+        private IEmailBaldeRepositorio? _emailBaldeRepositorio;
 
         private readonly string _dapperString;
 
@@ -29,5 +30,6 @@ namespace LGG.Infraestrutura.Library.Database
         public IVideoBaldeRepositorio VideoBaldeRepositorio => _videoBaldeRepositorio ??= new VideoBaldeRepositorio(_dapperString);
         public IVideoEstatisticaRepositorio VideoEstatisticaRepositorio => _videoEstatisticaRepositorio ??= new VideoEstatisticaRepositorio(_dapperString);
         public IVideoTopDezRepositorio VideoTopDezRepositorio => _videoTopDezRepositorio ??= new VideoTopDezRepositorio(_dapperString);
+        public IEmailBaldeRepositorio EmailBaldeRepositorio => _emailBaldeRepositorio ??= new EmailBaldeRepositorio (_dapperString);
     }
 }

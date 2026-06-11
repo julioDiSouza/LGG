@@ -37,10 +37,10 @@ namespace LGG.Api.Controllers
             if (retorno is null)
                 return StatusCode(500, SistemaEnum.UsuarioFalhaCadastro.ObterDescricao());
 
-            if (retorno?.Mensagem != null)
-                return Conflict(retorno.Mensagem.Descricao);
+            if (retorno.Mensagem.Sucesso)
+                return Ok(retorno);
 
-            return Ok(retorno);
+            return Conflict(retorno);
         }
 
         [HttpGet("{id}")]

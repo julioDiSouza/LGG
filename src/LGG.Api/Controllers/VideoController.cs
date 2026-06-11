@@ -33,13 +33,13 @@ namespace LGG.Api.Controllers
 
             var resposta = await _mediator.Send(video.ComandoPublicar());
 
-            if (resposta == SistemaEnum.ProcessadoSucesso)
+            if (resposta == SistemaEnum.Sucesso)
                 return Ok(resposta.ObterObjetoCodigoDescricao());
 
             return NotFound(resposta.ObterObjetoCodigoDescricao());
         }
 
-        [HttpGet("ConsultarTopDez")]
+        [HttpGet("consultar_top_dez")]
         [ProducesResponseType(typeof(List<VideoConsultaDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<List<VideoConsultaDto>>> ConsultarTopDezAsync()
         {

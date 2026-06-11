@@ -4,7 +4,11 @@ namespace LGG.Global.Library.Enumeradores
 {
     public enum EmailEnum
     {
-        [Description("EmailValidacao")]
-        EmailValidacao
+        [Description("Confirmação")]
+        Confirmacao,
+        [Description("Recuperação de senha")]
+        RecuperacaoSenha,
+        [Description("Campeão mensal")]
+        CampeaoMensal
     }
 }

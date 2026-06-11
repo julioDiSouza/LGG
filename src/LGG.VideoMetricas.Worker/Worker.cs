@@ -35,11 +35,11 @@ namespace LGG.VideoMetricas.Worker
                             var videoResponseDto = await _youtubeService.ObterVideosPorIdAsync(videoBalde!.VideoIdYt);
                             if (videoResponseDto!.Items!.Any())
                             {
-                                var videoEstatistiva = videoResponseDto.ConverterParaVideoEstatistica();
-                                videoEstatistiva.VideoId = videoBalde.VideoId;
-                                videoEstatistiva.VideoCicloId = videoBalde.VideoCicloId;
+                                var videoEstatistica = videoResponseDto.ConverterParaVideoEstatistica();
+                                videoEstatistica.VideoId = videoBalde.VideoId;
+                                videoEstatistica.VideoCicloId = videoBalde.VideoCicloId;
 
-                                await _videoMetricasService.AdicionarVideoEstatisticaAsync(videoEstatistiva);
+                                await _videoMetricasService.AdicionarVideoEstatisticaAsync(videoEstatistica);
                             }
                         }
                     }
