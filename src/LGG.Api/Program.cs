@@ -8,7 +8,6 @@ using LGG.Aplicacao.Library.Mediator.Videos.Commands;
 using LGG.Aplicacao.Library.Validadores;
 using LGG.Dominio.Library.Interfaces.IDatabase;
 using LGG.Infraestrutura.Library.Database;
-using LGG.Infraestrutura.Library.Email;
 using LGG.Infraestrutura.Library.RabbitMq;
 using LGG.Infraestrutura.Library.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

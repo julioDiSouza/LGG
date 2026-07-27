@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿ using Microsoft.Extensions.Logging;
 using LGG.Dominio.Library.Entidades;
 using LGG.Global.Library.Enumeradores;
 using LGG.Dominio.Library.Interfaces.IDatabase;

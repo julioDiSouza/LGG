@@ -5,5 +5,6 @@ namespace LGG.Dominio.Library.Interfaces.IRepositorios
     public interface IEmailBaldeRepositorio
     {
         Task AdicionarAsync(EmailBalde emailBalde);
+        Task<IEnumerable<EmailBalde>> ObterEmailsBaldeAsync(int qtd);
     }
 }
