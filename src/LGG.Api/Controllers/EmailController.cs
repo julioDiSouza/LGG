@@ -35,7 +35,7 @@ namespace LGG.Api.Controllers
 
                 if (keyValida)
                 {
-                    var (usuarioValido, token) = await _mediator.Send(new ValidarUsuarioQuery(emailConfirmacao!.Id, emailConfirmacao.Email));
+                    var (usuarioValido, token) = await _mediator.Send(new ValidarUsuarioQuery(emailConfirmacao!.UsuarioId, emailConfirmacao.Email));
 
                     if (usuarioValido)
                         return Ok(token);
