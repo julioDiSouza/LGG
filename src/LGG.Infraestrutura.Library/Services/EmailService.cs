@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using LGG.Aplicacao.Library.Dtos;
 using LGG.Global.Library.Extensoes;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ namespace LGG.Infraestrutura.Library.Services
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IUnidTrabalho _ut;
         private readonly IBrevoService _brevo;
 
@@ -24,6 +26,7 @@ namespace LGG.Infraestrutura.Library.Services
             IUnidTrabalho ut, IBrevoService brevo)
         {
             _logger = logger;
+            _configuration = configuration;
             _ut = ut;
             _brevo = brevo;
             _emailCryptoKey = configuration["Criptografia:Email:ChaveEmail"]!.ToString();
@@ -49,11 +52,13 @@ namespace LGG.Infraestrutura.Library.Services
                     emailBalde.Tipo.ObterDescricao());
 
                 var token = CriarEmailKey(emailToken);
+                token = WebUtility.UrlEncode(token);
 
                 switch (emailBalde.Tipo)
                 {
                     case EmailEnum.Confirmacao:
-                        conteudo = EmailConteudo.EmailConteudoCadastro2(destino, token).Replace("\r\n","");
+                        var endereco = _configuration["LGG:Endereco"]!.ToString();
+                        conteudo = EmailConteudo.EmailConteudoCadastro(endereco, token);
                         break;
                     case EmailEnum.RecuperacaoSenha:
                         break;

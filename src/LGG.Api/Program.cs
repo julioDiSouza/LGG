@@ -26,6 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUnidTrabalho, UnidTrabalho>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IYoutubeService, YoutubeService>();
+builder.Services.AddScoped<IBrevoService, BrevoService>();
 builder.Services.AddHttpClient<IHttpService, HttpService>();
 
 #region Configuracao JWT
