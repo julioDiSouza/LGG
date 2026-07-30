@@ -63,7 +63,7 @@ namespace LGG.Infraestrutura.Library.Services
 
                     await _ut.VideoBaldeRepositorio.AdicionarAsync(videosBalde);
                 }
-                else
+                else if (ids.Any())
                 {
                     await _ut.VideoCicloRepositorio.AtualizarStatusAsync(
                         ultimoCiclo.Id, 
