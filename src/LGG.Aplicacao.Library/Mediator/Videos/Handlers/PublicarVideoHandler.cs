@@ -67,11 +67,10 @@ namespace LGG.Aplicacao.Library.Mediator.Videos.Handlers
             if (video == null || video.Items == null || video.Items.Count == 0)
                 return valido;
 
-            var codigoParaBuscar = $"[LGG:{codigoVideo}]";
             valido = video.Items.Any(item => 
                 item.Snippet != null && 
                 !string.IsNullOrEmpty(item.Snippet.Description) &&
-                item.Snippet.Description.Contains(codigoParaBuscar));
+                item.Snippet.Description.Contains(codigoVideo));
 
             return valido;
         }
