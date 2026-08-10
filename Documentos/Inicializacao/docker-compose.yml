@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lgg-postgres
+    profiles: ["database"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin1234}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - lgg-postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init/00-schema.sql:/docker-entrypoint-initdb.d/00-schema.sql:ro
+      - ../Sql/campeonato_mensal.sql:/docker-entrypoint-initdb.d/10-campeonato_mensal.sql:ro
+      - ../Sql/usuario.sql:/docker-entrypoint-initdb.d/20-usuario.sql:ro
+      - ../Sql/video.sql:/docker-entrypoint-initdb.d/30-video.sql:ro
+      - ../Sql/video_ciclo.sql:/docker-entrypoint-initdb.d/40-video_ciclo.sql:ro
+      - ../Sql/video_balde.sql:/docker-entrypoint-initdb.d/50-video_balde.sql:ro
+      - ../Sql/video_estatistica.sql:/docker-entrypoint-initdb.d/60-video_estatistica.sql:ro
+      - ../Sql/video_top_dez.sql:/docker-entrypoint-initdb.d/70-video_top_dez.sql:ro
+      - ../Sql/email_balde.sql:/docker-entrypoint-initdb.d/80-email_balde.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: lgg-rabbitmq
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  lgg-postgres-data:

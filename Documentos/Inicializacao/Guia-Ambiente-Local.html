@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LGG — Guia do ambiente local</title>
+  <style>
+    :root { color-scheme: light dark; font-family: Arial, sans-serif; }
+    body { max-width: 980px; margin: 36px auto; padding: 0 20px 48px; line-height: 1.55; }
+    h1, h2 { line-height: 1.2; }
+    h2 { border-bottom: 1px solid #8885; padding-bottom: 6px; margin-top: 36px; }
+    code { font-family: Consolas, monospace; }
+    pre { padding: 14px; overflow-x: auto; border: 1px solid #8885; border-radius: 6px; }
+    .notice { border-left: 4px solid #2679d9; padding: 10px 14px; background: #2679d91a; }
+    .warning { border-left: 4px solid #c78000; padding: 10px 14px; background: #c780001a; }
+  </style>
+</head>
+<body>
+  <h1>LGG — configuração do ambiente local</h1>
+  <p>Este guia registra o processo realizado e mostra como reproduzi-lo manualmente em uma máquina Windows com Docker Desktop e .NET 8.</p>
+
+  <div class="notice">
+    <strong>O que ocorreu neste ambiente:</strong> o container PostgreSQL <code>lgg-postgres</code> já existia, estava em execução na porta 5432 e foi preservado. Não foi criada uma nova imagem PostgreSQL. O schema e as tabelas LGG foram criados nessa instância vazia. O RabbitMQ não existia e foi baixado/criado a partir da imagem <code>rabbitmq:4-management-alpine</code>.
+  </div>
+
+  <h2>1. Pré-requisitos</h2>
+  <ul>
+    <li>Docker Desktop iniciado;</li>
+    <li>.NET SDK 8 instalado;</li>
+    <li>repositório LGG clonado localmente.</li>
+  </ul>
+  <pre><code>docker --version
+docker compose version
+dotnet --info
+dotnet build LGG.sln --no-restore</code></pre>
+  <p>O build da solução foi executado com êxito. Existem avisos de nulabilidade no código, mas nenhum erro de compilação.</p>
+
+  <h2>2. PostgreSQL — procedimento manual do zero</h2>
+  <p>Estas são as configurações usadas pela LGG: imagem <code>postgres:16</code>, container <code>lgg-postgres</code>, porta do host <code>5432</code>, porta do container <code>5432</code>, banco <code>postgres</code>, usuário <code>postgres</code>, senha local <code>admin1234</code>, volume <code>pgdata</code> e schema da aplicação <code>dbggclt</code>.</p>
+  <p>Se você ainda não possuir um container PostgreSQL, crie uma rede e um volume persistente, baixe/crie a imagem e então inicie o banco com exatamente essas configurações:</p>
+  <pre><code>docker network create lgg-network
+docker volume create pgdata
+docker run -d --name lgg-postgres --network lgg-network `
+  -p 5432:5432 `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_PASSWORD=admin1234 `
+  -e POSTGRES_DB=postgres `
+  -v pgdata:/var/lib/postgresql/data `
+  postgres:16</code></pre>
+  <p>Confirme que ele iniciou:</p>
+  <pre><code>docker ps
+docker logs lgg-postgres</code></pre>
+  <p>O resultado de <code>docker ps</code> deve expor <code>0.0.0.0:5432-&gt;5432/tcp</code>. Isso torna o banco acessível para a API em <code>localhost:5432</code>.</p>
+  <p>A aplicação usa, por padrão, a conexão abaixo. Se você escolher outro usuário, senha, banco ou porta, sobrescreva <code>ConnectionStrings__Postgres</code> nas configurações da aplicação.</p>
+  <pre><code>Host=localhost;Port=5432;Database=postgres;Search Path=dbggclt;Username=postgres;Password=admin1234</code></pre>
+
+  <h2>3. Criar o schema e as tabelas</h2>
+  <p>Os scripts de tabela já existiam em <code>Documentos/Sql</code>. A aplicação espera o schema <code>dbggclt</code> e as tabelas <code>campeonato_mensal</code>, <code>usuario</code>, <code>video</code>, <code>video_ciclo</code>, <code>video_balde</code>, <code>video_estatistica</code>, <code>video_top_dez</code> e <code>email_balde</code>.</p>
+  <p>A forma recomendada é executar o script adicionado ao projeto. Ele verifica se o schema já existe e, nesse caso, interrompe sem alterar a base:</p>
+  <pre><code>.\Documentos\Inicializacao\Initialize-LggDatabase.ps1</code></pre>
+  <p>Para fazer tudo manualmente, no PowerShell, a partir da raiz do repositório:</p>
+  <pre><code>$sql = "CREATE SCHEMA dbggclt;`n" + @(
+  Get-Content -Raw Documentos/Sql/campeonato_mensal.sql
+  Get-Content -Raw Documentos/Sql/usuario.sql
+  Get-Content -Raw Documentos/Sql/video.sql
+  Get-Content -Raw Documentos/Sql/video_ciclo.sql
+  Get-Content -Raw Documentos/Sql/video_balde.sql
+  Get-Content -Raw Documentos/Sql/video_estatistica.sql
+  Get-Content -Raw Documentos/Sql/video_top_dez.sql
+  Get-Content -Raw Documentos/Sql/email_balde.sql
+) -join "`n"
+$sql | docker exec -i lgg-postgres psql -v ON_ERROR_STOP=1 -U postgres -d postgres</code></pre>
+  <p>Valide o resultado:</p>
+  <pre><code>docker exec lgg-postgres psql -U postgres -d postgres -c "SELECT table_name FROM information_schema.tables WHERE table_schema = 'dbggclt' ORDER BY table_name;"</code></pre>
+  <div class="warning"><strong>Atenção:</strong> execute a criação de tabelas somente em uma base vazia ou depois de confirmar que elas ainda não existem. Os scripts originais usam <code>CREATE TABLE</code>, não <code>CREATE TABLE IF NOT EXISTS</code>.</div>
+
+  <h2>4. RabbitMQ — procedimento manual</h2>
+  <p>O RabbitMQ é usado pela API para publicar mensagens. Para criá-lo sem Compose:</p>
+  <pre><code>docker run -d --name lgg-rabbitmq --network lgg-network `
+  -p 5672:5672 -p 15672:15672 `
+  rabbitmq:4-management-alpine</code></pre>
+  <p>Confira o status e abra o painel:</p>
+  <pre><code>docker ps
+docker logs lgg-rabbitmq</code></pre>
+  <p>O broker fica em <code>localhost:5672</code>. O painel fica em <code>http://localhost:15672</code>; para acesso local, as credenciais padrão são <code>guest</code>/<code>guest</code>.</p>
+
+  <h2>5. Alternativa automatizada com Docker Compose</h2>
+  <p>Foi adicionado o arquivo <code>docker-compose.yml</code>. Por padrão ele inicia apenas o RabbitMQ, evitando conflito com o PostgreSQL <code>lgg-postgres</code> já existente:</p>
+  <pre><code>docker compose -f Documentos/Inicializacao/docker-compose.yml up -d
+docker compose -f Documentos/Inicializacao/docker-compose.yml ps</code></pre>
+  <p>Em outra máquina, sem PostgreSQL, suba também o perfil de banco. Ele monta os scripts SQL e os executa somente na primeira criação do volume:</p>
+  <pre><code>docker compose -f Documentos/Inicializacao/docker-compose.yml --profile database up -d</code></pre>
+  <p>As portas e variáveis do Compose podem ser personalizadas criando <code>Documentos/Inicializacao/.env</code> a partir de <code>Documentos/Inicializacao/.env.example</code>.</p>
+
+  <h2>6. Executar e testar a API</h2>
+  <p>O perfil da API foi ajustado para usar <code>RabbitMqSettings__HostName=localhost</code>. Assim, tanto o F5 da IDE como os comandos abaixo usam o RabbitMQ local:</p>
+  <pre><code>dotnet run --project src/LGG.Api --launch-profile http
+
+# Em outro terminal
+Invoke-WebRequest http://localhost:5212/Teste/teste_publico -UseBasicParsing</code></pre>
+  <p>Resposta esperada: <code>Api funcionando.</code> A documentação Swagger está em <code>http://localhost:5212/swagger</code> (ou <code>https://localhost:7182/swagger</code> com o perfil HTTPS).</p>
+
+  <h2>7. Executar os workers</h2>
+  <p>Cada worker roda em seu próprio terminal e faz polling a cada 15 segundos:</p>
+  <pre><code>dotnet run --project src/LGG.Email.Worker
+dotnet run --project src/LGG.VideoCiclo.Worker
+dotnet run --project src/LGG.VideoMetricas.Worker</code></pre>
+  <ul>
+    <li><strong>Email:</strong> busca itens de <code>email_balde</code> e realiza o envio.</li>
+    <li><strong>VideoCiclo:</strong> controla ciclos, preenche o balde de vídeos, finaliza métricas e gera o top 10.</li>
+    <li><strong>VideoMetricas:</strong> consulta a API do YouTube e persiste as métricas dos vídeos.</li>
+  </ul>
+
+  <h2>8. Arquivos de documentação e configuração criados</h2>
+  <ul>
+    <li><code>Documentos/Inicializacao/README.local.md</code>: guia rápido para subir, testar e parar o ambiente;</li>
+    <li><code>Documentos/Inicializacao/docker-compose.yml</code>: RabbitMQ padrão e PostgreSQL opcional pelo perfil <code>database</code>;</li>
+    <li><code>Documentos/Inicializacao/.env.example</code>: valores configuráveis do Compose;</li>
+    <li><code>Documentos/Inicializacao/docker/postgres/init/00-schema.sql</code>: criação do schema para o perfil PostgreSQL do Compose;</li>
+    <li><code>Documentos/Inicializacao/Initialize-LggDatabase.ps1</code>: inicialização segura do banco PostgreSQL existente;</li>
+    <li><code>src/LGG.Api/Properties/launchSettings.json</code>: RabbitMQ local configurado nos perfis da API.</li>
+  </ul>
+
+  <h2>9. Encerramento</h2>
+  <pre><code># Para parar somente os serviços criados pelo Compose
+docker compose -f Documentos/Inicializacao/docker-compose.yml down
+
+# Para parar containers criados manualmente
+docker stop lgg-rabbitmq
+docker stop lgg-postgres</code></pre>
+  <div class="warning">Não use <code>docker compose down -v</code> nem <code>docker volume rm pgdata</code> se quiser preservar os dados locais do PostgreSQL.</div>
+</body>
+</html>
