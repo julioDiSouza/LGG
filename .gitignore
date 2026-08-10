@@ -19,6 +19,7 @@ TestResults/
 *.nupkg
 packages/
 .nuget/
+.env
 
 ## Rider / VSCode
 .idea/
