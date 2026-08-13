@@ -55,6 +55,25 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// CORS: permitir chamadas dos dev servers locais (Angular/ng serve e SSR)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LocalDevCorsPolicy", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:4200",
+                "https://localhost:4200",
+                "http://localhost:4000",
+                "https://localhost:4000",
+                "http://127.0.0.1:4200",
+                "https://127.0.0.1:4200"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 #endregion Fim - Configuracao JWT
 
 #region Swagger
@@ -135,6 +154,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
+// Use CORS before auth and endpoints
+app.UseCors("LocalDevCorsPolicy");
 
 app.UseAuthorization();
 
