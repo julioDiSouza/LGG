@@ -1,0 +1,6 @@
+{
+  "routes": {
+    "/": {},
+    "/Email/cadastro_confirmacao": {}
+  }
+}
