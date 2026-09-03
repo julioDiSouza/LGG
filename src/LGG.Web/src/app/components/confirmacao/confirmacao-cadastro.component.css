@@ -16,6 +16,11 @@ body {
   z-index: 0;
   font-weight: 850;
   font-size: 17pt;
+  background-color: #7506f7;
+}
+
+.destaque i {
+  background-color: #7506f7;
 }
 
 .destaque::after {
@@ -76,10 +81,9 @@ h2 {
   }
 }
 
-#orientacao {
-  display: none;
-  margin-top: 20px;
-}
+    #orientacao {
+      margin-top: 20px;
+    }
 
 .botao {
   background: #44f5fe;
@@ -97,8 +101,4 @@ h2 {
 
 .botao:hover {
   opacity: 0.85;
-}
-
-#confirmado {
-  display: none;
 }

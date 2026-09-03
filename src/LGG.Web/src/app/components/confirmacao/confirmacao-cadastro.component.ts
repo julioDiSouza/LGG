@@ -1,5 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
@@ -18,42 +18,80 @@ declare const confetti: ((options: {
 })
 export class ConfirmacaoCadastroComponent implements OnInit {
   key = '';
+  validando = true;
+  confirmado = false;
 
   constructor(
     private apiService: ApiService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {
-    this.iniciarConfirmacaoVisual();
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
-    this.activatedRoute.queryParams.subscribe((params) => {
-      this.key = params['key'];
-      this.verificarCliente();
-    });
+    this.key = this.activatedRoute.snapshot.queryParamMap.get('key') ?? '';
+    this.verificarCliente();
   }
 
-  private iniciarConfirmacaoVisual(): void {
+  private exibirConfirmacao(): void {
+    this.validando = false;
+    this.confirmado = true;
+
     if (typeof window === 'undefined') {
       return;
     }
 
-    window.setTimeout(() => {
-      document.getElementById('validando')?.setAttribute('style', 'display: none');
-      document.getElementById('confirmado')?.setAttribute('style', 'display: block');
-      document.getElementById('orientacao')?.setAttribute('style', 'display: block');
+    const validandoElement = document.getElementById('validando');
+    const confirmadoElement = document.getElementById('confirmado');
 
-      confetti?.({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
-      window.setTimeout(() => {
-        confetti?.({ particleCount: 100, spread: 120, origin: { y: 0.6 } });
-      }, 300);
-    }, 3000);
+    if (validandoElement) {
+      validandoElement.style.display = 'none';
+    }
+
+    if (confirmadoElement) {
+      confirmadoElement.style.display = 'block';
+    }
+
+    confetti?.({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+    window.setTimeout(() => {
+      confetti?.({ particleCount: 100, spread: 120, origin: { y: 0.6 } });
+    }, 300);
+  }
+
+  private exibirFalha(): void {
+    this.validando = false;
+    this.confirmado = false;
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const validandoElement = document.getElementById('validando');
+    const confirmadoElement = document.getElementById('confirmado');
+    const falhouElement = document.getElementById('falhou');
+
+    if (validandoElement) {
+      validandoElement.style.display = 'none';
+    }
+
+    if (confirmadoElement) {
+      confirmadoElement.style.display = 'none';
+    }
+
+    if (falhouElement) {
+      falhouElement.style.display = 'block';
+    }
   }
 
   verificarCliente() {
     console.log('[Confirmacao] chave recebida:', this.key);
 
     if (!this.key) {
+      this.exibirFalha();
+
       if (typeof window !== 'undefined' && window.alert) {
         window.alert('Chave de confirmação ausente na URL.');
       }
@@ -62,16 +100,12 @@ export class ConfirmacaoCadastroComponent implements OnInit {
 
     this.apiService.confirmarEmail(this.key).subscribe({
       next: (res) => {
-        console.log('[Confirmacao] resposta sucesso:', res);
-        if (typeof window !== 'undefined' && window.alert) {
-          window.alert('Cadastro confirmado com sucesso! Você será redirecionado para a página inicial.');
-        }
+        setTimeout(() => {
+          this.exibirConfirmacao();
+        }, 3000);
       },
       error: (err) => {
-        console.error('[Confirmacao] resposta erro:', err);
-        if (typeof window !== 'undefined' && window.alert) {
-          window.alert('Ocorreu um erro ao confirmar o cadastro. Por favor, tente novamente.');
-        }
+        this.exibirFalha();
       }
     });
   }
