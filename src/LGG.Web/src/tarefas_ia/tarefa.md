@@ -1,0 +1,2 @@
+- Tarefas
+  - Adaptar no componente "ConfirmacaoCadastroComponent", a página/layout "Confirmação.html" e exibir div "confirmado" quando o apiService.confirmarEmail retornar sucesso.

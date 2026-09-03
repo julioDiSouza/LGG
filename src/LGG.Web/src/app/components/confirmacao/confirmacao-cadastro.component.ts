@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
+declare const confetti: ((options: {
+  particleCount: number;
+  spread: number;
+  origin: { y: number };
+}) => void) | undefined;
+
 @Component({
   selector: 'app-confirmacao-cadastro',
   standalone: true,
@@ -19,25 +25,40 @@ export class ConfirmacaoCadastroComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.iniciarConfirmacaoVisual();
+
     this.activatedRoute.queryParams.subscribe((params) => {
       this.key = params['key'];
       this.verificarCliente();
     });
   }
 
+  private iniciarConfirmacaoVisual(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.setTimeout(() => {
+      document.getElementById('validando')?.setAttribute('style', 'display: none');
+      document.getElementById('confirmado')?.setAttribute('style', 'display: block');
+      document.getElementById('orientacao')?.setAttribute('style', 'display: block');
+
+      confetti?.({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+      window.setTimeout(() => {
+        confetti?.({ particleCount: 100, spread: 120, origin: { y: 0.6 } });
+      }, 300);
+    }, 3000);
+  }
+
   verificarCliente() {
     console.log('[Confirmacao] chave recebida:', this.key);
 
     if (!this.key) {
-      console.warn('[Confirmacao] query param "key" ausente — abortando confirmação.');
       if (typeof window !== 'undefined' && window.alert) {
         window.alert('Chave de confirmação ausente na URL.');
       }
       return;
     }
-
-    const reqUrl = `${this.apiService['baseUrl']}/Email/cadastro_confirmacao?key=${encodeURIComponent(this.key)}`;
-    console.log('[Confirmacao] fazendo requisição para', reqUrl);
 
     this.apiService.confirmarEmail(this.key).subscribe({
       next: (res) => {

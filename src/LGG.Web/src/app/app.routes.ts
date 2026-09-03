@@ -3,10 +3,7 @@ import { ConfirmacaoCadastroComponent } from './components/confirmacao/confirmac
 import { App } from './app';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: App
-  },
+  
   {
     path: 'Email/cadastro_confirmacao',
     component: ConfirmacaoCadastroComponent

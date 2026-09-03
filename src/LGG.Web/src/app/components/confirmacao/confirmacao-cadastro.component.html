@@ -1,1 +1,116 @@
-Confirmação...
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Logo -->
+    <div class="logo-container center">
+        <img src="https://ci3.googleusercontent.com/meips/ADKq_NYkSBbeXjOc_lUYfkTdAqFngQe7j9qhFs3IcrMZpIKHhawAjzlKT0QDzzEBR7LOZRrX0CUSw8240hWQC9lTsbIs3xe_bqLI2PD_nIxCas79dhMb410ts0vM_XBMfGzqIhlL9JzXjD5sxgKlWZb1Wwr88scJkbkbHmB-hv73u9PjepuBjCW_okhhjjAqHfPiOoStfNQFOuIhFC9psmhg0ZtvZBqdyifzkFmcMosM465lQlPLrCeZzoVmBTJ9kXSedKNP5Jr_fMISfx9iF1z3iYu7jzI-j857wyRzHOt7SAT3cbtwzE1hcMQg7qqA2zr3vGEQaK73am5a6QVvX8Osm7vh7rqwadz6KLhlMrVAt7h47Tfci1_hRzLo1R_8_fyVmw2Jm0QYe68hbxKCR4lo4Ih4keiotxgq2MolHaByeHoOyEhIntYLmVv_JOuldbss1i3vQW9j7d2yu-HdQt_TATyl18py8-YDagf9JUFXA8ztua2iH6M-l0l5L-dfGctRhO07z6pk3AiZNDCmucBE9lhaffzpkS7FI3vW_S2Xj_-9AZPYn4RENsO1iuK-4LC_6-7paJpT_GRFFaQj2uX5gKY3_iL4dO9g_eSuLk9M=s0-d-e1-ft#https://bbhfgchg.r.af.d.sendibt2.com/im/11756276/9ecfc3e706d180f4830d885f2c1a20b56219077a34646a759c97d1ffac111771.png?e=CMlB6H6dqXTaVTsxUzdqOOpaEXJheqNra_i_D2QeXehn97fvQCctdkKLmZUpNiAJPtOqpdC8gyjDYmNOmy9P35UlGUxhevqd72SvdO0uRpz7M6j0bapOq-6fE9ZIXzk0QFAe_ZGluj8EbwwB_ZDCQnQjXRa0UcdQu-DcSym0ULqD_sorJ4Ef_WDRFtA5H9Nk5zIABpP40nV-c5Rw_HI8DZqODQLNuGE0x3mU2zc2J19SPsu5vv5pwTae01CF89FBjLn0DphS_o9BySG2NvEBJMXvSqMxyfnN1IrjL6praP4SqbmtgptMyqSg5J1GqQ"
+             class="logo"
+             alt="logo_lgg">
+    </div>
+
+    <!-- Conteúdo -->
+    <div class="conteudo">
+
+        <!-- Estado de validação -->
+        <div id="validando" style="text-align: center">
+
+            <h2>Verificando...</h2>
+
+            <div id="status">
+                <div class="spinner"></div>
+            </div>
+
+        </div>
+
+        <!-- Estado confirmado -->
+        <div id="confirmado" style="text-align: center">
+
+            <h2>Sucesso</h2>
+
+            <p>
+                <span class="destaque">
+                    &nbsp;<i>Seu cadastro foi confirmado!</i>&nbsp;
+                </span>
+            </p>
+
+            <p id="orientacao">
+                Clique no botão abaixo:
+            </p>
+
+            <a href="https://localhost:7182/"
+               class="botao">
+                Página inicial
+            </a>
+
+            <br>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Biblioteca de confete -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+
+    let tempo = 3;
+
+    const validando = document.getElementById("validando");
+    const confirmado = document.getElementById("confirmado");
+    const orientacao = document.getElementById("orientacao");
+
+    const intervalo = setInterval(() => {
+
+        tempo--;
+
+        if (tempo === 0) {
+
+            clearInterval(intervalo);
+
+            // Esconde a tela de validação
+            validando.style.display = "none";
+
+            // Exibe a confirmação
+            confirmado.style.display = "block";
+
+            // Exibe a orientação
+            orientacao.style.display = "block";
+
+            // Dispara o confete
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: {
+                    y: 0.5
+                }
+            });
+
+            // Segundo disparo
+            setTimeout(() => {
+
+                confetti({
+                    particleCount: 100,
+                    spread: 120,
+                    origin: {
+                        y: 0.6
+                    }
+                });
+
+            }, 300);
+        }
+
+    }, 1000);
+
+</script>
+
+</body>
+</html>
