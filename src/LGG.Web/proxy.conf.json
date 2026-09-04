@@ -1,14 +1,11 @@
 {
-  "/Email": {
+  "/api": {
     "target": "https://localhost:7182",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug"
-  },
-  "/Teste": {
-    "target": "https://localhost:7182",
-    "secure": false,
-    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
     "logLevel": "debug"
   }
 }
