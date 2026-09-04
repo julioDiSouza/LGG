@@ -27,6 +27,8 @@ packages/
 
 ## Node
 node_modules/
+**/.angular/cache/
+/package-lock.json
 
 ## OS files
 .DS_Store
