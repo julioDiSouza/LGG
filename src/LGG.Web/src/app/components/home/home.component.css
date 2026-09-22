@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.site-header {
+  padding: 0 1.15rem;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  min-height: 70px;
+  border-bottom: 1px solid #2f2f2f;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 66px;
+  height: 66px;
+}
+
+.brand img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: 1rem;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 70px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: #b9f7ff;
+}
+
+.nav-link.active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: #ffffff;
+  content: "";
+}
+
+.login-link {
+  margin-left: auto;
+}
+
+.home-content {
+  /*
+  display: grid;
+  min-height: calc(100vh - 70px);
+  place-items: center;
+  padding: 2rem;
+  */
+}
+
+h1 {
+  margin: 0;
+  color: #ffffff;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .site-header {
+    padding: 0 0.75rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    margin-left: 0.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+  }
+}
