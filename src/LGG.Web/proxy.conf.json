@@ -1,4 +1,5 @@
 {
+  /*
   "/api": {
     "target": "https://localhost:7182",
     "secure": false,
@@ -8,4 +9,5 @@
     },
     "logLevel": "debug"
   }
+  */
 }
