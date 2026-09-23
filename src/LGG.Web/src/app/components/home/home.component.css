@@ -2,17 +2,19 @@
   display: block;
   min-height: 100vh;
   color: #ffffff;
+  background: #131313;
 }
 
 .site-header {
   padding: 0 1.15rem;
+  background: #1c1d1f;
+  border-bottom: 1px solid #44484d;
 }
 
 .site-nav {
   display: flex;
   align-items: center;
   min-height: 70px;
-  border-bottom: 1px solid #2f2f2f;
 }
 
 .brand {
@@ -51,7 +53,7 @@
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: #b9f7ff;
+  color: #d5d7d9;
 }
 
 .nav-link.active::after {
@@ -68,19 +70,168 @@
   margin-left: auto;
 }
 
+.site-footer {
+  margin-top: 3rem;
+  padding: 1.5rem 1.15rem 2rem;
+  border-top: 1px solid #3b3e42;
+  color: #9da1a6;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+/*
 .home-content {
-  /*
-  display: grid;
-  min-height: calc(100vh - 70px);
-  place-items: center;
-  padding: 2rem;
-  */
+  padding: 3.25rem 1.15rem 4rem;
+}
+*/
+
+.ranking {
+  width: min(100%, 980px);
+  margin: 0 auto;
+}
+
+.ranking-heading {
+  margin: 0 0 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.45rem;
+  color: #bfc3c8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 h1 {
   margin: 0;
-  color: #ffffff;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ranking-description {
+  margin: 0.5rem 0 0;
+  color: #9da1a6;
+  font-size: 0.95rem;
+}
+
+.ranking-table {
+  overflow: hidden;
+  border: 1px solid #44484d;
+  background: #1c1d1f;
+  box-shadow: 0 18px 45px rgb(0 0 0 / 18%);
+}
+
+.ranking-header,
+.video-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) 110px 110px;
+  align-items: center;
+}
+
+.ranking-header {
+  min-height: 36px;
+  padding: 0 1rem;
+  background: #393b3e;
+  color: #e0e2e4;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.metric-heading {
   text-align: center;
+}
+
+.video-row {
+  min-height: 62px;
+  padding: 0 1rem;
+  border-top: 1px solid #3b3e42;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.video-row:hover,
+.video-row:focus-visible {
+  background: #292b2e;
+  outline: none;
+}
+
+.video-row:focus-visible {
+  box-shadow: inset 0 0 0 2px #aeb3b8;
+}
+
+.rank {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-style: italic;
+}
+
+.video-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.video-info img {
+  width: 88px;
+  height: 50px;
+  flex-shrink: 0;
+  border: 1px solid #666b70;
+  object-fit: cover;
+}
+
+.video-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.video-copy strong {
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-copy span {
+  color: #9da1a6;
+  font-size: 0.68rem;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.metric svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.likes {
+  color: #20b8ff;
+}
+
+.views {
+  color: #f6dd35;
 }
 
 @media (max-width: 520px) {
@@ -95,5 +246,62 @@ h1 {
 
   .nav-link {
     font-size: 0.8rem;
+  }
+
+  .home-content {
+    padding: 1.5rem 0.75rem 2rem;
+  }
+
+  .site-footer {
+    margin-top: 2rem;
+    padding: 1.25rem 0.75rem 1.75rem;
+  }
+
+  .ranking-description {
+    font-size: 0.85rem;
+  }
+
+  .ranking-header,
+  .video-row {
+    grid-template-columns: 42px minmax(0, 1fr) 48px 48px;
+    padding-right: 0.65rem;
+    padding-left: 0.65rem;
+  }
+
+  .ranking-header {
+    font-size: 0.55rem;
+    letter-spacing: 0.04em;
+  }
+
+  .video-row {
+    min-height: 60px;
+  }
+
+  .video-info {
+    gap: 0.55rem;
+  }
+
+  .video-info img {
+    width: 68px;
+    height: 42px;
+  }
+
+  .video-copy strong {
+    font-size: 0.75rem;
+  }
+
+  .video-copy span {
+    font-size: 0.65rem;
+  }
+
+  .metric {
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.62rem;
+  }
+
+  .metric svg {
+    width: 18px;
+    height: 18px;
   }
 }

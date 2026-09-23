@@ -14,6 +14,44 @@
 </header>
 
 <main class="home-content">
-    <br>
-	<h1>Hello World!</h1>
+	<section class="ranking" aria-labelledby="ranking-title">
+		<div class="ranking-heading">
+			<h2 id="ranking-title">Ranking</h2>
+			<p class="ranking-description">Os vídeos mais curtidos e assistidos pela comunidade LGG.</p>
+		</div>
+
+		<div class="ranking-table" role="table" aria-label="Ranking de vídeos do YouTube">
+			<div class="ranking-header" role="row">
+				<span role="columnheader">Posição</span>
+				<span role="columnheader">Vídeo</span>
+				<span role="columnheader" class="metric-heading">Likes</span>
+				<span role="columnheader" class="metric-heading">Views</span>
+			</div>
+
+			@for (video of rankedVideos; track video.url) {
+				<a class="video-row" [href]="video.url" target="_blank" rel="noopener noreferrer" role="row">
+					<strong class="rank" role="cell">{{ video.rank }}º</strong>
+					<div class="video-info" role="cell">
+						<img [src]="video.thumbnail" [alt]="'Thumbnail de ' + video.title" loading="lazy" />
+						<div class="video-copy">
+							<strong>{{ video.title }}</strong>
+							<span>{{ video.channel }}</span>
+						</div>
+					</div>
+					<div class="metric likes" role="cell">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v10H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3Zm2 10V10l4-8a3 3 0 0 1 2.8 4.1L15 10h4.5a2.5 2.5 0 0 1 2.4 3.2l-1.7 5.9a4 4 0 0 1-3.8 2.9H9Z" /></svg>
+						<span>{{ video.likes }}</span>
+					</div>
+					<div class="metric views" role="cell">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c5.5 0 9.5 5 10 7-.5 2-4.5 7-10 7s-9.5-5-10-7c.5-2 4.5-7 10-7Zm0 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-2.2a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6Z" /></svg>
+						<span>{{ video.views }}</span>
+					</div>
+				</a>
+			}
+		</div>
+	</section>
 </main>
+
+<footer class="site-footer">
+	<p>Liga Gamer - LGG desde 2026</p>
+</footer>
